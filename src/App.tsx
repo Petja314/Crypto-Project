@@ -14,8 +14,9 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Portfolio from "./components/portfolio/Portfolio";
 import Nft from "./components/nfts/Nft";
 import News from "./components/news/News";
-import Login from "./components/login/Login";
+import LoginContainer from "./components/login/LoginContainer";
 import { TickerTape } from "react-ts-tradingview-widgets";
+import DatabaseTest from "./components/database/DatabaseTest";
 
 
 // @ts-ignore
@@ -95,7 +96,8 @@ function App() {
                     <Route path={"/nft"} element={<Nft/>}/>
                     <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
                     <Route path={"/news"} element={<News/>}/>
-                    <Route path={"/login"} element={<Login/>}/>
+                    <Route path={"/login"} element={<LoginContainer/>}/>
+                    <Route path={"/database"} element={<DatabaseTest/>}/>
                 </Routes>
         </ThemeProvider>
     );

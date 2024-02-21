@@ -1,6 +1,6 @@
 import Dashboard from "../dashboard/Dashboard";
 import dashboard from "../../assets/images/header-img/delicious.svg";
-import Login from "../login/Login";
+import LoginContainer from "../login/LoginContainer";
 import React from "react";
 import {Avatar, Badge, Box, IconButton, Menu, MenuItem, styled, Typography} from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
@@ -8,7 +8,7 @@ import {NavLink} from "react-router-dom";
 
 const settings = [
     {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: dashboard},
-    {path: '/login', element: <Login/>, name: "Logout"},
+    {path: '/login', element: <LoginContainer/>, name: "Logout"},
 ];
 
  const LoginSettings = () => {
