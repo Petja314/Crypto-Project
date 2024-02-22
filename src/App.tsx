@@ -17,6 +17,7 @@ import News from "./components/news/News";
 import LoginContainer from "./components/login/LoginContainer";
 import { TickerTape } from "react-ts-tradingview-widgets";
 import DatabaseTest from "./components/database/DatabaseTest";
+import ForgotPasswords from "./components/login/ForgotPasswords";
 
 
 // @ts-ignore
@@ -81,7 +82,6 @@ const routes = [
 ]
 
 function App() {
-    const navigate = useNavigate();
     const isLoginPage = window.location.pathname === '/login';
 
     return (
@@ -97,6 +97,7 @@ function App() {
                     <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
                     <Route path={"/news"} element={<News/>}/>
                     <Route path={"/login"} element={<LoginContainer/>}/>
+                    <Route path={"/reset"} element={<ForgotPasswords/>}/>
                     <Route path={"/database"} element={<DatabaseTest/>}/>
                 </Routes>
         </ThemeProvider>

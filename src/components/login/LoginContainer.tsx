@@ -1,19 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Container, Grid, TextField, Typography} from "@mui/material";
-import logo from "../../assets/images/logo/logo-dark.svg";
-import googleIcon from "../../assets/images/icons/google.svg"
-import logoBackground from "../../assets/images/login-img/login-background.svg";
-import loginImage from "../../assets/images/login-img/slide3.webp";
+import { Container, Grid,} from "@mui/material";
 import {auth, db} from "../../config/firebase"
-import {googleProvider} from "../../config/firebase"
-import {createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword} from "firebase/auth"
 import {getDocs, collection} from "firebase/firestore"
-import {Link} from "react-router-dom";
 import {LoginSection} from "./LoginSection";
 import {SignUpSection} from "./SignUpSection";
 import {LoginInfoSection} from "./LoginInfoSection";
+import {Dashboard} from "@mui/icons-material";
 
-const commonButtonStyles = {
+export const commonButtonStyles = {
     border: "1px solid #333",
     background: "#171717",
     color: "#fff",
@@ -25,40 +19,39 @@ const commonButtonStyles = {
 const LoginContainer = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [movieList, setMovieList] = useState<any>([])
     const [isRegistered, setIsRegistered] = useState<any>(true)
-    // pass the function db and collection name "movies"
-    const moviesCollectionRef = collection(db, "movies")
-    //Error - invalid credentials
+    const usersCollectionRef = collection(db, "users-db")
+    const [usersDb, setUsersDb] = useState<any>([])
+
+    //Checking if cred. exist
+    const isEmailExists = usersDb.some((item: any) => item.user_email === email)
+
+    // console.log('auth', auth?.currentUser)
+    // console.log('filterData' , movieList)
+    // console.log('auth', auth?.currentUser?.photoURL)
+
+    const getUsersDb = async () => {
+        try {
+            const response = await getDocs(usersCollectionRef)
+            const filterData = response.docs.map((item) => ({...item.data(), id: item.id}))
+            setUsersDb(filterData)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
-        const getMovieList = async () => {
-            // READ THE DATA
-            try {
-                const data = await getDocs(moviesCollectionRef)
-                const filterData = data.docs.map((item) => ({...item.data(), id: item.id}))
-                // debugger
-                setMovieList(filterData)
-                // console.log('run')
-                // console.log('data :' , data)
-            } catch (error) {
-                console.log('error' , error)
-            }
-        }
-        getMovieList()
-
+        getUsersDb()
     }, [])
-
-    // console.log('auth', auth?.currentUser?.email)
-    // console.log('auth', auth?.currentUser?.email)
-    console.log('filterData' , movieList)
-    // console.log('auth', auth?.currentUser?.photoURL)
 
     return (
         <Container
             disableGutters
             maxWidth={false}
             sx={{height: '100vh', display: 'flex',}}>
+
+
+
 
             <Grid container sx={{flex: 1}}>
 
@@ -88,6 +81,9 @@ const LoginContainer = () => {
                             password={password}
                             setPassword={setPassword}
                             setIsRegistered={setIsRegistered}
+                            usersCollectionRef={usersCollectionRef}
+                            usersDb={usersDb}
+                            isEmailExists={isEmailExists}
                         />
                     )
                     }

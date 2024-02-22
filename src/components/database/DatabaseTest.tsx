@@ -125,7 +125,9 @@ const MovieDbComponent = () => {
                 {title: addMovieTitle,
                     releaseDate: addMovieDate,
                     receivedOscar: isOscar,
-                    userId : auth?.currentUser?.uid})
+                    userId : auth?.currentUser?.uid,
+                    userEmail : auth?.currentUser?.email
+                    })
 
             getMovieList()
         } catch (error) {
@@ -161,7 +163,7 @@ const MovieDbComponent = () => {
             console.error(error)
         }
     }
-
+    // console.log('auth' , auth?.currentUser)
     // console.log('isOscar', isOscar)
     // console.log('isOscar', updateTitle)
     // console.log('movieList', movieList)

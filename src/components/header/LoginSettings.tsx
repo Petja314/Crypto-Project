@@ -2,16 +2,20 @@ import Dashboard from "../dashboard/Dashboard";
 import dashboard from "../../assets/images/header-img/delicious.svg";
 import LoginContainer from "../login/LoginContainer";
 import React from "react";
-import {Avatar, Badge, Box, IconButton, Menu, MenuItem, styled, Typography} from "@mui/material";
+import {Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, MenuList, styled, Typography} from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
+import {auth} from "../../config/firebase";
+import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
+
 
 const settings = [
     {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: dashboard},
-    {path: '/login', element: <LoginContainer/>, name: "Logout"},
+    // {path: '/login', element: <LoginContainer/>, name: "Logout"},
 ];
 
  const LoginSettings = () => {
+ const navigate = useNavigate()
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -19,6 +23,16 @@ const settings = [
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+
+     const logOutHandler = async () => {
+         try {
+             await signOut(auth)
+             navigate("/login")
+         } catch (error) {
+             console.error(error)
+         }
+     }
 
 
     return (
@@ -55,15 +69,29 @@ const settings = [
                 onClose={handleCloseUserMenu}
             >
 
-                {settings.map((setting) => (
-                    <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">
-                            <NavLink style={{textDecoration: 'none', listStyleType: "none", color: "white", cursor: "pointer"}} to={setting.path}>
-                                {setting.name}
-                            </NavLink>
-                        </Typography>
+                <MenuList>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                            <Box onClick={logOutHandler}>Logout</Box>
                     </MenuItem>
-                ))}
+
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <Link to={"/dashboard"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            Dashboard
+                        </Link>
+                    </MenuItem>
+                </MenuList  >
+
+
+
+                {/*{settings.map((setting) => (*/}
+                {/*    <MenuItem key={setting.name} onClick={handleCloseUserMenu}>*/}
+                {/*        <Typography textAlign="center">*/}
+                {/*            <NavLink style={{textDecoration: 'none', listStyleType: "none", color: "white", cursor: "pointer"}} to={setting.path}>*/}
+                {/*                {setting.name}*/}
+                {/*            </NavLink>*/}
+                {/*        </Typography>*/}
+                {/*    </MenuItem>*/}
+                {/*))}*/}
             </Menu>
         </Box>
     )

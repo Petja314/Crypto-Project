@@ -5,7 +5,10 @@ import LeaderBoard from "./LeaderBoard";
 import CarouselMui from "./CarouselMui";
 import QuickActions from "./QuickActions";
 
-const Dashboard = () => {
+const Dashboard = ({usersDb} : any) => {
+
+    console.log('usersDb' , usersDb)
+
     return (
         <Box>
             <Container
