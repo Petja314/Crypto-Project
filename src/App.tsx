@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import PurchaseCrypto from "./components/purchase crypto/PurchaseCrypto";
-import {Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {CircularProgress, Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {lime} from "@mui/material/colors";
 import {ReactComponent as PurchaseIcon} from "./assets/images/header-img/credit-card.svg"
 import {ReactComponent as PortfolioIcon} from "./assets/images/header-img/database.svg"
@@ -15,9 +15,12 @@ import Portfolio from "./components/portfolio/Portfolio";
 import Nft from "./components/nfts/Nft";
 import News from "./components/news/News";
 import LoginContainer from "./components/login/LoginContainer";
-import { TickerTape } from "react-ts-tradingview-widgets";
+import {TickerTape} from "react-ts-tradingview-widgets";
 import DatabaseTest from "./components/database/DatabaseTest";
 import ForgotPasswords from "./components/login/ForgotPasswords";
+import {useDispatch, useSelector} from "react-redux";
+import {auth} from "./config/firebase";
+import {appInitActions, appInitializationThunkCreator} from "./components/redux/AppInitialization";
 
 
 // @ts-ignore
@@ -28,8 +31,6 @@ const theme = createTheme({
     },
 
     components: {
-
-
         MuiCssBaseline: {
             styleOverrides: {
                 body: {
@@ -82,24 +83,60 @@ const routes = [
 ]
 
 function App() {
+    const [userLogged, setUserLogged] = useState<null>(null)
+    const [isFetching, setIsFetching] = useState(true)
+    const appInitial = useSelector((state: any) => state.appInitial)
     const isLoginPage = window.location.pathname === '/login';
+    const dispatch: any = useDispatch()
+
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user: any) => {
+            if (user) {
+                console.log('in')
+                setUserLogged(user)
+                setIsFetching(false)
+                // dispatch(appInitializationThunkCreator(user))
+                // dispatch(appInitActions.setIsFetchingAC(false))
+                return
+            }
+            console.log('out')
+            setUserLogged(null)
+            setIsFetching(false)
+            // dispatch(appInitializationThunkCreator(null))
+            // dispatch(appInitActions.setIsFetchingAC(false))
+            return () => unsubscribe
+        })
+    }, [])
+
+
+
+    // useEffect(()=> {
+    //    dispatch(appInitializationThunkCreator())
+    // },[])
+
+    // console.log(appInitial.userLogged)
+    // console.log('userLogged' , appInitial.userLogged)
+
+    if (isFetching) {
+        return <CircularProgress color="inherit"/>
+    }
 
     return (
         <ThemeProvider theme={theme}>
-            { !isLoginPage &&
-                <Header routes={routes}/>}
+            <Header routes={routes} userLogged={userLogged}/>
             {/*<TickerTape colorTheme="dark"></TickerTape>*/}
-                <CssBaseline/>
-                <Routes>
-                    <Route path={"/dashboard"} element={<Dashboard/>}/>
-                    <Route path={"/portfolio"} element={<Portfolio/>}/>
-                    <Route path={"/nft"} element={<Nft/>}/>
-                    <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
-                    <Route path={"/news"} element={<News/>}/>
-                    <Route path={"/login"} element={<LoginContainer/>}/>
-                    <Route path={"/reset"} element={<ForgotPasswords/>}/>
-                    <Route path={"/database"} element={<DatabaseTest/>}/>
-                </Routes>
+            <CssBaseline/>
+            <Routes>
+                <Route path={"/dashboard"} element={<Dashboard/>}/>
+                <Route path={"/portfolio"} element={<Portfolio/>}/>
+                <Route path={"/nft"} element={<Nft/>}/>
+                <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
+                <Route path={"/news"} element={<News/>}/>
+                <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
+                <Route path={"/reset"} element={<ForgotPasswords/>}/>
+                <Route path={"/database"} element={<DatabaseTest/>}/>
+            </Routes>
         </ThemeProvider>
     );
 }

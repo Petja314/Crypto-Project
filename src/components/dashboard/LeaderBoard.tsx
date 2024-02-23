@@ -32,8 +32,8 @@ const LeaderBoard = () => {
 
 
             {
-                data.map(item => (
-                    <Paper sx={{borderRadius: '20px', marginBottom: "10px",}}>
+                data.map((item,index) => (
+                    <Paper  key={index} sx={{borderRadius: '20px', marginBottom: "10px",}}>
                         <Grid container
                               sx={{
                                   alignItems: 'center',

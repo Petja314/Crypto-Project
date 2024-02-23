@@ -4,10 +4,9 @@ import CryptoTable from "./CryptoTable";
 import LeaderBoard from "./LeaderBoard";
 import CarouselMui from "./CarouselMui";
 import QuickActions from "./QuickActions";
+import {useSelector} from "react-redux";
 
 const Dashboard = ({usersDb} : any) => {
-
-    console.log('usersDb' , usersDb)
 
     return (
         <Box>

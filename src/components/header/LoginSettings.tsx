@@ -4,9 +4,11 @@ import LoginContainer from "../login/LoginContainer";
 import React from "react";
 import {Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, MenuList, styled, Typography} from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import {Link, NavLink, useNavigate} from "react-router-dom";
+import {Link, Navigate, NavLink, useNavigate} from "react-router-dom";
 import {auth} from "../../config/firebase";
 import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
+import {logOuThunkCreator} from "../redux/AuthReducer";
+import {useDispatch, useSelector} from "react-redux";
 
 
 const settings = [
@@ -14,9 +16,12 @@ const settings = [
     // {path: '/login', element: <LoginContainer/>, name: "Logout"},
 ];
 
- const LoginSettings = () => {
- const navigate = useNavigate()
+ const LoginSettings = ({userLogged} : any) => {
+     const dispatch : any = useDispatch()
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+     const appInitial = useSelector((state: any) => state.appInitial)
+
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -26,14 +31,20 @@ const settings = [
 
 
      const logOutHandler = async () => {
-         try {
-             await signOut(auth)
-             navigate("/login")
-         } catch (error) {
-             console.error(error)
-         }
+         // try {
+         //     await signOut(auth)
+         //     navigate("/login")
+         // } catch (error) {
+         //     console.error(error)
+         // }
+         // console.log('click')
+         dispatch(logOuThunkCreator())
      }
+     // console.log('isAuth :' , isAuth.isAuth)
 
+     if (!userLogged) {
+         return <Navigate to="/login" />
+     }
 
     return (
         <Box sx={{

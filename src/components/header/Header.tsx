@@ -7,7 +7,7 @@ import {ReactComponent as LeaderIcon} from "../../assets/images/icons/icon-cup-d
 
 
 
-const Header = ({routes} : any) => {
+const Header = ({routes,userLogged} : any) => {
    const {width} = UseMobileHook()
     const isMobile : boolean = width <= 900
 
@@ -17,7 +17,7 @@ const Header = ({routes} : any) => {
             { isMobile ?
                 <MobileHeader routes={routes}/>
                 :
-                <HeaderDesktop routes={routes}/>
+                <HeaderDesktop routes={routes} userLogged={userLogged}/>
             }
         </Box>
 

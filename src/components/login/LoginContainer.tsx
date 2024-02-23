@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { Container, Grid,} from "@mui/material";
+import { Container, Grid, TextField,} from "@mui/material";
 import {auth, db} from "../../config/firebase"
 import {getDocs, collection} from "firebase/firestore"
 import {LoginSection} from "./LoginSection";
 import {SignUpSection} from "./SignUpSection";
 import {LoginInfoSection} from "./LoginInfoSection";
-import {Dashboard} from "@mui/icons-material";
-
+import {useDispatch, useSelector} from "react-redux";
+import {Navigate} from "react-router-dom";
+import {actionsAuth} from "../redux/AuthReducer";
 export const commonButtonStyles = {
     border: "1px solid #333",
     background: "#171717",
@@ -16,41 +17,58 @@ export const commonButtonStyles = {
     },
 };
 
-const LoginContainer = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+const LoginContainer = ({userLogged} : any) => {
+    const isAuth = useSelector((state : any) => state.auth)
     const [isRegistered, setIsRegistered] = useState<any>(true)
     const usersCollectionRef = collection(db, "users-db")
     const [usersDb, setUsersDb] = useState<any>([])
+    const appInitial = useSelector((state: any) => state.appInitial)
 
-    //Checking if cred. exist
-    const isEmailExists = usersDb.some((item: any) => item.user_email === email)
+    const dispatch : any = useDispatch()
 
-    // console.log('auth', auth?.currentUser)
-    // console.log('filterData' , movieList)
-    // console.log('auth', auth?.currentUser?.photoURL)
-
-    const getUsersDb = async () => {
-        try {
-            const response = await getDocs(usersCollectionRef)
-            const filterData = response.docs.map((item) => ({...item.data(), id: item.id}))
-            setUsersDb(filterData)
-        } catch (error) {
-            console.log(error)
-        }
+    if(userLogged )  {
+        return <Navigate to="/dashboard" />
     }
 
-    useEffect(() => {
-        getUsersDb()
-    }, [])
+
+
+
+
+    // console.log('isAuth :' , isAuth.isAuth)
+    // console.log('user : :' , isAuth.user)
+
+    // const authMe = useSelector((state : any) => state.auth)
+
+    //Checking if cred. exist
+    // const isEmailExists = usersDb.some((item: any) => item.user_email === email)
+    // const isUsernameExists = usersDb.some((item: any) => item.username === userName)
+
+    // const getUsersDb = async () => {
+    //     try {
+    //         const response = await getDocs(usersCollectionRef)
+    //         const filterData = response.docs.map((item) => ({...item.data(), id: item.id}))
+    //         setUsersDb(filterData)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     getUsersDb()
+    // }, [])
+
+    // console.log('auth user emailVerified :',  auth?.currentUser?.emailVerified)
+    // console.log('auth user name', auth?.currentUser)
+    // console.log('filterData' , movieList)
+    // console.log('auth', auth?.currentUser?.photoURL)
+    // console.log('auth', db)
+    // console.log('usersDb', usersDb)
 
     return (
         <Container
             disableGutters
             maxWidth={false}
             sx={{height: '100vh', display: 'flex',}}>
-
-
 
 
             <Grid container sx={{flex: 1}}>
@@ -66,24 +84,11 @@ const LoginContainer = () => {
                 >
                     {isRegistered ? (
                        <LoginSection
-                           commonButtonStyles={commonButtonStyles}
-                           email={email}
-                           password={password}
-                           setEmail={setEmail}
-                           setPassword={setPassword}
                            setIsRegistered={setIsRegistered}
                        />
                     ) : (
                         <SignUpSection
-                            commonButtonStyles={commonButtonStyles}
-                            email={email}
-                            setEmail={setEmail}
-                            password={password}
-                            setPassword={setPassword}
                             setIsRegistered={setIsRegistered}
-                            usersCollectionRef={usersCollectionRef}
-                            usersDb={usersDb}
-                            isEmailExists={isEmailExists}
                         />
                     )
                     }

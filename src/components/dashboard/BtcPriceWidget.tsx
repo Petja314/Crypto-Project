@@ -41,8 +41,8 @@ const BtcPriceWidget = () => {
                                 label='currency'
                                 value={currencyValue}
                             >
-                                {currency.map(item => (
-                                    <MenuItem sx={{color: "#B8B8B8", fontSize: "12px"}} value={item}>{item}</MenuItem>
+                                {currency.map((item , index) => (
+                                    <MenuItem  key={index} sx={{color: "#B8B8B8", fontSize: "12px"}} value={item}>{item}</MenuItem>
                                 ))}
 
                             </Select>

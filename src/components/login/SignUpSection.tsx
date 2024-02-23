@@ -1,69 +1,34 @@
-import {createUserWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword,updateProfile} from "firebase/auth";
 import {auth, db} from "../../config/firebase";
 import {Box, Button, TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {collection, getDocs, addDoc, deleteDoc, doc, updateDoc} from "firebase/firestore";
-import {Dashboard} from "@mui/icons-material";
+import {useDispatch, useSelector} from "react-redux";
+import {actionsAuth, signInThunkCreator} from "../redux/AuthReducer";
+import {commonButtonStyles} from "./LoginContainer";
 
 
-export const SignUpSection = ({
-                                  email,
-                                  setEmail,
-                                  password,
-                                  setPassword,
-                                  setIsRegistered,
-                                  commonButtonStyles,
-                                  usersCollectionRef,
-                                  usersDb,
-                                  isEmailExists
-                              }: any) => {
+export const SignUpSection = ({ setIsRegistered}: any) => {
+
+    const dispatch : any = useDispatch()
     const navigate = useNavigate()
     const [confirmPassword, setConfirmPassword] = useState("")
-    const [accountCreateError, setAccountCreateError] = useState('')
-    // USER DATA BASE
     const [userName, setUserName] = useState('')
+    const accountCreateError = useSelector((state : any) => state.auth.signInError)
+    const password = useSelector((state : any) => state.auth.password)
 
     const signIn = async () => {
-        const isUsernameExists = usersDb.some((item: any) => item.username === userName)
-        if (isUsernameExists) {
-            setAccountCreateError('username already exist')
-            return
-        }
-        else if ( userName === "") {
-            setAccountCreateError('Create User name')
-            return
-        }
-       else if (isEmailExists) {
-            setAccountCreateError('Email already exist')
+        if ( userName === "") {
+            dispatch(actionsAuth.setSignInErrorAC('Create User name'))
             return
         }
         else if (password !== confirmPassword) {
-            setAccountCreateError('Password are not matching')
+            dispatch(actionsAuth.setSignInErrorAC('Password are not matching'))
             return
         }
-        try {
-            await createUserWithEmailAndPassword(auth, email, password)
-            await addDoc(usersCollectionRef,
-                {
-                    user_email: auth?.currentUser?.email,
-                    username: userName,
-                    user_id: auth?.currentUser?.uid
-                })
-            // navigate("/dashboard")
-        } catch (error: any) {
-            const errorCode = error.code;
-            console.log('errorCode', errorCode)
-            console.log('error', error)
-            if (errorCode) {
-                setAccountCreateError('Invalid email or password')
-            }
-        }
+        dispatch(signInThunkCreator(userName))
     }
 
-    // console.log('userExistError', accountCreateError)
-    // console.log('auth user name :')
-    // console.log('current users-db collection :' , usersDb)
     return (
         <Box sx={{
             display: "flex",
@@ -73,7 +38,6 @@ export const SignUpSection = ({
 
 
             <Typography variant='h5' sx={{color: "#fff", fontWeight: "bold", textAlign: "center", maxWidth: "250px", margin: "0 auto"}}>Create Personal Account</Typography>
-
             <Box sx={{
                 marginTop: "30px",
                 display: "flex",
@@ -91,14 +55,14 @@ export const SignUpSection = ({
                 />
                 <TextField
                     onChange={(event) => {
-                        setEmail(event.target.value)
+                        dispatch(actionsAuth.setEmailAC(event.target.value))
                     }}
                     label='Email'
                     type='text'
                 />
                 <TextField
                     onChange={(event) => {
-                        setPassword(event.target.value)
+                        dispatch(actionsAuth.setPasswordAC(event.target.value))
                     }}
                     label='Password'
                     type='password'

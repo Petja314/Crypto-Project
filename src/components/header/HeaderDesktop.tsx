@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 import React from "react";
 import LoginSettings from "./LoginSettings";
 
-const HeaderDesktop = ({routes}: any) => {
+const HeaderDesktop = ({routes,userLogged }: any) => {
     // console.log('desktop')
     return (
         <AppBar position="static">
@@ -79,7 +79,7 @@ const HeaderDesktop = ({routes}: any) => {
                         ))}
                     </Box>
 
-                    <LoginSettings/>
+                    <LoginSettings userLogged={userLogged}/>
                 </Toolbar>
             </Container>
         </AppBar>

@@ -1,48 +1,30 @@
 import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import {auth, googleProvider} from "../../config/firebase";
-import {Box, Button, IconButton, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField, Typography} from "@mui/material";
 import logo from "../../assets/images/logo/logo-dark.svg";
 import googleIcon from "../../assets/images/icons/google.svg";
-import React, {useState} from "react";
+import React from "react";
 import {useNavigate} from "react-router-dom";
 import ForgotPasswords from "./ForgotPasswords";
+import {useDispatch, useSelector} from "react-redux";
+import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../redux/AuthReducer";
+import {commonButtonStyles} from "./LoginContainer";
 
-export const LoginSection = ({
-                                 email,
-                                 password,
-                                 setEmail,
-                                 setPassword,
-                                 setIsRegistered,
-                                 commonButtonStyles
-                             }: any) => {
+
+export const LoginSection = ({ setIsRegistered , userLogged }: any) => {
     const navigate = useNavigate()
-    const [invalidLogin, setInvalidLogin] = useState('')
+    const invalidLogin = useSelector((state : any) => state.auth.loginError)
+    const dispatch : any = useDispatch()
+
     const logIn = async () => {
-        try {
-            let response = await signInWithEmailAndPassword(auth, email, password)
-            navigate("/dashboard")
-            console.log('response', response)
-        } catch (error: any) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            if (errorCode) {
-                setInvalidLogin('Invalid login or password')
-            }
-        }
+        dispatch(loginThunkCreator())
     }
+
     const signInWithGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider)
-        } catch (error) {
-            console.error(error)
-        }
+        dispatch(signInWithGoogleThunkCreator())
     }
     const logOutHandler = async () => {
-        try {
-            await signOut(auth)
-        } catch (error) {
-            console.error(error)
-        }
+        dispatch(logOuThunkCreator())
     }
 
     return (
@@ -65,19 +47,20 @@ export const LoginSection = ({
                     label='Email'
                     type='text'
                     onChange={(event) => {
-                        setEmail(event.target.value)
+                        dispatch(actionsAuth.setEmailAC(event.target.value))
                     }}
                 />
                 <TextField
                     label='Password'
                     type='password'
                     onChange={(event) => {
-                        setPassword(event.target.value)
+                        dispatch(actionsAuth.setPasswordAC(event.target.value))
+
                     }}
                 />
                 <Box sx={{color: "red", textAlign: "center"}}>{invalidLogin}</Box>
                 <Button onClick={logIn}>Login</Button>
-                {/*<Button onClick={logOutHandler} sx={{ ...commonButtonStyles}}>Log out</Button>*/}
+                <Button onClick={logOutHandler} sx={{...commonButtonStyles}}>Log out</Button>
                 <Button onClick={signInWithGoogle} startIcon={<img src={googleIcon} alt=""/>} sx={{...commonButtonStyles, marginBottom: "100px"}}>
                     Continue with Google
                 </Button>
