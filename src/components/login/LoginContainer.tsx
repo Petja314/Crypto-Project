@@ -18,17 +18,15 @@ export const commonButtonStyles = {
 };
 
 const LoginContainer = ({userLogged} : any) => {
-    const isAuth = useSelector((state : any) => state.auth)
     const [isRegistered, setIsRegistered] = useState<any>(true)
     const usersCollectionRef = collection(db, "users-db")
     const [usersDb, setUsersDb] = useState<any>([])
-    const appInitial = useSelector((state: any) => state.appInitial)
-
-    const dispatch : any = useDispatch()
 
     if(userLogged )  {
         return <Navigate to="/dashboard" />
     }
+
+    // console.log('log con' , userLogged)
 
 
 

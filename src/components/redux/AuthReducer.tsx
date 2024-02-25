@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {auth, db, googleProvider} from "../../config/firebase";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
+import {profileThunkCreator} from "./ProfileReducer";
 
 
 const initialState: any = {
@@ -64,9 +65,9 @@ export const actionsAuth = {
 
 export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
     const {tempEmailValue, password} = getState().auth
-    // debugger
     try {
         let response = await signInWithEmailAndPassword(auth, tempEmailValue, password)
+        // console.log('response' , response)
     } catch (error: any) {
         const errorCode = error.code;
         if (errorCode) {
@@ -79,6 +80,9 @@ export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
 export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
     try {
         const response = await signInWithPopup(auth, googleProvider)
+        // console.log('response google : ' , response.user.providerData
+        //     const userData = response.user.providerData
+        //     dispatch(profileThunkCreator(userData))
     } catch (error: any) {
         const errorCode = error.code;
         if (errorCode) {
@@ -89,6 +93,7 @@ export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
 
 export const logOuThunkCreator = () => async (dispatch: any) => {
     try {
+        // debugger
         await signOut(auth)
     } catch (error: any) {
         const errorCode = error.code;

@@ -5,11 +5,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import {Link} from "react-router-dom";
 import LoginSettings from "./LoginSettings";
 
-export const MobileHeader = ({routes}: any) => {
+export const MobileHeader = ({routes,userLogged}: any) => {
     const [selectedMenu, setSelectedMenu] = useState<any>(0)
-    // console.log('mobile')
 
-    // console.log('selectedMenu', selectedMenu)
     return (
         <>
             <AppBar position="static">
@@ -77,7 +75,7 @@ export const MobileHeader = ({routes}: any) => {
                             />
                         </Box>
 
-                        <LoginSettings/>
+                        <LoginSettings userLogged={userLogged} />
                     </Toolbar>
                 </Container>
             </AppBar>

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import PurchaseCrypto from "./components/purchase crypto/PurchaseCrypto";
-import {CircularProgress, Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {Box, CircularProgress, Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {lime} from "@mui/material/colors";
 import {ReactComponent as PurchaseIcon} from "./assets/images/header-img/credit-card.svg"
 import {ReactComponent as PortfolioIcon} from "./assets/images/header-img/database.svg"
@@ -18,13 +18,14 @@ import LoginContainer from "./components/login/LoginContainer";
 import {TickerTape} from "react-ts-tradingview-widgets";
 import DatabaseTest from "./components/database/DatabaseTest";
 import ForgotPasswords from "./components/login/ForgotPasswords";
-import {useDispatch, useSelector} from "react-redux";
 import {auth} from "./config/firebase";
-import {appInitActions, appInitializationThunkCreator} from "./components/redux/AppInitialization";
+import Profile from "./components/profile/Profile";
+import {profileThunkCreator} from "./components/redux/ProfileReducer";
+import {useDispatch} from "react-redux";
 
 
 // @ts-ignore
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         mode: "dark",
         primary: lime,
@@ -85,8 +86,6 @@ const routes = [
 function App() {
     const [userLogged, setUserLogged] = useState<null>(null)
     const [isFetching, setIsFetching] = useState(true)
-    const appInitial = useSelector((state: any) => state.appInitial)
-    const isLoginPage = window.location.pathname === '/login';
     const dispatch: any = useDispatch()
 
 
@@ -95,38 +94,26 @@ function App() {
             if (user) {
                 console.log('in')
                 setUserLogged(user)
+                dispatch(profileThunkCreator( user.displayName,user.email, user.emailVerified, user.photoURL,user.uid ))
                 setIsFetching(false)
-                // dispatch(appInitializationThunkCreator(user))
-                // dispatch(appInitActions.setIsFetchingAC(false))
                 return
             }
             console.log('out')
             setUserLogged(null)
             setIsFetching(false)
-            // dispatch(appInitializationThunkCreator(null))
-            // dispatch(appInitActions.setIsFetchingAC(false))
             return () => unsubscribe
         })
     }, [])
 
 
-
-    // useEffect(()=> {
-    //    dispatch(appInitializationThunkCreator())
-    // },[])
-
-    // console.log(appInitial.userLogged)
-    // console.log('userLogged' , appInitial.userLogged)
-
     if (isFetching) {
-        return <CircularProgress color="inherit"/>
+        return <Box sx={{margin: "0 auto"}}> <CircularProgress color="inherit"/> </Box>
     }
-
+    console.log('userLogged App : ', userLogged)
     return (
-        <ThemeProvider theme={theme}>
+        <Box>
             <Header routes={routes} userLogged={userLogged}/>
             {/*<TickerTape colorTheme="dark"></TickerTape>*/}
-            <CssBaseline/>
             <Routes>
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
                 <Route path={"/portfolio"} element={<Portfolio/>}/>
@@ -136,8 +123,10 @@ function App() {
                 <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
                 <Route path={"/reset"} element={<ForgotPasswords/>}/>
                 <Route path={"/database"} element={<DatabaseTest/>}/>
+                <Route path={"/profile"} element={<Profile/>}/>
             </Routes>
-        </ThemeProvider>
+        </Box>
+
     );
 }
 

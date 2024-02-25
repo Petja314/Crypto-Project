@@ -15,7 +15,7 @@ const Header = ({routes,userLogged} : any) => {
     return (
         <Box>
             { isMobile ?
-                <MobileHeader routes={routes}/>
+                <MobileHeader routes={routes} userLogged={userLogged}/>
                 :
                 <HeaderDesktop routes={routes} userLogged={userLogged}/>
             }

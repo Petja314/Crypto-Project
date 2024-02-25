@@ -12,14 +12,12 @@ import {commonButtonStyles} from "./LoginContainer";
 
 
 export const LoginSection = ({ setIsRegistered , userLogged }: any) => {
-    const navigate = useNavigate()
     const invalidLogin = useSelector((state : any) => state.auth.loginError)
     const dispatch : any = useDispatch()
 
     const logIn = async () => {
         dispatch(loginThunkCreator())
     }
-
     const signInWithGoogle = async () => {
         dispatch(signInWithGoogleThunkCreator())
     }

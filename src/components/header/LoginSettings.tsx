@@ -9,6 +9,7 @@ import {auth} from "../../config/firebase";
 import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import {logOuThunkCreator} from "../redux/AuthReducer";
 import {useDispatch, useSelector} from "react-redux";
+import {UserAvatar} from "./UserAvatar";
 
 
 const settings = [
@@ -19,50 +20,30 @@ const settings = [
  const LoginSettings = ({userLogged} : any) => {
      const dispatch : any = useDispatch()
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-     const appInitial = useSelector((state: any) => state.appInitial)
-
-
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
 
 
      const logOutHandler = async () => {
-         // try {
-         //     await signOut(auth)
-         //     navigate("/login")
-         // } catch (error) {
-         //     console.error(error)
-         // }
-         // console.log('click')
          dispatch(logOuThunkCreator())
      }
      // console.log('isAuth :' , isAuth.isAuth)
 
-     if (!userLogged) {
+     if (userLogged === null) {
          return <Navigate to="/login" />
      }
+
+     // console.log('userLogged SETTINGS :' , userLogged)
 
     return (
         <Box sx={{
             // border : "2px solid red",
             flexGrow: 0,
         }}>
-            <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu}>
-                    <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                        variant="dot"
-                    >
-                        <Avatar src={'https://randomuser.me/api/portraits/men/79.jpg'} alt='avatar'> </Avatar>
-                    </StyledBadge>
-                    {/*<Box sx={{marginLeft : "15px"}} > Name </Box>*/}
-                </IconButton>
-            </Tooltip>
+            <UserAvatar
+                setAnchorElUser={setAnchorElUser}
+            />
             <Menu
                 sx={{mt: '60px'}}
                 id="menu-appbar"
@@ -90,8 +71,13 @@ const settings = [
                             Dashboard
                         </Link>
                     </MenuItem>
-                </MenuList  >
 
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <Link to={"/profile"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            Profile
+                        </Link>
+                    </MenuItem>
+                </MenuList  >
 
 
                 {/*{settings.map((setting) => (*/}
@@ -111,33 +97,4 @@ const settings = [
 export default LoginSettings
 
 
-
-const StyledBadge = styled(Badge)(({theme}) => ({
-    '& .MuiBadge-badge': {
-        backgroundColor: '#44b700',
-        color: '#44b700',
-        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-        '&::after': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            animation: 'ripple 1.2s infinite ease-in-out',
-            border: '1px solid currentColor',
-            content: '""',
-        },
-    },
-    '@keyframes ripple': {
-        '0%': {
-            transform: 'scale(.8)',
-            opacity: 1,
-        },
-        '100%': {
-            transform: 'scale(2.4)',
-            opacity: 0,
-        },
-    },
-}));
 

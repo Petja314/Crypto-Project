@@ -33,50 +33,21 @@ export const appInitActions = ({
     } as const),
 })
 
-export const appInitializationThunkCreator = () =>  async (dispatch: any) => {
-    const unsubscribe = await auth.onAuthStateChanged((user: any) => {
-        if (user) {
-            console.log('in')
-            // debugger
-            dispatch(appInitActions.setUserAuth(user))
-            // dispatch(appInitActions.setIsFetchingAC(false))
-            // setUserLogged(user)
-            // setIsFetching(false)
-            // dispatch(appInitializationThunkCreator(user))
-            return
-        }
-        console.log('out')
-        // setUserLogged(null)
-        // setIsFetching(false)
-        dispatch(appInitActions.setUserAuth(null))
-        // dispatch(appInitActions.setIsFetchingAC(false))
-        return () => unsubscribe
-    })
-}
-
-// export const appInitializationThunkCreator = () => async (dispatch: any) => {
-//     try {
-//         dispatch(appInitActions.setIsFetchingAC(true));
-//
-//         const user = await new Promise((resolve) => {
-//             const unsubscribe = auth.onAuthStateChanged((user: any) => {
-//                 resolve(user);
-//                 unsubscribe(); // Unsubscribe after getting the initial user state
-//             });
-//         });
-//
+// export const appInitializationThunkCreator = () =>  async (dispatch: any) => {
+//     const unsubscribe = await auth.onAuthStateChanged((user: any) => {
 //         if (user) {
-//             dispatch(appInitActions.setUserAuth(user));
-//         } else {
-//             dispatch(appInitActions.setUserAuth(null));
+//             console.log('in')
+//             dispatch(appInitActions.setUserAuth(user))
+//             dispatch(appInitActions.setIsFetchingAC(false))
+//             return
 //         }
-//
-//         dispatch(appInitActions.setIsFetchingAC(false));
-//     } catch (error) {
-//         console.error('Error during app initialization:', error);
-//         dispatch(appInitActions.setIsFetchingAC(false));
-//     }
-// };
+//         console.log('out')
+//         dispatch(appInitActions.setUserAuth(null))
+//         dispatch(appInitActions.setIsFetchingAC(false))
+//         return () => unsubscribe
+//     })
+// }
+
 
 
 

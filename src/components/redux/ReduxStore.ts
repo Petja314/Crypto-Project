@@ -30,11 +30,13 @@ import {configureStore} from '@reduxjs/toolkit';
 import { AuthReducer } from "./AuthReducer";
 import {thunk} from "redux-thunk";
 import {AppInitialization} from "./AppInitialization";
+import {ProfileReducer} from "./ProfileReducer";
 
 export const store = configureStore({
     reducer: {
         auth: AuthReducer,
-        appInitial : AppInitialization
+        appInitial : AppInitialization,
+        userProfile : ProfileReducer
 
     },
     middleware: (getDefaultMiddleware) =>
