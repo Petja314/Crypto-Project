@@ -106,10 +106,28 @@ function App() {
     }, [])
 
 
+
+    // useEffect(() => {
+    //      const unsubscribe = auth.onAuthStateChanged((user: any) => {
+    //         if (user) {
+    //             console.log('in')
+    //             setUserLogged(user)
+    //             dispatch(profileThunkCreator( user.displayName,user.email, user.emailVerified, user.photoURL,user.uid ))
+    //             setIsFetching(false)
+    //             return
+    //         }
+    //         console.log('out')
+    //         setUserLogged(null)
+    //         setIsFetching(false)
+    //         return () => unsubscribe
+    //     })
+    // }, [])
+
+
     if (isFetching) {
         return <Box sx={{margin: "0 auto"}}> <CircularProgress color="inherit"/> </Box>
     }
-    console.log('userLogged App : ', userLogged)
+    // console.log('userLogged App : ', userLogged)
     return (
         <Box>
             <Header routes={routes} userLogged={userLogged}/>

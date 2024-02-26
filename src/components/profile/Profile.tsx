@@ -1,21 +1,19 @@
 // @ts-ignore
-import { v4 as uuidv4 } from 'uuid';
-import React, {useRef, useState} from 'react';
-import {Avatar, Box, Button, Container, Paper, TextField, Typography} from "@mui/material";
+import {v4 as uuidv4} from 'uuid';
+import React, {useEffect, useRef, useState} from 'react';
+import {Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, Tab, Tabs, TextField, Typography} from "@mui/material";
 import {StyledBadge, UserAvatar} from "../header/UserAvatar";
 import {useSelector} from "react-redux";
-import noAvatar from "../../assets/images/image/blankAvatar.jpg"
 import {auth, storage} from "../../config/firebase";
-import {getAuth, deleteUser,updateProfile} from "firebase/auth";
+import {getAuth, deleteUser, updateProfile} from "firebase/auth";
 import {
     getDownloadURL,
     ref as storageRef,
     uploadBytes,
 } from "firebase/storage";
+import {ProfileAvatarUpload} from "./ProfileAvatarUpload";
 
 const Profile = () => {
-    console.log('uuidv4()' , uuidv4())
-    // console.log('uid :', `image${uuidv4()}`)
     const userProfile = useSelector((state: any) => state.userProfile.user)
     const [newName, setNewName] = useState<any>('')
     const [newEmail, setNewEmail] = useState<any>('')
@@ -23,9 +21,29 @@ const Profile = () => {
     const [newImage, setNewImage] = useState<any>(null)
     const [url, setUrl] = useState<any>(null)
     const fileInput = useRef<any>(null)
-    const userImg = userProfile[0].photoURL
+    // const userImg = userProfile[0].photoURL
 
 
+    useEffect(() => {
+        if(newImage) {
+            handleSubmit()
+        }
+    },[newImage])
+
+    useEffect(() => {
+        if(url){
+            const user: any = auth.currentUser
+                try {
+                    // console.log('in')
+                     updateProfile(user, {
+                        photoURL: url
+                    } )
+                }
+                catch(error) {
+                    console.error(error)
+                }
+        }
+    },[url])
 
     const changeNameHandler = async (event: any) => {
         const nameValue = event.target.value
@@ -40,14 +58,15 @@ const Profile = () => {
     const handleUploadClick = () => {
         fileInput?.current?.click()
     }
-    const changeImageHandler =  (event : any) =>  {
+    const changeImageHandler = (event: any) => {
         const selectedFile = event.target?.files[0]
-        if (selectedFile  ) {
+        if (selectedFile) {
+            console.log('selected')
             setNewImage(selectedFile)
         }
     }
     const handleSubmit = () => {
-        const imageRef = storageRef(storage,`image_${uuidv4()}`)
+        const imageRef = storageRef(storage, `user_avatar/image_${uuidv4()}`)
         uploadBytes(imageRef, newImage).then(() => {
             getDownloadURL(imageRef).then((url) => {
                 setUrl(url)
@@ -59,34 +78,31 @@ const Profile = () => {
     }
 
 
-    const deleteUserAccount = async  () => {
-        const user : any = auth.currentUser
-        try{
+    const deleteUserAccount = async () => {
+        const user: any = auth.currentUser
+        try {
             await deleteUser(user)
             alert("Your account was successfully deleted!")
-        }
-        catch(error) {
+        } catch (error) {
             console.error(error)
         }
     }
 
     const saveChangesFirebase = async () => {
-        const user : any = auth.currentUser
-        // debugger
-        updateProfile(user, {
-            displayName: newName,
-            photoURL: url
-        }).then(() => {
-            alert(' Profile updated!')
-            // Profile updated!
-            // ...
-        }).catch((error) => {
-            console.log(error)
-            // An error occurred
-            // ...
-        });
+        console.log('run')
+        const user: any = auth.currentUser
+            try {
+                console.log('in')
+               await updateProfile(user, {
+                    displayName: newName,
+                    photoURL: url
+                } )
+            }
+            catch(error) {
+                console.error(error)
+            }
     }
-
+    // console.log('name : ', newName)
     // console.log('url' , url)
     return (
         <Box mt={12} sx={{display: "flex"}}>
@@ -94,17 +110,20 @@ const Profile = () => {
             <Container>
                 <Paper sx={{maxWidth: "600px", width: "100%", position: "relative", margin: "0 auto"}}>
                     <Box>
-                        <input type="file" onChange={changeImageHandler} style={{display : "none"}} ref={fileInput} />
-                        <Box onClick={handleUploadClick} sx={{position: "absolute", top: "-35px", left: "40%" , cursor : "pointer" }}>
-                            {/* border : "1px solid red"*/}
-                            <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-                                variant="dot"
-                            >
-                                <Avatar sx={{width: "130px", height: "130px"}} src={userImg ? userImg : noAvatar} alt='avatar'/>
-                            </StyledBadge>
-                        </Box>
+
+                        {/*<input type="file" onChange={changeImageHandler} style={{display: "none"}} ref={fileInput}/>*/}
+                        {/*<Box onClick={handleUploadClick} sx={{position: "absolute", top: "-35px", left: "40%", cursor: "pointer"}}>*/}
+                        {/*    /!* border : "1px solid red"*!/*/}
+                        {/*    <StyledBadge*/}
+                        {/*        overlap="circular"*/}
+                        {/*        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}*/}
+                        {/*        variant="dot"*/}
+                        {/*    >*/}
+                        {/*        <Avatar sx={{width: "130px", height: "130px"}} src={userImg ? userImg : noAvatar} alt='avatar'/>*/}
+                        {/*    </StyledBadge>*/}
+                        {/*</Box>*/}
+
+                        <ProfileAvatarUpload userProfile={userProfile}/>
 
                         <Box mt={5} p={10}>
                             <Typography mb={5} variant="h5" sx={{textAlign: "center"}}>User Profile</Typography>
@@ -145,10 +164,10 @@ const Profile = () => {
                                             <Box>
                                             </Box>
 
-                                            <Box sx={{display : "flex", flexDirection : "column" , width : "250px", margin : "0 auto"}}>
+                                            <Box sx={{display: "flex", flexDirection: "column", width: "250px", margin: "0 auto"}}>
                                                 <Button sx={{marginTop: "20px"}} onClick={saveChangesFirebase}>Save</Button>
                                                 <Button sx={{marginTop: "20px"}} onClick={deleteUserAccount}>Delete Account</Button>
-                                                <Button sx={{marginTop: "20px"}} onClick={handleSubmit}>UPLOAD PHOTO</Button>
+                                                {/*<Button sx={{marginTop: "20px"}} onClick={handleSubmit}>UPLOAD PHOTO</Button>*/}
                                             </Box>
 
                                         </Box>
@@ -167,3 +186,6 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+
