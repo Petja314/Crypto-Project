@@ -1,19 +1,22 @@
 // @ts-ignore
 import {v4 as uuidv4} from 'uuid';
 import React, {useEffect, useRef, useState} from 'react';
-import {Avatar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, Tab, Tabs, TextField, Typography} from "@mui/material";
+import {Avatar, Box, Button, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper, Tab, Tabs, TextField, Typography} from "@mui/material";
 import {StyledBadge, UserAvatar} from "../header/UserAvatar";
 import {useSelector} from "react-redux";
 import {auth, storage} from "../../config/firebase";
-import {getAuth, deleteUser, updateProfile} from "firebase/auth";
+import {getAuth, deleteUser, updateProfile, updateEmail, sendEmailVerification, verifyBeforeUpdateEmail, signOut} from "firebase/auth";
 import {ProfileAvatarUpload} from "./ProfileAvatarUpload";
 
 const Profile = () => {
     const userProfile = useSelector((state: any) => state.userProfile.user)
     const [newName, setNewName] = useState<any>('')
     const [newEmail, setNewEmail] = useState<any>('')
+    const [checked, setChecked] = useState(false)
+    const [notification, setNotification] = useState<any>('')
+    const [deleteButtonClicked, setDeleteButtonClicked] = useState(false);
 
-    console.log('userProfile' , userProfile)
+
     const changeNameHandler = async (event: any) => {
         const nameValue = event.target.value
         setNewName(nameValue)
@@ -24,29 +27,76 @@ const Profile = () => {
     }
 
 
-    const deleteUserAccount = async () => {
+    const updateEmailFirebase = async (user: any) => {
+        try {
+            if (newEmail.length > 0) {
+                console.log('in email')
+                await verifyBeforeUpdateEmail(user, newEmail);
+                alert('The email was successfully updated , please verify your email to sign in!')
+                await signOut(auth)
+            }
+            return;
+        } catch (error : any) {
+            const errorCode = error.code
+            setNotification(errorCode)
+            console.error(error)
+        }
+    }
+    const updateUserNameFirebase = async (user: any) => {
+        try {
+            if (newName.length > 0) {
+                console.log('in name')
+                await updateProfile(user, {
+                    displayName: newName,
+                })
+                setNotification('The name was successfully updated!')
+            }
+            return;
+        } catch (error: any) {
+            const errorCode = error.code
+            setNotification(errorCode)
+            console.error(error)
+        }
+
+    }
+
+
+    const updateUserDetailsFirebase = async () => {
         const user: any = auth.currentUser
         try {
-            await deleteUser(user)
-            alert("Your account was successfully deleted!")
-        } catch (error) {
+            await updateUserNameFirebase(user)
+            await updateEmailFirebase(user)
+        } catch (error: any) {
+            const errorCode = error.code
+            setNotification(errorCode)
             console.error(error)
         }
     }
 
-    const saveChangesFirebase = async () => {
-        console.log('run')
+    const handleAccountDeleteConformation = async (event: any) => {
+        setChecked(event.target.checked)
+    }
+
+    const deleteUserAccount = async () => {
+        setDeleteButtonClicked(true)
         const user: any = auth.currentUser
+        setNotification('After an account has been deleted, it cannot be recovered. Are you sure you want to proceed with the deletion?')
+        if (checked === true) {
             try {
-                console.log('in')
-               await updateProfile(user, {
-                    displayName: newName,
-                } )
-            }
-            catch(error) {
+                await deleteUser(user)
+                alert("Your account was successfully deleted!")
+            } catch (error : any) {
+                const errorCode = error.code
+                setNotification(errorCode);
                 console.error(error)
             }
+        } else {
+            return
+        }
     }
+
+    console.log('checked', checked)
+    console.log('notification', notification)
     return (
         <Box mt={12} sx={{display: "flex"}}>
 
@@ -97,8 +147,20 @@ const Profile = () => {
                                             </Box>
 
                                             <Box sx={{display: "flex", flexDirection: "column", width: "250px", margin: "0 auto"}}>
-                                                <Button sx={{marginTop: "20px"}} onClick={saveChangesFirebase}>Save</Button>
+                                                <Button sx={{marginTop: "20px"}} onClick={updateUserDetailsFirebase}>Save</Button>
                                                 <Button sx={{marginTop: "20px"}} onClick={deleteUserAccount}>Delete Account</Button>
+
+
+                                                {deleteButtonClicked &&
+                                                    <Box mt={4} sx={{color: "green"}}>
+                                                        {notification}
+                                                        <Checkbox
+                                                            checked={checked}
+                                                            onChange={handleAccountDeleteConformation}
+                                                        />
+                                                    </Box>
+                                                }
+
                                             </Box>
 
                                         </Box>

@@ -79,10 +79,7 @@ export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
 
 export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
     try {
-        const response = await signInWithPopup(auth, googleProvider)
-        // console.log('response google : ' , response.user.providerData
-        //     const userData = response.user.providerData
-        //     dispatch(profileThunkCreator(userData))
+         await signInWithPopup(auth, googleProvider)
     } catch (error: any) {
         const errorCode = error.code;
         if (errorCode) {
@@ -93,7 +90,6 @@ export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
 
 export const logOuThunkCreator = () => async (dispatch: any) => {
     try {
-        // debugger
         await signOut(auth)
     } catch (error: any) {
         const errorCode = error.code;

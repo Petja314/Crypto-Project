@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 
 export const UserAvatar = ({setAnchorElUser} : any) => {
     const userProfile = useSelector((state : any) => state.userProfile.user)
-    const userAvatarServer = userProfile[0].photoURL
+    const userAvatarServer = userProfile[0].photoURL // current user profile avatar
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };

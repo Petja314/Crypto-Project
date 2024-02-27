@@ -10,6 +10,7 @@ import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/aut
 import {logOuThunkCreator} from "../redux/AuthReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {UserAvatar} from "./UserAvatar";
+import {actionsProfile} from "../redux/ProfileReducer";
 
 
 const settings = [
