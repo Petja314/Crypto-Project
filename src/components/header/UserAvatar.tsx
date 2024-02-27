@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 
 export const UserAvatar = ({setAnchorElUser} : any) => {
     const userProfile = useSelector((state : any) => state.userProfile.user)
-    const userImg = userProfile[0].photoURL
+    const userAvatarServer = userProfile[0].photoURL
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -20,7 +20,7 @@ export const UserAvatar = ({setAnchorElUser} : any) => {
                     anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                     variant="dot"
                 >
-                    <Avatar src={userImg ? userProfile[0].photoURL : noAvatar} alt='avatar'> </Avatar>
+                    <Avatar sx={{ border: "1px solid #fff"}} src={userAvatarServer ? userAvatarServer : noAvatar} alt='avatar'> </Avatar>
                 </StyledBadge>
                 {/*<Box sx={{marginLeft : "15px"}} > Name </Box>*/}
             </IconButton>
