@@ -3,14 +3,14 @@ import Tooltip from "@mui/material/Tooltip";
 import {Avatar, Badge, IconButton, styled} from "@mui/material";
 import noAvatar from "../../assets/images/image/blankAvatar.jpg";
 import {useSelector} from "react-redux";
+import {RootState} from "../redux/ReduxStore";
 
 export const UserAvatar = ({setAnchorElUser} : any) => {
-    const userProfile = useSelector((state : any) => state.userProfile.user)
-    const userAvatarServer = userProfile[0].photoURL // current user profile avatar
+    const {user} = useSelector((state : RootState) => state.userProfile)
+    const userAvatarServer : string | null = user[0].photoURL // current user profile avatar
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-
 
     return (
         <Tooltip title="Open settings">
@@ -22,7 +22,6 @@ export const UserAvatar = ({setAnchorElUser} : any) => {
                 >
                     <Avatar sx={{ border: "1px solid #fff"}} src={userAvatarServer ? userAvatarServer : noAvatar} alt='avatar'> </Avatar>
                 </StyledBadge>
-                {/*<Box sx={{marginLeft : "15px"}} > Name </Box>*/}
             </IconButton>
         </Tooltip>
     )

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {Avatar, Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import noAvatar from "../../assets/images/image/blankAvatar.jpg"
@@ -9,37 +9,45 @@ import Avatar3 from "../../assets/images/profile_avatars/avatar-3.png"
 import Avatar4 from "../../assets/images/profile_avatars/avatar-4.png"
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {useDispatch, useSelector} from "react-redux";
-import {actionsProfile, handleSubmitThunk, saveProfileAvatarFirebaseThunk} from "../redux/ProfileReducer";
+import {actionsProfile, handleSubmitThunk, ProfileStateTypes, saveProfileAvatarFirebaseThunk, UserAuthArrayDetailsType} from "../redux/ProfileReducer";
+import  {RootState} from "../redux/ReduxStore";
+import {ThunkDispatch} from "redux-thunk";
 
-const default_avatars = [Avatar1, Avatar2, Avatar3, Avatar4]
-export const ProfileAvatarUpload = ({userProfile}: any) => {
-    const dispatch: any = useDispatch()
-    const {urlDisplayImage, openAvatarPopUpWindow} = useSelector((state: any) => state.userProfile)
+const default_avatars: string[] = [Avatar1, Avatar2, Avatar3, Avatar4]
+type ProfileAvatarUploadPropsType = {
+    user: UserAuthArrayDetailsType[]
+}
+
+export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
+    const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
+    const {urlDisplayImage , openAvatarPopUpWindow} = useSelector((state: RootState) => state.userProfile)
     //UPLOAD IMG
-    const [newImageFile, setNewImageFile] = useState<any>(null)
-    const userImg = userProfile[0].photoURL
-    const fileInput = useRef<any>(null)
+    const [newImageFile, setNewImageFile] = useState<null | File>(null)
+    const userImg: string | null = user[0].photoURL
+    const fileInput: React.MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
         if (newImageFile) {
             dispatch(handleSubmitThunk(newImageFile, setNewImageFile))
         }
     }, [newImageFile])
-
     const handleUploadClick = () => {
         fileInput?.current?.click()
     }
-    const changeImageHandler = (event: any) => {
+    const changeImageHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         //Getting the img file
-        const selectedFile = event.target?.files[0]
-        if (selectedFile) {
-            setNewImageFile(selectedFile)
+        if (event.target && event.target.files) { // checking for typescript
+            const selectedFile = event.target?.files[0]
+            if (selectedFile) {
+                setNewImageFile(selectedFile)
+            }
         }
+
     }
 
-    const getValue = async (event: any) => {
+    const getValue = async (event: React.MouseEvent<HTMLImageElement>) => {
         // compiling the src file to the blob , that we can send it to the server - event.target.src - cannot be send to the server
-        const selectedSrc = event.target.src
+        const selectedSrc = (event.target as HTMLImageElement).src; //event.target.src
         let selectedFile;
         if (selectedSrc) {
             const response = await fetch(selectedSrc)
@@ -49,16 +57,17 @@ export const ProfileAvatarUpload = ({userProfile}: any) => {
             dispatch(actionsProfile.setDisplayImageShowAC(selectedSrc))
         } else {
             dispatch(actionsProfile.setDisplayImageShowAC(null))
-            setNewImageFile(selectedSrc)
+            // setNewImageFile(selectedSrc)
         }
     }
 
+    console.log('urlDisplayImage' , urlDisplayImage)
     return (
         <Box>
             <Box onClick={() => dispatch(actionsProfile.openAvatarPopUpWindowAC(true))} sx={{position: "absolute", top: "-35px", left: "40%", cursor: "pointer"}}>
                 <Box>
                     {/*Showing the current user avatar , if not existed - noAvatar */}
-                    <Avatar sx={{width: "130px", height: "130px", border: "1px solid #fff"}} src={userImg ? userImg : noAvatar} alt='avatar'/>
+                    <Avatar sx={{width: "130px", height: "130px", border: "1px solid #fff"}} src={userImg ? userImg : noAvatar} alt='avatar'/>{/*userImg - img from the firebase server */}
                     <IconButton sx={{
                         position: 'absolute',
                         right: 0,
@@ -87,7 +96,7 @@ export const ProfileAvatarUpload = ({userProfile}: any) => {
                 <DialogContent>
 
                     <Box sx={{display: "flex", justifyContent: "center", gap: 3}}>
-                        <Avatar sx={{width: "130px", height: "130px", border: "1px solid #fff"}} src={urlDisplayImage} alt='avatar'/>
+                        <Avatar sx={{width: "130px", height: "130px", border: "1px solid #fff"}} src={urlDisplayImage || undefined} alt='avatar'/> {/*urlDisplayImage -  Preview src img */}
                         <Box>
                             <Typography mb={3}>Let's face it, we're all good looking people 😎 so upload your best profile photo. </Typography>
                             <input type="file" onChange={changeImageHandler} style={{display: "none"}} ref={fileInput}/>
@@ -100,8 +109,9 @@ export const ProfileAvatarUpload = ({userProfile}: any) => {
                         <Box mb={3} sx={{display: "flex", gap: 3, justifyContent: "space-around"}}>
                             {/*Default avatars to choose option */}
                             {
-                                default_avatars.map(item => (
+                                default_avatars.map((item: string, index: number) => (
                                     <Avatar
+                                        key={index}
                                         onClick={getValue}
                                         sx={{
                                             width: "80px",
