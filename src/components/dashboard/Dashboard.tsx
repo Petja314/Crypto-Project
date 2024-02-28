@@ -6,7 +6,7 @@ import CarouselMui from "./CarouselMui";
 import QuickActions from "./QuickActions";
 import {useSelector} from "react-redux";
 
-const Dashboard = ({usersDb} : any) => {
+const Dashboard = ({usersDb}: any) => {
 
     return (
         <Box>
@@ -17,38 +17,41 @@ const Dashboard = ({usersDb} : any) => {
                 <Typography
                     variant='h4'
                     sx={{
-                        marginTop : "50px",
-                        marginBottom : "20px",
-                        color : "#fff"
+                        marginTop: "50px",
+                        marginBottom: "20px",
+                        color: "#fff"
                     }}
                 >
                     Dashboard
                 </Typography>
 
-                    <Typography variant='h6' sx={{color : "#fff" , marginBottom : "20px"}}>🔥Cryptocurrency market cap</Typography>
+                <Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🔥Cryptocurrency market cap</Typography>
 
-                    <Grid container  sx={{marginBottom : "60px"}}  spacing={2}>
-                        <Grid item xs={4} >
-                            <CarouselMui/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <CarouselMui/>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <CarouselMui/>
-                        </Grid>
+                <Grid container sx={{marginBottom: "60px"}} spacing={2}>
+                    <Grid item xs={4}>
+                        <CarouselMui/>
                     </Grid>
-
-
-                    <Grid container  spacing={3}>
-                        <Grid item xs={8}>
-                            <CryptoTable/>
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <LeaderBoard/>
-                        </Grid>
+                    <Grid item xs={4}>
+                        <CarouselMui/>
                     </Grid>
+                    <Grid item xs={4}>
+                        <CarouselMui/>
+                    </Grid>
+                </Grid>
+
+
+                <CryptoTable/>
+
+
+                {/*<Grid container  spacing={3}>*/}
+                {/*    <Grid item xs={8}>*/}
+                {/*        <CryptoTable/>*/}
+                {/*    </Grid>*/}
+
+                {/*    <Grid item xs={4}>*/}
+                {/*        <LeaderBoard/>*/}
+                {/*    </Grid>*/}
+                {/*</Grid>*/}
 
 
             </Container>

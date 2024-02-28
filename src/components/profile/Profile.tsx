@@ -32,7 +32,6 @@ const Profile = () => {
                             <Typography mb={5} variant="h5" sx={{textAlign: "center"}}>User Profile</Typography>
                             <Box sx={{display: "flex", gap: 2, flexDirection: "column"}}>
 
-
                                 {
                                     user.map((item, index: number) => (
                                         <Box key={index} sx={{maxWidth: "400px", width: "100%"}}>

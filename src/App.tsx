@@ -22,7 +22,8 @@ import {auth} from "./config/firebase";
 import Profile from "./components/profile/Profile";
 import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch} from "react-redux";
-
+import {coinGeckoApi} from "./components/api/CointGeckoApi";
+import CoinInfo from "./components/coin-info/CoinInfo";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -63,6 +64,14 @@ export const theme = createTheme({
                 },
             },
         },
+        MuiTableRow: { // Add styles for MuiTableRow
+            styleOverrides: {
+                root: {
+
+                    whiteSpace : "nowrap"
+                },
+            },
+        },
     },
     typography: {
         fontFamily: 'Manrope, sans-serif',
@@ -87,7 +96,6 @@ function App() {
     const [userLogged, setUserLogged] = useState<null>(null)
     const [isFetching, setIsFetching] = useState(true)
     const dispatch: any = useDispatch()
-
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user: any) => {
@@ -125,6 +133,7 @@ function App() {
                 <Route path={"/reset"} element={<ForgotPasswords/>}/>
                 <Route path={"/database"} element={<DatabaseTest/>}/>
                 <Route path={"/profile"} element={<Profile/>}/>
+                <Route path={"/coin_info/:id?"} element={<CoinInfo/>}/>
             </Routes>
         </Box>
 
