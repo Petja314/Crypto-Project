@@ -4,6 +4,7 @@ import {thunk} from "redux-thunk";
 import {AppInitialization} from "./AppInitialization";
 import {ProfileReducer} from "./ProfileReducer";
 import {CryptoTableReducer} from "./CryptoTableReducer";
+import {CoinDescriptionReducer} from "./CoinDescriptionReducer";
 
 
 // export const store = configureStore({
@@ -26,7 +27,8 @@ let rootReducers = combineReducers({
     auth: AuthReducer,
     appInitial : AppInitialization,
     userProfile : ProfileReducer,
-    marketCoinList : CryptoTableReducer
+    marketCoinList : CryptoTableReducer,
+    coinDetails : CoinDescriptionReducer
 });
 
 

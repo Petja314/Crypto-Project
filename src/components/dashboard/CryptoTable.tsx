@@ -7,8 +7,7 @@ import {RootState} from "../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import {useNavigate} from "react-router-dom";
-
+import {Link, useNavigate} from "react-router-dom";
 
 const CryptoTable = () => {
     const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
@@ -19,6 +18,7 @@ const CryptoTable = () => {
     const [currency, setCurrency] = useState("usd")
     const [priceSort, setPriceSort] = useState(true)
     const navigate = useNavigate();
+
 
     useEffect(() => {
         if (fetching) {
@@ -47,15 +47,15 @@ const CryptoTable = () => {
             marketCapList.sort((a: any, b: any) => (priceSort ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
         }
     }
-    const formattedPrice = (price: any) => {
+     const formattedPrice = (price: any) => {
         return Number(price).toLocaleString('en-US')
     }
-    const navigateToCoinPageHandler = (id : any) => {
-        console.log('id' , id)
+    const navigateToCoinPageHandler = (id: any) => {
+        console.log('id', id)
         navigate(`/coin_info/${id}`)
     }
 
-    // console.log('marketCapList', marketCapList)
+    console.log('marketCapList', marketCapList)
     return (
         <Box>
             <BtcPriceWidget/>
@@ -81,6 +81,7 @@ const CryptoTable = () => {
                                     key={index}
                                     onClick={() => navigateToCoinPageHandler(item.id)}
                                 >
+                                    {/*<Link to={`/coin_info/${item.id}`}>*/}
                                     <TableCell>{item.market_cap_rank}</TableCell>
                                     <TableCell>
                                         <Box sx={{display: "flex", gap: 1, alignItems: "center"}}>
@@ -93,11 +94,13 @@ const CryptoTable = () => {
                                     <TableCell>{formattedPrice(item.current_price)} $</TableCell>
                                     <TableCell>{formattedPrice(item.low_24h)} $</TableCell>
                                     <TableCell> {formattedPrice(item.high_24h)} $</TableCell>
+                                    <TableCell component={'span'} sx={{color: item.price_change_24h < 0 ? "#ea3943" : "#16c784"}}> $ {formattedPrice(item.price_change_percentage_24h)} </TableCell>
                                     <TableCell>
-                                        <Box component={'span'} sx={{color: item.price_change_24h < 0 ? "#ea3943" : "#16c784"}} > {formattedPrice(item.price_change_24h)} $</Box>
-
+                                        <Box component={'span'} sx={{color: item.price_change_24h < 0 ? "#ea3943" : "#16c784"}}> {formattedPrice(item.price_change_24h)} $</Box>
                                     </TableCell>
                                     <TableCell>$ {formattedPrice(item.market_cap)}</TableCell>
+                                    {/*<TableCell>{formattedPrice(item.max_supply)}</TableCell>*/}
+                                    {/*</Link>*/}
                                 </TableRow>
                             ))
                         }
@@ -116,14 +119,18 @@ const CryptoTable = () => {
 export default CryptoTable;
 
 const TableHeadComponent = ({sortingMultiFunction, priceSort}: any) => {
+
+
     const tableHeaderColumns = [
         {key: "market_cap_rank", label: "Rank"},
         {key: "name", label: "Coin"},
         {key: "current_price", label: "Current Price"},
         {key: "low_24h", label: "Low 24h"},
         {key: "high_24h", label: "High 24h"},
+        {key: "price_change_percentage_24h", label: "24h%"},
         {key: "price_change_24h", label: "Price change 24h"},
-        {key: "market_cap", label: "Market Cap"}
+        {key: "market_cap", label: "Market Cap"},
+        // {key: "max_supply", label: "Total Supply"},
     ]
     const [selectedKey, setSelectedKey] = useState(null)
 

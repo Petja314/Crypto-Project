@@ -6,7 +6,7 @@ import CarouselMui from "./CarouselMui";
 import QuickActions from "./QuickActions";
 import {useSelector} from "react-redux";
 
-const Dashboard = ({usersDb}: any) => {
+const Dashboard = () => {
 
     return (
         <Box>
@@ -39,7 +39,7 @@ const Dashboard = ({usersDb}: any) => {
                     </Grid>
                 </Grid>
 
-
+                {/*<LeaderBoard/>*/}
                 <CryptoTable/>
 
 

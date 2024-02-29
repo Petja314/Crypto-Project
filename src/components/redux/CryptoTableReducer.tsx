@@ -50,6 +50,9 @@ export const actionsCryptoTable = {
 // }
 
 
+
+//LOCAL STORAGE LOGIC - SOMETIMES API GIVING THE 429 ERROR (TOO MANY REQUEST BECAUSE OF THE DEMO ACCOUNT)
+
 export const getAllCoinsListThunk = (currency: string, pageSize: number, page: number) => async (dispatch: any) => {
     // Check the last fetched page from local storage
     const lastFetchedPage = localStorage.getItem("lastFetchedPage");
@@ -86,10 +89,17 @@ export const getAllCoinsListThunk = (currency: string, pageSize: number, page: n
     }
 };
 
-export const sortRankThunk = (result : any) => (dispatch : any) => {
-}
 
-
+// export const getAllCoinsListThunk = (currency: string, pageSize: number, page: number) => async (dispatch: any) => {
+//     try {
+//         const response = await coinGeckoApi.listOfCoinsApi(currency, pageSize, page)
+//         if (response.status === 200) {
+//             dispatch(actionsCryptoTable.setAllCoinsListAC(response.data))
+//         }
+//     } catch (error) {
+//         console.error(error)
+//     }
+// }
 
 
 

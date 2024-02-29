@@ -23,7 +23,7 @@ import Profile from "./components/profile/Profile";
 import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch} from "react-redux";
 import {coinGeckoApi} from "./components/api/CointGeckoApi";
-import CoinInfo from "./components/coin-info/CoinInfo";
+import {CoinContainerDescription} from "./components/coin-info/CoinInfo";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -133,7 +133,7 @@ function App() {
                 <Route path={"/reset"} element={<ForgotPasswords/>}/>
                 <Route path={"/database"} element={<DatabaseTest/>}/>
                 <Route path={"/profile"} element={<Profile/>}/>
-                <Route path={"/coin_info/:id?"} element={<CoinInfo/>}/>
+                <Route path={"/coin_info/:id?"} element={<CoinContainerDescription/>}/>
             </Routes>
         </Box>
 

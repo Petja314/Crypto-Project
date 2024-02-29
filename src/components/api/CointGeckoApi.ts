@@ -19,7 +19,11 @@ export const coinGeckoApi = {
             'x-cg-demo-api-key': apiKeyGecko,
         }).get(`/coins/${id}/market_chart?vs_currency=usd&days=7`)
     },
-
+    coinDetails(id : any) {
+        return instance('https://api.coingecko.com/api/v3', {
+            'x-cg-demo-api-key': apiKeyGecko,
+        }).get(`/coins/${id}`)
+    }
 
 };
 // 'x-cg-demo-api-key': apiKeyGecko,
