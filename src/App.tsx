@@ -22,8 +22,7 @@ import {auth} from "./config/firebase";
 import Profile from "./components/profile/Profile";
 import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch} from "react-redux";
-import {coinGeckoApi} from "./components/api/CointGeckoApi";
-import {CoinContainerDescription} from "./components/coin-info/CoinInfo";
+import {CoinContainerDescription} from "./components/coin-info/CoinContainerDescription";
 
 // @ts-ignore
 export const theme = createTheme({

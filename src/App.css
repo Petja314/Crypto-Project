@@ -22,3 +22,9 @@
 .css-9obj1j-MuiTableRow-root {
   background : none !important;
 }
+
+
+.css-10he8s-MuiTable-root {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
