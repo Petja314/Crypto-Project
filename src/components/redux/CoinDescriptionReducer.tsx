@@ -1,6 +1,5 @@
 import React from 'react';
-import {coinGeckoApi} from "../api/CointGeckoApi";
-import axios from "axios";
+import { coinStatApi} from "../api/CoinStatApi";
 
 const initialState = {
     coinData: [],
@@ -37,53 +36,27 @@ export const coinDescriptionActions = {
 
 
 export const coinDescriptionDataThunk = (id: any) => async (dispatch: any) => {
-    // try {
-    //     const response = await coinGeckoApi.coinDetails(id);
-    //     dispatch(coinDescriptionActions.setCoinDetails([response.data]))
-    // } catch (error) {
-    //     console.log('Error:', error);
-    // }
-    //
-
-    const url = `http://localhost:3001/coins/${id}`
     try {
-        const response = await axios.get(url);
+        const response = await coinStatApi.coinDetails(id);
         dispatch(coinDescriptionActions.setCoinDetails([response.data]))
     } catch (error) {
         console.log('Error:', error);
     }
 
-    // axios.get(url)
-    //     .then((response) => {
-    //         console.log('response coin data :  ', response);
-    //         dispatch(coinDescriptionActions.setCoinDetails([response.data]))
-    //
-    //     })
-    //     .catch((error) => {
-    //         console.log('err', error);
-    //     });
+
+
 
 }
 
 
 export const coinChartDataThunk = (id: any) => async (dispatch: any) => {
     try {
-        const response = await coinGeckoApi.coinChart(id);
-        dispatch(coinDescriptionActions.setCryptoChartAC(response.data.prices))
+        const response = await coinStatApi.coinChart(id);
+        console.log('res chart :' , response)
+        // dispatch(coinDescriptionActions.setCryptoChartAC())
+        dispatch(coinDescriptionActions.setCryptoChartAC(response.data))
     } catch (error) {
         console.log('Error:', error);
     }
-
-
-    //SERVER
-    // const url = `http://localhost:3001/coins/${id}/market_chart`
-    // try {
-    //     const response = await axios.get(url);
-    //     dispatch(coinDescriptionActions.setCryptoChartAC(response.data.prices))
-    // } catch (error) {
-    //     console.log('Error:', error);
-    // }
-
-    // /coins/:id/market_chart?vs_currency=usd&days=7
 
 }

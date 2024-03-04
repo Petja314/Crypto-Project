@@ -1,20 +1,11 @@
 import axios from "axios";
 
-const apiKeyGecko = process.env.REACT_APP_API_KEY_CRYPTO_GECKO
-const coinMarketCapKey = process.env.REACT_APP_API_KEY_COIN_MARKET_CAP
+const coinStatApiKey = process.env.REACT_APP_API_KEY_COIN_STAT
 
 
-export const instance = axios.create({
-    baseURL: "https://api.coingecko.com/api/v3/",
+export const instanceAxios = axios.create({
+    baseURL: "https://openapiv1.coinstats.app/coins/",
     headers: {
-        'x-cg-demo-api-key': apiKeyGecko,
-    }
-})
-
-export const instanceMarketCapAxios = axios.create({
-    withCredentials: true,
-    baseURL: "https://pro-api.coinmarketcap.com/v1/",
-    headers: {
-        'X-CMC_PRO_API_KEY': coinMarketCapKey,
+        'X-API-KEY': "07GRzrjRyWN31Ziw/90JsbuhxNL0+OilusCU1pMKpSg=",
     }
 })
