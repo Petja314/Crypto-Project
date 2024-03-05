@@ -7,6 +7,7 @@ import eur from "../../assets/images/icons/currency_icons/EUR.svg"
 import cad from "../../assets/images/icons/currency_icons/CAD.svg"
 import aud from "../../assets/images/icons/currency_icons/AUD.svg"
 import {formattedPrice} from "../../commons/formattedPrice";
+import Preloader from "../../commons/preloader/Preloader";
 
 const Nft = () => {
     const [currencyValue, setCurrencyValue] = useState<any>({value: 'USD', symbol: "$", icon: usd})
@@ -54,6 +55,7 @@ const Nft = () => {
     const currentData = filteredData.slice(firstIndexPage, row)
     return (
         <Container>
+            {/*<Preloader/>*/}
             <Box sx={{border: "1px solid green", padding: "20px", borderRadius: "10px", marginTop: "20px", display: "flex", gap: 5}}>
                 <Box sx={{gap: 2}}>
                     Search by name:

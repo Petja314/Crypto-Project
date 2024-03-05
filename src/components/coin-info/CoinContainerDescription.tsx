@@ -33,12 +33,13 @@ export const CoinContainerDescription = () => {
                                         item={item}
                                     />
                                     <CoinDataLinksWidget item={item}/>
+                                    <Button sx={{marginTop: "20px"}}>Add to portfolio</Button>
+
                                 </Box>
 
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <CryptoChart/>
                                     <PriceChangesWidget item={item}/>
-                                    <Button sx={{marginTop: "20px"}}>Add to portfolio</Button>
                                 </Box>
                             </Box>
 

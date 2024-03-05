@@ -49,10 +49,10 @@ export const coinDescriptionDataThunk = (id: any) => async (dispatch: any) => {
 }
 
 
-export const coinChartDataThunk = (id: any) => async (dispatch: any) => {
+export const coinChartDataThunk = (id: any , timeValue : any) => async (dispatch: any) => {
     try {
-        const response = await coinStatApi.coinChart(id);
-        console.log('res chart :' , response)
+        const response = await coinStatApi.coinChart(id , timeValue);
+        // console.log('res chart :' , response)
         // dispatch(coinDescriptionActions.setCryptoChartAC())
         dispatch(coinDescriptionActions.setCryptoChartAC(response.data))
     } catch (error) {

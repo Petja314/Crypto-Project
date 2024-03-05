@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Box, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, Avatar, IconButton, TextField, Select, MenuItem} from "@mui/material";
+import {Box, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, Avatar, IconButton, TextField, Select, MenuItem, CircularProgress} from "@mui/material";
 import BtcPriceWidget from "./BtcPriceWidget";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsCryptoTable, getAllCoinsListThunk} from "../redux/CryptoTableReducer";
@@ -15,8 +15,6 @@ import eur from "../../assets/images/icons/currency_icons/EUR.svg";
 import cad from "../../assets/images/icons/currency_icons/CAD.svg";
 import aud from "../../assets/images/icons/currency_icons/AUD.svg";
 import {formattedPrice} from "../../commons/formattedPrice";
-
-
 
 
 const CryptoTable = () => {
@@ -53,20 +51,19 @@ const CryptoTable = () => {
         if (fetching) {
             dispatch(getAllCoinsListThunk(currencyValue.value, rowNumber, page))
             setPage((prevState) => prevState + 1)
-            console.log('page' , page)
+            console.log('page', page)
             setTimeout(() => {
                 setFetching(false)
-            },1000)
+            }, 1000)
         }
-    }, [fetching,rowNumber])
+    }, [fetching, rowNumber])
 
-    const rowNumberHandler = async (event : any) => {
+    const rowNumberHandler = async (event: any) => {
         setFetching(true)
         setRowNumber(event.target?.value)
         setPage(1);
         dispatch(actionsCryptoTable.clearRecentApiCallDataValue());
     }
-
 
 
     const scrollHandlerDebounced = (event: any) => {
@@ -88,13 +85,14 @@ const CryptoTable = () => {
         }
     }
 
-    const changeCurrencyHandler = async (event : any) => {
-        const selectedValue =    event.target?.value
-        await dispatch(getAllCoinsListThunk(selectedValue, pageSize, 1))
-        if(selectedValue) {
-            const filteredCurrency = currency.find((item : any) => item.value === selectedValue)
+    const changeCurrencyHandler = async (event: any) => {
+        const selectedValue = event.target?.value
+        if (selectedValue) {
+            const filteredCurrency = currency.find((item: any) => item.value === selectedValue) //find the currency to change it with api call
             setCurrencyValue(filteredCurrency)
+            await dispatch(actionsCryptoTable.clearRecentApiCallDataValue()); // clearing current array to display new values
         }
+        await dispatch(getAllCoinsListThunk(selectedValue, rowNumber, 1)) // display new values
     }
 
     const navigateToCoinPageHandler = (id: any) => {
@@ -161,15 +159,21 @@ const CryptoTable = () => {
                                 </TableRow>
                             ))
                         }
-                        {
-                            filteredDataByName.length <= 0 &&
-                            <Box mt={2}>No matching results found.</Box>
-                        }
+
                     </TableBody>
                 </Table>
-                {fetching &&
-                    <Box>Loading...</Box>
-                }
+
+
+                {/*PRELOADER && NOTIFICATIONS */}
+                <Box sx={{ display: "flex", justifyContent: "center", marginTop: "100px" }}>
+                    {fetching ? (
+                        <CircularProgress />
+                    ) : (
+                        filteredDataByName.length <= 0 && <Box>No matching results found.</Box>
+                    )}
+                </Box>
+
+
             </TableContainer>
 
 
@@ -179,7 +183,7 @@ const CryptoTable = () => {
 
 export default CryptoTable;
 
-const TableHeadComponent = ({ sortingMultiFunction, priceSort, setCoinValue, rowNumber, rows, currencyValue, currency,changeCurrencyHandler,rowNumberHandler}: any) => {
+const TableHeadComponent = ({sortingMultiFunction, priceSort, setCoinValue, rowNumber, rows, currencyValue, currency, changeCurrencyHandler, rowNumberHandler}: any) => {
     const tableHeaderColumns = [
         {key: "rank", label: "Rank"},
         {key: "name", label: "Coin"},
@@ -191,18 +195,20 @@ const TableHeadComponent = ({ sortingMultiFunction, priceSort, setCoinValue, row
     ]
     const [selectedKey, setSelectedKey] = useState(null)
     return (
-        <TableHead>
-            <TableRow>
-                <TableCell align="center" colSpan={2} sx={{background: "none"}}>
+        <TableHead
+        >
+            <TableRow sx={{borderBottom : "none"}}>
+                {/*FILTRATION*/}
+                <TableCell align="center" colSpan={5} sx={{background: "none",borderBottom : "none"}}>
                     <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
                         <Box component={'span'}>Search by name: </Box>
                         <TextField sx={{maxWidth: "100%", width: "150px"}} onChange={(event: any) => setCoinValue(event.target.value)} type={"text"}/>
 
-                        <Box  sx={{display: "flex", alignItems: "center", gap: 2}} >
-                            <Avatar sx={{width : "30px" , height : "30px"}} src={currencyValue.icon} />
+                        <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
+                            <Avatar sx={{width: "30px", height: "30px"}} src={currencyValue.icon}/>
                             <Select
                                 onChange={changeCurrencyHandler}
-                                sx={{height : "40px"}}
+                                sx={{height: "40px"}}
                                 value={currencyValue.value}
                             >
                                 {
@@ -214,14 +220,14 @@ const TableHeadComponent = ({ sortingMultiFunction, priceSort, setCoinValue, row
                                 }
                             </Select>
                         </Box>
-
                     </Box>
                 </TableCell>
 
-                <TableCell align="center" colSpan={2} sx={{background: "none"}}>
+                {/*ROWS*/}
+                <TableCell align="center" colSpan={2} sx={{background: "none",borderBottom : "none"}}>
                     <Box component={'span'}>Rows per page: </Box>
                     <Select
-                        sx={{height : "40px"}}
+                        sx={{height: "40px"}}
                         // value={rowNumber}
                         value={rowNumber || rows[0]}
                         // onChange={(event) => setRowNumber(event.target?.value)}

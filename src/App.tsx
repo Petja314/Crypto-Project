@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import './App.css';
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import PurchaseCrypto from "./components/purchase crypto/PurchaseCrypto";
@@ -23,6 +23,7 @@ import Profile from "./components/profile/Profile";
 import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch} from "react-redux";
 import {CoinContainerDescription} from "./components/coin-info/CoinContainerDescription";
+import Preloader from "./commons/preloader/Preloader";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -113,15 +114,17 @@ function App() {
     }, [])
 
 
-
     if (isFetching) {
-        return <Box sx={{margin: "0 auto"}}> <CircularProgress color="inherit"/> </Box>
+        return <Preloader/>
+        // <Box sx={{margin: "0 auto"}}> <CircularProgress color="inherit"/> </Box>
     }
     // console.log('userLogged App : ', userLogged)
+    // console.log('isFetching' , isFetching)
     return (
         <Box>
             <Header routes={routes} userLogged={userLogged}/>
             {/*<TickerTape colorTheme="dark"></TickerTape>*/}
+            {/*<Suspense fallback={<Preloader visible={isFetching} />} >*/}
             <Routes>
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
                 <Route path={"/portfolio"} element={<Portfolio/>}/>
@@ -134,6 +137,7 @@ function App() {
                 <Route path={"/profile"} element={<Profile/>}/>
                 <Route path={"/coin_info/:id?"} element={<CoinContainerDescription/>}/>
             </Routes>
+            {/*</Suspense>*/}
         </Box>
 
     );

@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input{
+  height: 0.4375em;
+}

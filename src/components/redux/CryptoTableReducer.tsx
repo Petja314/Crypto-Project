@@ -37,6 +37,7 @@ export const actionsCryptoTable = {
 
 
 export const getAllCoinsListThunk = (currency: string, pageSize: number, page: number) => async (dispatch: any) => {
+    // debugger
     try {
         const response = await coinStatApi.listOfCoinsApi(currency, pageSize, page)
         if (response?.status === 200) {

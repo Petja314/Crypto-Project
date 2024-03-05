@@ -1,4 +1,4 @@
-import {Avatar, Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {Avatar, Box, Paper, Skeleton, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import {formattedPrice} from "../../commons/formattedPrice";
 import React from "react";
 import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";

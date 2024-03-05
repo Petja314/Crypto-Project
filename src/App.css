@@ -28,3 +28,7 @@
   display: flex !important;
   flex-wrap: wrap !important;
 }
+
+.css-p51h6s-MuiInputBase-input-MuiOutlinedInput-input{
+  height: 0.4375em !important;
+}
