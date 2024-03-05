@@ -1,18 +1,12 @@
 import React from 'react';
-import {Box, Container, Grid, Paper, Stack, Typography} from "@mui/material";
-import CryptoTable from "./CryptoTable";
-import LeaderBoard from "./LeaderBoard";
-import CarouselMui from "./CarouselMui";
-import QuickActions from "./QuickActions";
-import {useSelector} from "react-redux";
+import { Container, Grid, Paper, Stack, Typography} from "@mui/material";
+import CryptoTable from "./crypto table/CryptoTable";
+import BtcPriceWidget from "../widgets/BtcPriceWidget";
+import CarouselMui from "../widgets/CarouselMui";
 
 const Dashboard = () => {
-
     return (
-        <Box>
-            <Container
-                sx={{marginBottom: "50px"}}
-            >
+            <Container sx={{marginBottom: "50px"}}>
 
                 <Typography
                     variant='h4'
@@ -39,9 +33,9 @@ const Dashboard = () => {
                     </Grid>
                 </Grid>
 
+                <BtcPriceWidget/>
                 {/*<LeaderBoard/>*/}
                 <CryptoTable/>
-
 
                 {/*<Grid container  spacing={3}>*/}
                 {/*    <Grid item xs={8}>*/}
@@ -55,7 +49,6 @@ const Dashboard = () => {
 
 
             </Container>
-        </Box>
     );
 };
 

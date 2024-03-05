@@ -55,7 +55,7 @@ export const CryptoChart = () => {
         datasets: [
             {
                 fill: true,
-                label: id,
+                label: id + ' $', //$ - cannot change different currency by API
                 data: coinCharData.map((value: any) => value.y),
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',

@@ -35,18 +35,16 @@ export const coinDescriptionActions = {
 }
 
 
-export const coinDescriptionDataThunk = (id: any) => async (dispatch: any) => {
+export const coinDescriptionDataThunk = (id: any , currency : any) => async (dispatch: any) => {
     try {
-        const response = await coinStatApi.coinDetails(id);
+        const response = await coinStatApi.coinDetails(id , currency);
         dispatch(coinDescriptionActions.setCoinDetails([response.data]))
     } catch (error) {
         console.log('Error:', error);
     }
-
-
-
-
 }
+
+
 
 
 export const coinChartDataThunk = (id: any , timeValue : any) => async (dispatch: any) => {

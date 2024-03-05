@@ -9,14 +9,17 @@ import {PriceChangesWidget} from "./coin-info-widgets/PriceChangesWidget";
 import {CoinTableInfo} from "./CoinTableInfo";
 import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";
 import CryptoExplorers from "./CryptoExplorers";
+import {RootState} from "../redux/ReduxStore";
 
 export const CoinContainerDescription = () => {
     const dispatch: any = useDispatch()
     const {id} = useParams()
     const {coinData} = useSelector((state: any) => state.coinDetails)
+    const {currencyValue} = useSelector((state: RootState) => state.marketCoinList)
+
 
     useEffect(() => {
-        dispatch(coinDescriptionDataThunk(id))
+        dispatch(coinDescriptionDataThunk(id, currencyValue.value))
     }, [id]);
     return (
         <Container>
@@ -29,6 +32,7 @@ export const CoinContainerDescription = () => {
 
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <CoinTableInfo
+                                        currencyValue={currencyValue}
                                         formattedPrice={formattedPrice}
                                         item={item}
                                     />

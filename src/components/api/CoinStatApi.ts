@@ -2,11 +2,11 @@ import {instanceAxios} from "./Api";
 
 
 export const coinStatApi = {
-    listOfCoinsApi(currency: string, pageSize: number, page: number) {
-        return instanceAxios.get(`?page=${page}&limit=${pageSize}&currency=${currency}`)
+    listOfCoinsApi(currency: string, rowsPerPage: number, page: number) {
+        return instanceAxios.get(`?page=${page}&limit=${rowsPerPage}&currency=${currency}`)
     },
-    coinDetails(id: any) {
-        return instanceAxios.get(`${id}?currency=usd`)
+    coinDetails(id: any , currency : any) {
+        return instanceAxios.get(`${id}?currency=${currency}`)
     },
     coinChart(id: any, period: any) {
         return instanceAxios.get(`${id}/charts?period=${period}`)

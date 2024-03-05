@@ -2,16 +2,20 @@ import {Avatar, Box, Paper, Skeleton, Table, TableBody, TableCell, TableHead, Ta
 import {formattedPrice} from "../../commons/formattedPrice";
 import React from "react";
 import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/ReduxStore";
 
-export const CoinTableInfo = ({item}: any) => {
+export const CoinTableInfo = ({item,currencyValue}: any) => {
+
+
     const tableBodyInfo = [
         ['Market cap Rank', item.rank],
-        ['Market Cap', formattedPrice(item.marketCap) + ' $'],
+        ['Market Cap', formattedPrice(item.marketCap) + currencyValue.symbol],
         ['Volume', formattedPrice(item.volume)],
         ['Available Supply', `${item.availableSupply} ${item.symbol}`],
         ['Total supply', `${item.totalSupply} ${item.symbol}`],
-        ['Price change 1d', formattedPrice(item.priceChange1d) + ' $'],
-        ['Price change 1w', formattedPrice(item.priceChange1w) + ' $'],
+        ['Price change 1d', formattedPrice(item.priceChange1d) + "%"],
+        ['Price change 1w', formattedPrice(item.priceChange1w) + "%"],
     ]
 
 
@@ -30,7 +34,7 @@ export const CoinTableInfo = ({item}: any) => {
                                 </Box>
                             </TableCell>
                             <TableCell>
-                                <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formattedPrice(item.price)} $</Box>
+                                <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formattedPrice(item.price)+ currencyValue.symbol} </Box>
                                 <Box
                                     sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}
                                 >

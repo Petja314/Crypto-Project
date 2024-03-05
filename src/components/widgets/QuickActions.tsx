@@ -11,7 +11,7 @@ const QuickActions = () => {
                     <Typography variant='h6' sx={{color : "#fff"}}>Quick Actions</Typography>
 
                     <Box>
-                        {/*<img src={walleticon} alt="WebP Image" style={{ width: "100%", height: "auto" }} />*/}
+                        <img src={walleticon} alt="WebP Image" style={{ width: "100%", height: "auto" }} />
                     </Box>
 
                     <Grid item>
