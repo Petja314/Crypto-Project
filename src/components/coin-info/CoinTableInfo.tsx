@@ -5,20 +5,26 @@ import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/ReduxStore";
 
-export const CoinTableInfo = ({item,currencyValue}: any) => {
 
-
-    const tableBodyInfo = [
-        ['Market cap Rank', item.rank],
-        ['Market Cap', formattedPrice(item.marketCap) + currencyValue.symbol],
-        ['Volume', formattedPrice(item.volume)],
-        ['Available Supply', `${item.availableSupply} ${item.symbol}`],
-        ['Total supply', `${item.totalSupply} ${item.symbol}`],
-        ['Price change 1d', formattedPrice(item.priceChange1d) + "%"],
-        ['Price change 1w', formattedPrice(item.priceChange1w) + "%"],
-    ]
-
-
+type tableBodyInfoType = {
+    label: string
+    value: string | number
+}
+type CoinTableInfoPropsType = {
+    item : any,
+    currencyValue : any
+}
+export const CoinTableInfo = ({item, currencyValue}: CoinTableInfoPropsType) => {
+    //tableBodyInfo was made to make JSX more clear
+    const tableBodyInfo: tableBodyInfoType[] = [
+        {label: 'Market cap Rank', value: item.rank},
+        {label: 'Market Cap', value: formattedPrice(item.marketCap) + currencyValue.symbol},
+        {label: 'Volume', value: formattedPrice(item.volume)},
+        {label: 'Available Supply', value: `${item.availableSupply} ${item.symbol}`},
+        {label: 'Total supply', value: `${item.totalSupply} ${item.symbol}`},
+        {label: 'Price change 1d', value: formattedPrice(item.priceChange1d) + "%"},
+        {label: 'Price change 1w', value: formattedPrice(item.priceChange1w) + "%"},
+    ];
     return (
         <Box>
             {/*TABLE*/}
@@ -34,7 +40,7 @@ export const CoinTableInfo = ({item,currencyValue}: any) => {
                                 </Box>
                             </TableCell>
                             <TableCell>
-                                <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formattedPrice(item.price)+ currencyValue.symbol} </Box>
+                                <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formattedPrice(item.price) + currencyValue.symbol} </Box>
                                 <Box
                                     sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}
                                 >
@@ -44,18 +50,22 @@ export const CoinTableInfo = ({item,currencyValue}: any) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tableBodyInfo.map(([label, value], index) => (
+                        {tableBodyInfo.map((item, index: number) => (
                             <TableRow key={index}>
                                 <TableCell component="th" scope="row" sx={{fontWeight: 'bold'}}>
-                                    {label}
+                                    {item.label}
                                 </TableCell>
                                 <TableCell>
                                     <Typography component="span" sx={{fontWeight: 'bold', textTransform: 'uppercase'}}>
-                                        {value}
+                                        <Box sx={{color: item.label === 'Price change 1d' || item.label === 'Price change 1w' ? (item.value < 0 ? "#ea3943" : "#16c784") : "#fff"}}>
+                                            {item.value}
+                                        </Box>
                                     </Typography>
                                 </TableCell>
                             </TableRow>
                         ))}
+
+
                     </TableBody>
                 </Table>
             </Paper>

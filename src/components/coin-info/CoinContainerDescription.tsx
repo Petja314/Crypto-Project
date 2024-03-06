@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
-import {coinDescriptionDataThunk} from "../redux/CoinDescriptionReducer";
+import {coinDataArray, coinDescriptionDataThunk} from "../redux/CoinDescriptionReducer";
 import {Box, Button, Container,} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {CryptoChart} from "./chart/CryptoChart";
@@ -13,10 +13,9 @@ import {RootState} from "../redux/ReduxStore";
 
 export const CoinContainerDescription = () => {
     const dispatch: any = useDispatch()
-    const {id} = useParams()
-    const {coinData} = useSelector((state: any) => state.coinDetails)
+    const {id  }= useParams()
+    const {coinData} = useSelector((state: RootState) => state.coinDetails) as { coinData: coinDataArray[] }
     const {currencyValue} = useSelector((state: RootState) => state.marketCoinList)
-
 
     useEffect(() => {
         dispatch(coinDescriptionDataThunk(id, currencyValue.value))
@@ -25,15 +24,14 @@ export const CoinContainerDescription = () => {
         <Container>
             <Box sx={{marginTop: "50px", marginBottom: "50px"}}>
                 {
-                    coinData.map((item: any, index: any) => (
-                        <Box key={index}>
+                    coinData.map((item , index: number) => (
+                        <Box key={item.id}>
 
                             <Box sx={{display: "flex", gap: 3}}>
 
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <CoinTableInfo
                                         currencyValue={currencyValue}
-                                        formattedPrice={formattedPrice}
                                         item={item}
                                     />
                                     <CoinDataLinksWidget item={item}/>

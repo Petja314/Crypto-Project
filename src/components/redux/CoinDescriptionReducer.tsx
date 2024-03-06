@@ -1,11 +1,46 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { coinStatApi} from "../api/CoinStatApi";
+import {InferActionsTypes, RootState} from "./ReduxStore";
+import {actionsCryptoTable} from "./CryptoTableReducer";
+import {ThunkAction} from "redux-thunk";
 
-const initialState = {
-    coinData: [],
-    cryptoChartData: []
+export type coinDataArray = {
+    "id": string,
+    "icon": string,
+    "name": string,
+    "symbol": string,
+    "rank": number,
+    "price": number,
+    "priceBtc": number,
+    "volume": number,
+    "marketCap": number,
+    "availableSupply": number,
+    "totalSupply": number,
+    "priceChange1h": number,
+    "priceChange1d": number,
+    "priceChange1w": number,
+    "redditUrl": string,
+    "websiteUrl": string,
+    "twitterUrl": string,
+    "explorers": [string]
 }
-export const CoinDescriptionReducer = (state = initialState, action: any) => {
+
+export type cryptoChartDataType = {
+    cryptoChartData : any
+}
+
+type initialStateCoinType = {
+    coinData : coinDataArray[],
+    cryptoChartData: any ,
+    chartTimeFrame : string
+}
+
+const initialState : initialStateCoinType = {
+    coinData: [],
+    cryptoChartData: [],
+    chartTimeFrame : "1m",
+}
+export const CoinDescriptionReducer = (state = initialState, action: ActionsCryptoTable) => {
     switch (action.type) {
         case "SET_COIN_DATA" :
             return {
@@ -17,14 +52,21 @@ export const CoinDescriptionReducer = (state = initialState, action: any) => {
                 ...state,
                 cryptoChartData: action.cryptoChartData
             }
+            case "SET_CHART_TIME_FRAME" :
+            return {
+                ...state,
+                chartTimeFrame: action.chartTimeFrame
+            }
         default :
             return state
     }
 };
 
 
+export type ActionsCryptoTable = InferActionsTypes<typeof coinDescriptionActions>
+
 export const coinDescriptionActions = {
-    setCoinDetails: (data: any) => ({
+    setCoinDetails: (data: coinDataArray[]) => ({
         type: "SET_COIN_DATA",
         data
     } as const),
@@ -32,10 +74,16 @@ export const coinDescriptionActions = {
         type: "SET_CRYPTO_CHART",
         cryptoChartData
     } as const),
+    setChartTimeFrameAC: (chartTimeFrame: string) => ({
+        type: "SET_CHART_TIME_FRAME",
+        chartTimeFrame
+    } as const),
 }
 
 
-export const coinDescriptionDataThunk = (id: any , currency : any) => async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsCryptoTable | any>;
+
+export const coinDescriptionDataThunk = (id: string | undefined, currency : string) : ThunkType => async (dispatch) => {
     try {
         const response = await coinStatApi.coinDetails(id , currency);
         dispatch(coinDescriptionActions.setCoinDetails([response.data]))
@@ -45,13 +93,9 @@ export const coinDescriptionDataThunk = (id: any , currency : any) => async (dis
 }
 
 
-
-
-export const coinChartDataThunk = (id: any , timeValue : any) => async (dispatch: any) => {
+export const coinChartDataThunk = (id: string | undefined , chartTimeFrame : string) : ThunkType => async (dispatch) => {
     try {
-        const response = await coinStatApi.coinChart(id , timeValue);
-        // console.log('res chart :' , response)
-        // dispatch(coinDescriptionActions.setCryptoChartAC())
+        const response = await coinStatApi.coinChart(id , chartTimeFrame);
         dispatch(coinDescriptionActions.setCryptoChartAC(response.data))
     } catch (error) {
         console.log('Error:', error);

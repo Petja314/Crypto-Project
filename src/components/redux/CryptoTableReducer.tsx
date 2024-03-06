@@ -3,7 +3,6 @@ import {coinStatApi} from "../api/CoinStatApi";
 import _ from "lodash";
 import usd from "../../assets/images/icons/currency_icons/USD.svg";
 import {InferActionsTypes, RootState} from "./ReduxStore";
-import {actionsProfile, ActionsProfileTypes} from "./ProfileReducer";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 
 
@@ -44,11 +43,14 @@ type initialStateType = {
     page : number
 }
 
+const savedCurrencyValue = localStorage.getItem('currencyValue')
 const initialState: initialStateType = {
     marketCapList: [],
     coinValue: '',
-    currencyValue: {value: 'USD', symbol: "$", icon: usd},
-    rowsPerPage : 25 ,
+    currencyValue: savedCurrencyValue
+        ? JSON.parse(savedCurrencyValue)
+        :{value: 'USD', symbol: "$", icon: usd},
+    rowsPerPage : 100,
     rows : [25, 50, 100],
     fetching : true,
     page : 1
@@ -75,10 +77,13 @@ export const CryptoTableReducer = (state = initialState, action: ActionsCryptoTa
                 coinValue: action.coinSearchValue
             }
             case "SET_CURRENCY_VALUE" :
-            return {
-                ...state,
-                currencyValue: action.currency
-            }
+                //Setting the currency value to the localStorage - after refresh the latest currency would be selected to prevent call USD as default currency
+                const newState = {
+                    ...state,
+                    currencyValue: action.currency
+                }
+                localStorage.setItem('currencyValue' , JSON.stringify(action.currency))
+            return newState
         case "SET_ROW_NUMBER" :
             return {
                 ...state,

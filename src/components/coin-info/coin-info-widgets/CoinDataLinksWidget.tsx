@@ -4,14 +4,25 @@ import XIcon from "@mui/icons-material/X";
 import {Link} from "react-router-dom";
 import React from "react";
 import BackgroundBlock from "../../../assets/images/image/block_bg.svg"
+import {coinDataArray} from "../../redux/CoinDescriptionReducer";
 
+type coinDataWidgetType = {
+    label : string ,
+    icon : any ,
+    value : string
+}
 
-export const CoinDataLinksWidget = ({item}: any) => {
-    const coinDataWidgets =  [
-        ['Website :', <LanguageIcon/>, item.websiteUrl],
-        ['Github :', <XIcon/>, item.twitterUrl],
-        ['Reddit :', <LanguageIcon/>, item.redditUrll],
+type CoinDataLinksWidgetPropsType = {
+    item : any
+}
+export const CoinDataLinksWidget = ({item}: CoinDataLinksWidgetPropsType) => {
+
+    const coinDataWidget : coinDataWidgetType[] = [
+        {label: 'Website', icon: <LanguageIcon/>, value: item.websiteUrl},
+        {label: 'Github', icon: <XIcon/>, value: item.twitterUrl},
+        {label: 'Reddit', icon: <LanguageIcon/>, value: item.redditUrl},
     ]
+
 
     return (
         <Paper sx={{
@@ -25,16 +36,18 @@ export const CoinDataLinksWidget = ({item}: any) => {
                 Official links
             </Box>
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: "space-evenly", marginTop: "10px"}}>
-                {coinDataWidgets.map(([label, image, value], index) => (
-                        <Box key={index}>
-                            <Link to={value}>
-                                <IconButton sx={{color: "#E0F64B"}}>
-                                    {image}
-                                </IconButton>
-                            </Link>
-                        </Box>
-                    ))
+
+                {coinDataWidget.map((item , index : number) => (
+                    <Box key={index}>
+                        <Link to={item.value}>
+                            <IconButton sx={{color: "#E0F64B"}}>
+                                {item.icon}
+                            </IconButton>
+                        </Link>
+                    </Box>
+                ))
                 }
+
             </Box>
         </Paper>
     )

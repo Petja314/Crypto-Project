@@ -71,6 +71,7 @@ const CryptoTable = () => {
     //New array to display in JSX
     const filteredDataByName: marketCapListArray[] = findCoinHandler()
 
+    // console.log('fetching , ' ,fetching)
     return (
         <TableContainer
             component={Paper}

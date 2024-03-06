@@ -3,38 +3,28 @@ import { Container, Grid, Paper, Stack, Typography} from "@mui/material";
 import CryptoTable from "./crypto table/CryptoTable";
 import BtcPriceWidget from "../widgets/BtcPriceWidget";
 import CarouselMui from "../widgets/CarouselMui";
+import LeaderBoard from "../widgets/LeaderBoard";
 
 const Dashboard = () => {
     return (
-            <Container sx={{marginBottom: "50px"}}>
+            <Container sx={{marginBottom: "50px", marginTop : "50px"}}>
 
-                <Typography
-                    variant='h4'
-                    sx={{
-                        marginTop: "50px",
-                        marginBottom: "20px",
-                        color: "#fff"
-                    }}
-                >
-                    Dashboard
-                </Typography>
+                <Typography  variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
 
-                <Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🔥Cryptocurrency market cap</Typography>
-
-                <Grid container sx={{marginBottom: "60px"}} spacing={2}>
-                    <Grid item xs={4}>
-                        <CarouselMui/>
+                <Grid container  >
+                    <Grid item xs={6}>
+                        <LeaderBoard/>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         <CarouselMui/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <CarouselMui/>
+                        <BtcPriceWidget/>
                     </Grid>
                 </Grid>
 
-                <BtcPriceWidget/>
-                {/*<LeaderBoard/>*/}
+
+
+
+
                 <CryptoTable/>
 
                 {/*<Grid container  spacing={3}>*/}

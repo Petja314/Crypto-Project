@@ -14,7 +14,7 @@ const BtcPriceWidget = () => {
 
     // console.log('currencyValue',currencyValue)
     return (
-        <Box>
+        <Box mt={4}>
 
             <Paper sx={{
                 borderRadius: '20px',
