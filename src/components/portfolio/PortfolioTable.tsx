@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
-import AddTransaction from "./AddTransaction";
+import AddTransaction from "./add-transaction/AddTransaction";
 
 const PortfolioTable = () => {
     return (

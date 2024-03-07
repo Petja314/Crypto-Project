@@ -26,7 +26,6 @@ const LeaderBoard = () => {
     }
     return (
         <Box>
-
             <Typography variant='h6' sx={{color: "white", marginBottom: "10px", display: "flex", alignItems: "center", gap: 1}}>
                 <LeaderIcon/>
                 Leaderboard of the week

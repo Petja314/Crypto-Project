@@ -64,7 +64,7 @@ const CryptoTable = () => {
         }
     }
     // Function that creates a new array with the ability to search by name
-    const findCoinHandler = () => {
+     const findCoinHandler = () => {
         const filteredDataName : marketCapListArray[] = marketCapList.filter((item) => item.name.toUpperCase().includes(coinValue.toUpperCase()))
         return filteredDataName
     }
