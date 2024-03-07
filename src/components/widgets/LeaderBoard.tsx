@@ -4,9 +4,11 @@ import {ReactComponent as LeaderIcon} from "../../assets/images/icons/icon-cup-d
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/ReduxStore";
 import {marketCapListArray} from "../redux/CryptoTableReducer";
+import {useNavigate} from "react-router-dom";
 
 
 const LeaderBoard = () => {
+    const navigate = useNavigate()
     const {marketCapList,fetching} = useSelector((state: RootState) => state.marketCoinList)
     const [leadersOfWeek, setLeadersOfWeek] = useState<marketCapListArray[]>([])
 
@@ -19,8 +21,9 @@ const LeaderBoard = () => {
         }
     }, [fetching,marketCapList])
 
-
-    // console.log('leadersOfWeek' , leadersOfWeek)
+    const navigateToCoinDescription = (id : any) => {
+        navigate(`/coin_info/${id}`)
+    }
     return (
         <Box>
 
@@ -34,7 +37,7 @@ const LeaderBoard = () => {
                     <Paper key={index} sx={{borderRadius: '20px', marginBottom: "10px", width : "500px",
                     backgroundColor : index === 0 ? "#1230c9" : "transparent",
                     }}>
-                        <Grid container  sx={{alignItems: 'center', }} >
+                        <Grid container  sx={{alignItems: 'center',cursor : "pointer" }} onClick={() => navigateToCoinDescription(item.id)} >
                             <Grid item xs={6}>
                                 <Box
                                     sx={{

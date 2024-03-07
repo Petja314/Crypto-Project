@@ -4,6 +4,7 @@ import CryptoTable from "./crypto table/CryptoTable";
 import BtcPriceWidget from "../widgets/BtcPriceWidget";
 import CarouselMui from "../widgets/CarouselMui";
 import LeaderBoard from "../widgets/LeaderBoard";
+import FearGreedIndex from "../widgets/FearGreedIndex";
 
 const Dashboard = () => {
     return (
@@ -11,31 +12,18 @@ const Dashboard = () => {
 
                 <Typography  variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
 
-                <Grid container  >
+                <Grid container mb={2} >
                     <Grid item xs={6}>
                         <LeaderBoard/>
                     </Grid>
                     <Grid item xs={6}>
+                        <FearGreedIndex/>
                         <CarouselMui/>
                         <BtcPriceWidget/>
                     </Grid>
                 </Grid>
 
-
-
-
-
                 <CryptoTable/>
-
-                {/*<Grid container  spacing={3}>*/}
-                {/*    <Grid item xs={8}>*/}
-                {/*        <CryptoTable/>*/}
-                {/*    </Grid>*/}
-
-                {/*    <Grid item xs={4}>*/}
-                {/*        <LeaderBoard/>*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
 
 
             </Container>
