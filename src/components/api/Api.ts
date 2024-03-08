@@ -9,3 +9,9 @@ export const instanceAxios = axios.create({
         'X-API-KEY': "07GRzrjRyWN31Ziw/90JsbuhxNL0+OilusCU1pMKpSg=",
     }
 })
+
+
+export const instanceAlternative = axios.create({
+    baseURL  : "https://api.alternative.me/" ,
+})
+

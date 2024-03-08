@@ -13,18 +13,44 @@ import {formattedPrice} from "../../../commons/formattedPrice";
 const AddTransaction = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [tabValue, setTabValue] = useState<any>(0)
-
-    const addTransactionHandler = () => {
-        setOpenDialog(false)
-    }
+    const [name, setName] = useState<any>('')
+    const [newState, setNewState] = useState<any>([
+        {id : "" , name : [] , value : []}
+    ])
+    // console.log('newState : ', newState)
+    // console.log('name :' , name)
+    // const addTransactionHandler = () => {
+    //     setOpenDialog(false)
+    // }
     //BUY 0 - SELL - 1
     const tabValueHandler = (event: any, newValue: any) => {
         setTabValue(newValue)
     }
 
+    const addNewValueHandler = (id : any) => {
+        const coinId = id
+        // console.log('coinId' ,coinId)
+        const data = {id : coinId, name : ["btc"] , value : [1000]}
+        const isExisting = newState.some((item : any) => item.id === coinId)
+
+        if(!isExisting) {
+            const updatedState = newState.map((item : any) => (
+               {...item,
+                   name : [...item.name ,name],
+                   value : data.value
+               }
+            ))
+            setNewState(updatedState)
+        }
+        else {
+            setNewState([...newState,data ])
+        }
+    }
+
     // console.log('tabValue', tabValue)
     return (
         <Box>
+
             <Button
                 sx={{
                     padding: 0
@@ -33,6 +59,11 @@ const AddTransaction = () => {
             >
                 +
             </Button>
+
+            {/*<input type="text" onChange={(event) => setName(event.target.value)} />*/}
+            {/*<Button onClick={() => addNewValueHandler("btc")} >CLICK</Button>*/}
+
+
             <Dialog
                 open={openDialog}
                 onClose={() => setOpenDialog(false)}
@@ -62,17 +93,22 @@ const AddTransaction = () => {
                     </Tabs>
 
                     <TabPanel value={tabValue} index={0}>
-                        <TabPanelCoinSearch/>
+                        <TabPanelCoinSearch
+                            setOpenDialog={setOpenDialog}
+                        />
                     </TabPanel>
 
                     <TabPanel value={tabValue} index={1}>
-                        <TabPanelCoinSearch/>
+                        <TabPanelCoinSearch
+                            setOpenDialog={setOpenDialog}
+                        />
                     </TabPanel>
                 </DialogContent>
 
                 <DialogActions sx={{display: "flex", justifyContent: "center"}}>
-                    <Button autoFocus onClick={addTransactionHandler}>Add Transaction</Button>
+                    {/*<Button autoFocus onClick={addTransactionHandler}>Add Transaction</Button>*/}
                 </DialogActions>
+
 
             </Dialog>
 
@@ -84,7 +120,7 @@ const AddTransaction = () => {
 export default AddTransaction;
 
 
-export const TabPanelCoinSearch = () => {
+export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
     const dispatch: any = useDispatch()
     const {marketCapList, fetching, rowsPerPage} = useSelector((state: RootState) => state.marketCoinList)
     const totalPageCount = 50
@@ -105,7 +141,7 @@ export const TabPanelCoinSearch = () => {
 
     }, [fetching, rowsPerPage])
 
-    const selectedCoinHandler = (value : any) => {
+    const selectedCoinHandler = (value: any) => {
         setSelectedCoin([value])
         setIsTableClosed(false)
     }
@@ -119,7 +155,7 @@ export const TabPanelCoinSearch = () => {
     // console.log('coinValue' , coinValue)
     // console.log('marketCapList' , marketCapList)
     // console.log('portfolioDataArray', portfolioDataArray)
-    console.log('selectedCoin' , selectedCoin)
+    // console.log('selectedCoin', selectedCoin)
     return (
         <Paper sx={{
             marginTop: "10px"
@@ -130,9 +166,9 @@ export const TabPanelCoinSearch = () => {
                     <Box>
                         <Box sx={{textAlign: "center", margin: "10px 0px 10px 0px"}}>Choose Coin</Box>
                         <TextField
-                            onClick={() =>  setIsTableClosed(true)}
+                            onClick={() => setIsTableClosed(true)}
                             value={coinValue}
-                            onChange={ (event) => setCoinValue(event.target.value) }
+                            onChange={(event) => setCoinValue(event.target.value)}
                             label='add coin'
                             sx={{width: "100%",}}
                         />
@@ -157,10 +193,12 @@ export const TabPanelCoinSearch = () => {
                         )
                         }
                     </Box>
-
                     <PurchaseCoinSection
                         selectedCoin={selectedCoin}
+                        setOpenDialog={setOpenDialog}
                     />
+
+
 
                 </Grid>
             </Grid>
@@ -170,19 +208,92 @@ export const TabPanelCoinSearch = () => {
 }
 
 
-const PurchaseCoinSection = ({selectedCoin} : any) => {
+const PurchaseCoinSection = ({selectedCoin, setOpenDialog}: any) => {
     // console.log('selectedCoin', selectedCoin)
-    const [quantity, setQuantity] = useState<any>(null)
+    const selectedCoinId = selectedCoin[0]?.id
+    const [quantity, setQuantity] = useState<number>(0)
     const [totalAmount, setTotalAmount] = useState<any>(0)
+    // const [portfolioDataMy, setPortfolioDataSetMy] = useState<any>([])
+
+    const [portfolioDataMy, setPortfolioDataSetMy] = useState<any>([
+        {
+            id : "",
+            icon: "",
+            rank: "",
+            name: "",
+            symbol : "",
+            currentCoinPrice: 0,                    //Current coin price
+            coinsBoughtAmountHistoryCash: [],       //Coins Bought Amount in Cash History
+            coinsBoughtHistoryTokenQuantity : [],   //Coins Bought Quantity History
+            totalHoldingCoins: 0,                   //Total Holding Coins in portfolio
+            buyingPricesHistory: [],                //Buying prices history in $
+            averageBuyingPrice: 0,                  //Average buying price
+            profitLoss: 0,                          //PROFIT - LOSS
+            totalHoldingCoinAmountCash : 0,         //Total amount of coins in portfolio
+        }
+    ])
 
     useEffect(() => {
         if (quantity > 0) {
             calculateTotalPrice()
         }
-        if(!quantity){
+        if (!quantity) {
             setTotalAmount(0)
         }
-    },[quantity])
+    }, [quantity])
+
+    const addTransactionHandler = () => {
+        const currentCoinPrice = selectedCoin[0]?.price || 0;
+        const quantityNumber = Number(quantity);
+
+        const existingIndex = portfolioDataMy.findIndex((item: any) => item.id === selectedCoinId);
+
+        const updatedPortfolioData = portfolioDataMy.map((item: any, index: any) => {
+            if (item.id === selectedCoinId) {
+                // Update specific properties for the existing item
+                return {
+                    ...item,
+                    coinsBoughtAmountHistoryCash: [...item.coinsBoughtAmountHistoryCash, totalAmount],
+                    coinsBoughtHistoryTokenQuantity: [...item.coinsBoughtHistoryTokenQuantity, quantityNumber],
+                    totalHoldingCoins: item.totalHoldingCoins <= 0 ? quantityNumber : item.totalHoldingCoins + quantityNumber,
+                    totalHoldingCoinAmountCash: item.totalHoldingCoins * currentCoinPrice,
+                    buyingPricesHistory: [...item.buyingPricesHistory, totalAmount],
+                    averageBuyingPrice: item.totalHoldingCoins <= 0 ? quantityNumber : (item.totalHoldingCoinAmountCash + totalAmount) / (item.totalHoldingCoins + quantityNumber),
+                    profitLoss: (currentCoinPrice - item.averageBuyingPrice) * (item.totalHoldingCoins + quantityNumber),
+                };
+            }
+            return item;
+        });
+
+        if (existingIndex !== -1) {
+            // Item exists, update the existing array
+            setPortfolioDataSetMy(updatedPortfolioData);
+        } else {
+            // Item doesn't exist, add a new object
+            const newCoinData = {
+                id: selectedCoin[0]?.id || "",
+                icon: selectedCoin[0]?.icon || "",
+                rank: selectedCoin[0]?.rank || "",
+                name: selectedCoin[0]?.name || "",
+                symbol: selectedCoin[0]?.symbol || "",
+                currentCoinPrice,
+                coinsBoughtAmountHistoryCash: [totalAmount],
+                coinsBoughtHistoryTokenQuantity: [quantityNumber],
+                totalHoldingCoins: quantityNumber,
+                totalHoldingCoinAmountCash: quantityNumber * currentCoinPrice,
+                buyingPricesHistory: [totalAmount],
+                averageBuyingPrice: quantityNumber,
+                profitLoss: 0,
+            };
+
+            setPortfolioDataSetMy([...portfolioDataMy, newCoinData]);
+        }
+
+        console.log('updatedPortfolioData', updatedPortfolioData);
+    };
+
+
+
 
     const calculateTotalPrice = () => {
         const pricePerCoin = selectedCoin[0].price
@@ -194,41 +305,38 @@ const PurchaseCoinSection = ({selectedCoin} : any) => {
     if (!selectedCoin || selectedCoin.length <= 0) {
         return null
     }
-    console.log('quantity' , quantity)
-    console.log('totalAmount' , totalAmount)
+    console.log('portfolioDataMy' ,portfolioDataMy)
     return (
         <Box>
             <Box>
 
                 {
-                    selectedCoin.map((item:any , index:any)=>  (
-                            <Box key={index}>
+                    selectedCoin.map((item: any, index: any) => (
+                        <Box key={index}>
 
-                                    <Box sx={{display: "flex", justifyContent : "center", alignItems : "center", marginTop : "10px" }}>
-                                        <Avatar sx={{width : "30px", height : "30px",marginRight : "10px"}} src={item.icon}/>
-                                        <Box sx={{fontWeight: "bold", marginRight : "5px"}}>{item.name}</Box>
-                                        <Box sx={{color: "#c0c0ce", fontSize: "10px"}} component={"span"}> {item.symbol}</Box>
-                                    </Box>
+                            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px"}}>
+                                <Avatar sx={{width: "30px", height: "30px", marginRight: "10px"}} src={item.icon}/>
+                                <Box sx={{fontWeight: "bold", marginRight: "5px"}}>{item.name}</Box>
+                                <Box sx={{color: "#c0c0ce", fontSize: "10px"}} component={"span"}> {item.symbol}</Box>
+                            </Box>
 
-                                <Box sx={{marginTop: "10px", display: "flex", gap: 3}} >
-                                    <Box>
-                                        <Typography>Quantity</Typography>
-                                        <TextField
-                                            type={"number"}
-                                            variant="filled"
-                                            onChange={(event) => setQuantity(event.target.value)}
-                                            value={quantity}
-                                        />
-                                    </Box>
-
-                                    <Box>
-                                        <Typography>Price Per Coin</Typography>
-                                        <TextField disabled variant="filled" value={`${formattedPrice(item.price)} $`}/>
-                                    </Box>
+                            <Box sx={{marginTop: "10px", display: "flex", gap: 3}}>
+                                <Box>
+                                    <Typography>Quantity</Typography>
+                                    <TextField
+                                        type={"number"}
+                                        variant="filled"
+                                        onChange={(event : any) => setQuantity(event.target.value)}
+                                        value={quantity}
+                                    />
                                 </Box>
 
-
+                                <Box>
+                                    <Typography>Price Per Coin</Typography>
+                                    <TextField disabled variant="filled" value={`${formattedPrice(item.price)} $`}/>
+                                </Box>
                             </Box>
+                        </Box>
                     ))
                 }
 
@@ -246,6 +354,11 @@ const PurchaseCoinSection = ({selectedCoin} : any) => {
                     }}
                     >{formattedPrice(totalAmount)}$</Box>
                 </Paper>
+
+                <Box sx={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                    <Button autoFocus onClick={addTransactionHandler}>Add Transaction</Button>
+                </Box>
+
             </Box>
         </Box>
     )
