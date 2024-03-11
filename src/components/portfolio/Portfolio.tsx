@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Container, Typography} from "@mui/material";
 import BtcPriceWidget from "../widgets/BtcPriceWidget";
-import Performer from "./Performer";
+import Performer from "../widgets/Performer";
 import PortfolioTable from "./PortfolioTable";
 
 

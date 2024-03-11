@@ -6,6 +6,7 @@ import {ProfileReducer} from "./ProfileReducer";
 import {CryptoTableReducer} from "./CryptoTableReducer";
 import {CoinDescriptionReducer} from "./CoinDescriptionReducer";
 import {FearGreedIndexReducer} from "./FearGreedIndexReducer";
+import {PortfolioReducer} from "./PortfolioReducer";
 
 
 // export const store = configureStore({
@@ -30,7 +31,8 @@ let rootReducers = combineReducers({
     userProfile : ProfileReducer,
     marketCoinList : CryptoTableReducer,
     coinDetails : CoinDescriptionReducer,
-    fearAndGreed : FearGreedIndexReducer
+    fearAndGreed : FearGreedIndexReducer,
+    myPortfolio : PortfolioReducer
 });
 
 

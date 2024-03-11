@@ -96,11 +96,6 @@ export const CryptoTableReducer = (state = initialState, action: ActionsCryptoTa
                 ...state,
                 fetching: action.isFetching
             }
-            case "SET_PAGE" :
-            return {
-                ...state,
-                page: action.page
-            }
         default :
             return state
     }

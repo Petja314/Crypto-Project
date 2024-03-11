@@ -1,64 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Input, MenuItem, Paper, Select, Tab, Tabs, TextField, Typography} from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import SellIcon from '@mui/icons-material/Sell';
-import ShopIcon from '@mui/icons-material/Shop';
-import PropTypes from 'prop-types';
-import {tableDataPortfolio} from "../PortfolioTable";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
-import {actionsCryptoTable, getAllCoinsListThunk, marketCapListArray} from "../../redux/CryptoTableReducer";
+import React, {useEffect, useState} from "react";
+import {actionsCryptoTable, getAllCoinsListThunk} from "../../redux/CryptoTableReducer";
+import {Avatar, Box, Grid, MenuItem, Paper, TextField} from "@mui/material";
 import {formattedPrice} from "../../../commons/formattedPrice";
-
-const AddTransaction = () => {
-    const [openDialog, setOpenDialog] = useState(false)
-    const [tabValue, setTabValue] = useState<any>(0)
-    const tabValueHandler = (event: any, newValue: any) => {
-        setTabValue(newValue)
-    }
-
-    return (
-        <Box>
-            <Button  sx={{padding: 0 }} onClick={() => setOpenDialog(true)}>+</Button>
-            <Dialog open={openDialog}  onClose={() => setOpenDialog(false)}>
-                <DialogTitle>Add transaction</DialogTitle>
-                <IconButton
-                    aria-label="close"
-                    onClick={() => setOpenDialog(false)}
-                    sx={{position: 'absolute',right: 8,top: 8,color: (theme) => theme.palette.grey[500],}}
-                >
-                    <CloseIcon/>
-                </IconButton>
-
-                <DialogContent>
-                    <Tabs variant="fullWidth" value={tabValue} onChange={tabValueHandler}>
-                        <Tab icon={<ShopIcon/>} label='Buy'/>
-                        <Tab icon={<SellIcon/>} label='Sell'/>
-                    </Tabs>
-
-                    <TabPanel value={tabValue} index={0}>
-                        <TabPanelCoinSearch setOpenDialog={setOpenDialog}/>
-                    </TabPanel>
-
-                    <TabPanel value={tabValue} index={1}>
-                        <TabPanelCoinSearch setOpenDialog={setOpenDialog}/>
-                    </TabPanel>
-                </DialogContent>
-            </Dialog>
-        </Box>
-    );
-};
-
-export default AddTransaction;
-
-
+import {PurchaseCoinSection} from "./PurchaseCoinSection";
+import {PortfolioActions} from "../../redux/PortfolioReducer";
 export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
     const dispatch: any = useDispatch()
     const {fetching, rowsPerPage} = useSelector((state: RootState) => state.marketCoinList) //marketCapList
-    const totalPageCount = 50
-    const currentPage = 1
-    const [coinValue, setCoinValue] = useState<any>('')
-    const [selectedCoin, setSelectedCoin] = useState<any>([])
+    const {totalPageCount, currentPage, newCoinValue, selectedCoinArrayData} = useSelector((state: RootState) => state.myPortfolio)
     const [isTableClosed, setIsTableClosed] = useState(true)
 
     useEffect(() => {
@@ -73,29 +24,30 @@ export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
     }, [fetching, rowsPerPage])
 
     const selectedCoinHandler = (value: any) => {
-        setSelectedCoin([value])
+        // setSelectedCoinArrayData([value])
+       dispatch(PortfolioActions.setSelectedCoinArrayData([value]))
         setIsTableClosed(false)
     }
 
     const filteredPortfolioData = () => {
-        const filteredData = marketCapList.filter((item) => item.name.toUpperCase().includes(coinValue.toUpperCase()))
-        return filteredData
+        return  marketCapList.filter((item) => item.name.toUpperCase().includes(newCoinValue.toUpperCase()))
     }
     const portfolioDataArray = filteredPortfolioData()
     return (
-        <Paper sx={{ marginTop: "10px" }}>
+        <Paper sx={{marginTop: "10px"}}>
             <Grid container>
                 <Grid item>
                     <Box>
                         <Box sx={{textAlign: "center", margin: "10px 0px 10px 0px"}}>Choose Coin</Box>
                         <TextField
                             onClick={() => setIsTableClosed(true)}
-                            value={coinValue}
-                            onChange={(event) => setCoinValue(event.target.value)}
+                            value={newCoinValue}
+                            // onChange={(event) => setCoinValue(event.target.value)}
+                            onChange={(event) => dispatch(PortfolioActions.getNewCoinValueAC(event.target.value))}
                             label='add coin'
                             sx={{width: "100%",}}
                         />
-                        {coinValue !== '' && isTableClosed && (
+                        {newCoinValue !== '' && isTableClosed && (
                             portfolioDataArray.map((item, index) => (
                                 <MenuItem
                                     key={index}
@@ -113,7 +65,7 @@ export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
                         )}
                     </Box>
                     <PurchaseCoinSection
-                        selectedCoin={selectedCoin}
+                        selectedCoinArrayData={selectedCoinArrayData}
                         setOpenDialog={setOpenDialog}
                     />
                 </Grid>
@@ -121,210 +73,6 @@ export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
         </Paper>
     )
 }
-
-
-const PurchaseCoinSection = ({selectedCoin, setOpenDialog}: any) => {
-    const {id,icon,rank,name,symbol,price} = selectedCoin[0] || {}
-    // const currentCoinPrice = Math.round(price * 100) / 100
-    const currentCoinPrice = price
-    const [coinQuantity, setCoinQuantity] = useState<number>(0)
-    const [totalBuyingAmount, setTotalBuyingAmount] = useState<any>(0)
-    const [error, setError] = useState('')
-    const [portfolioDataMy, setPortfolioDataSetMy] = useState<any>([
-        {
-            id: "",
-            icon: "",
-            rank: "",
-            name: "",
-            symbol: "",
-            currentCoinPrice: 0,                    //Current coin price
-            coinsBoughtAmountHistoryCash: [],       //Coins Bought Amount in Cash History
-            coinsBoughtHistoryTokenQuantity: [],   //Coins Bought Quantity History
-            totalHoldingCoins: 0,                   //Total Holding Coins in portfolio
-            buyingPricesHistory: [],                //Buying prices history in $
-            averageBuyingPrice: 0,                  //Average buying price
-            profitLoss: 0,                          //PROFIT - LOSS
-            totalHoldingCoinAmountCash: 0,         //Total amount of coins in portfolio
-        }
-    ])
-
-    useEffect(() => {
-        if (coinQuantity > 0) {
-            calculateTotalPrice()
-        }
-        if (!coinQuantity) {
-            setTotalBuyingAmount(0)
-        }
-    }, [selectedCoin,coinQuantity])
-
-    const calculateTotalHoldingCoins = (totalHoldingCoins: any, coinQuantity: any) => {
-        //Formula to calc. total holding coins
-        return totalHoldingCoins + coinQuantity
-    }
-    const calculateAverageBuyingPrice = (totalHoldingCoinAmountCash: any, totalBuyingAmount: any, totalHoldingCoins: any, coinQuantity: any) => {
-        //Formula to calc. average buying price
-        return (totalHoldingCoinAmountCash + totalBuyingAmount) / (totalHoldingCoins + coinQuantity)
-    }
-    const calculateProfitLoss = (currentCoinPrice: any, averageBuyingPrice: any, totalHoldingCoins: any) => {
-        //Formula to calc. profit and loss
-        return (currentCoinPrice - averageBuyingPrice) * totalHoldingCoins;
-    }
-    const calculateTotalHoldingCoinAmountCash = (totalHoldingCoins: any, coinQuantity: any, currentCoinPrice: any) => {
-        //Formula to calc. total holding coin amount in cash $
-        return (totalHoldingCoins + coinQuantity) * currentCoinPrice;
-
-    }
-
-
-    const updatePortfolioHandler = () => {
-        const updatedPortfolioData = portfolioDataMy.map((item: any) => {
-            if (item.id === id) {
-                return {
-                    ...item,
-                    currentCoinPrice: currentCoinPrice,
-                    coinsBoughtAmountHistoryCash: [...item.coinsBoughtAmountHistoryCash, totalBuyingAmount],
-                    coinsBoughtHistoryTokenQuantity: [...item.coinsBoughtHistoryTokenQuantity, coinQuantity],
-                    totalHoldingCoins: calculateTotalHoldingCoins(item.totalHoldingCoins, coinQuantity), //item.totalHoldingCoins + coinQuantity,
-                    buyingPricesHistory: [...item.buyingPricesHistory, totalBuyingAmount],
-                    averageBuyingPrice: calculateAverageBuyingPrice(item.totalHoldingCoinAmountCash, totalBuyingAmount, item.totalHoldingCoins, coinQuantity),
-                    profitLoss: calculateProfitLoss(currentCoinPrice, item.averageBuyingPrice, item.totalHoldingCoins),
-                    totalHoldingCoinAmountCash: calculateTotalHoldingCoinAmountCash(item.totalHoldingCoins, coinQuantity, currentCoinPrice),
-                };
-            }
-            return item;
-        });
-        //Setting to the existing object updated data
-        setPortfolioDataSetMy(updatedPortfolioData);
-    }
-    const createNewCoinInPortfolioHandler = () => {
-        const newCoinData = {
-            id: id || "",
-            icon: icon || "",
-            rank: rank || "",
-            name: name || "",
-            symbol: symbol || "",
-            currentCoinPrice: currentCoinPrice,
-            coinsBoughtAmountHistoryCash: [totalBuyingAmount],
-            coinsBoughtHistoryTokenQuantity: [coinQuantity],
-            totalHoldingCoins: coinQuantity,
-            totalHoldingCoinAmountCash: coinQuantity * currentCoinPrice,
-            buyingPricesHistory: [totalBuyingAmount],
-            averageBuyingPrice: currentCoinPrice,
-            profitLoss: 0,
-        };
-        // If there's an initial empty object, replace it; otherwise, add the new data
-        const updatedPortfolioData = portfolioDataMy.length === 1 && portfolioDataMy[0].id === ""
-            ? [newCoinData] //Create the new data instead of initial empty object
-            : [...portfolioDataMy, newCoinData]; //Create the new object to the existing data ,bitcoin,zen,xrp...
-        //SET CREATED ARRAY [{...}]
-        setPortfolioDataSetMy(updatedPortfolioData);
-    }
-    const addTransactionHandler = () => {
-        if (coinQuantity <= 0) {
-            setError('The coin quantity must be grater than 0!')
-            return
-        }
-        //Checking if the selected coin exist in portfolio (portfolioDataMy)
-        const isExistCoinID = portfolioDataMy.some((item: any) => item.id === id);
-
-        if (isExistCoinID) {
-            // Coin already exists, update the existing data
-            updatePortfolioHandler()
-        } else {
-            // Coin doesn't exist, add a new object
-            createNewCoinInPortfolioHandler()
-        }
-    };
-
-    const calculateTotalPrice = () => {
-        const totalSpend = coinQuantity * price
-        const totalSpendResult = Math.round(totalSpend * 100) / 100
-        setTotalBuyingAmount(totalSpendResult)
-
-    }
-    if (!selectedCoin || selectedCoin.length <= 0) {
-        return null
-    }
-    // console.log('portfolioDataMy', portfolioDataMy)
-    // console.log('price' ,price)
-    return (
-        <Box>
-            <Box>
-                {
-                    selectedCoin.map((item: any, index: any) => (
-                        <Box key={index}>
-                            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px"}}>
-                                <Avatar sx={{width: "30px", height: "30px", marginRight: "10px"}} src={item.icon}/>
-                                <Box sx={{fontWeight: "bold", marginRight: "5px"}}>{item.name}</Box>
-                                <Box sx={{color: "#c0c0ce", fontSize: "10px"}} component={"span"}> {item.symbol}</Box>
-                            </Box>
-
-                            <Box sx={{marginTop: "10px", display: "flex", gap: 3}}>
-                                <Box>
-                                    <Typography>Quantity</Typography>
-                                    <TextField
-                                        type={"number"}
-                                        variant="filled"
-                                        onChange={(event) => {
-                                            const inputValue = Math.max(0, Number(event.target.value));
-                                            setCoinQuantity(inputValue);
-                                        }}
-                                        value={coinQuantity.toString()}
-                                    />
-                                </Box>
-
-                                <Box>
-                                    <Typography>Price Per Coin</Typography>
-                                    <TextField disabled variant="filled" value={`${formattedPrice(item.price)} $`}/>
-                                    {/*<TextField disabled variant="filled" value={item.price}/>*/}
-                                </Box>
-                            </Box>
-                        </Box>
-                    ))
-                }
-
-                <Paper sx={{backgroundColor: "rgba(255, 255, 255, 0.16)",display: "flex-column",textAlign: "center",marginTop: "20px"}}>
-                    <Box sx={{color: "#24de19", fontWeight: "bold", marginBottom: "10px"}}>{error}</Box>
-                    <Typography>Total Spend</Typography>
-                    <Box sx={{ marginTop: "10px",fontWeight: "bold",fontSize: "20px"}}>
-                        {formattedPrice(totalBuyingAmount)}$
-                    </Box>
-                </Paper>
-
-                <Box sx={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                    <Button autoFocus onClick={addTransactionHandler}>Add Transaction</Button>
-                </Box>
-            </Box>
-        </Box>
-    )
-}
-
-
-export const TabPanel = (props: any) => {
-    const {children, value, index, ...other} = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`tabpanel-${index}`}
-            aria-labelledby={`tabpanel-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <div>
-                    {children}
-                </div>
-            )}
-        </div>
-    );
-};
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
 
 
 const marketCapList = [
@@ -1751,3 +1499,4 @@ const marketCapList = [
         ]
     }
 ]
+

@@ -1,51 +1,80 @@
 import React from 'react';
-import {Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
-import AddTransaction from "./add-transaction/AddTransaction";
+import {Avatar, Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import AddTransactionContainer from "./add-transaction/AddTransactionContainer";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/ReduxStore";
+import {formattedPrice} from "../../commons/formattedPrice";
 
 const PortfolioTable = () => {
+    const {myCurrentPortfolioData} = useSelector((state: any) => state.myPortfolio)
+    // console.log('PortfolioTable myCurrentPortfolioData : ', myCurrentPortfolioData)
+
+
+
     return (
         <Box sx={{
             marginTop: "20px",
-            marginBottom : "20px"
-        }} >
+            marginBottom: "20px"
+        }}>
 
             <Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🚀 Current Portfolio</Typography>
 
-            <TableContainer component={Paper}sx={{borderRadius: '20px'}}  >
+            <TableContainer component={Paper} sx={{borderRadius: '20px'}}>
                 <Table stickyHeader>
                     <TableHead>
-                        <TableRow sx={{background: "red", paddingTop: "120px"}} >
+                        <TableRow sx={{background: "red", paddingTop: "120px"}}>
                             <TableCell>Id</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>Price</TableCell>
+                            <TableCell>Total Holdings Amount</TableCell>
                             <TableCell>Holdings</TableCell>
                             <TableCell>Avg. buy Price</TableCell>
                             <TableCell>Profit/Loss</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell sx={{textAlign : "center" }} >Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody
                     >
-                        {tableDataPortfolio.map(item => (
-                                <TableRow
-                                    key={item.id}
-                                >
-                                    <TableCell>{item.id}</TableCell>
-                                    <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.price}</TableCell>
-                                    <TableCell>{item.holdings}</TableCell>
-                                    <TableCell>{item.average_price}</TableCell>
-                                    <TableCell>{item.profit}</TableCell>
-                                    <TableCell>
-                                        <IconButton>
-                                            <AddTransaction/>
-                                            {/*<AddIcon/>*/}
-                                            {/*BUY AND SELL CRYPTO*/}
-                                        </IconButton>
+                        {myCurrentPortfolioData.map((item: any, index: any) => (
+                            <TableRow
+                                key={item.id}
+                            >
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>
+                                    <Box sx={{display: "flex", gap: 1, alignItems: "center"}}>
+                                        <Avatar src={item.icon}/>
+                                        <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
+                                        <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>
+                                    </Box>
+                                </TableCell>
+                                <TableCell>
+                                    {formattedPrice(item.price)}$
+                                </TableCell>
 
-                                    </TableCell>
-                                </TableRow>
-                            ))
+                                <TableCell>
+                                    <Box>
+                                        <Box>{formattedPrice(item.totalHoldingCoinAmountCash)}$</Box>
+                                    </Box>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Box>{item.totalHoldingCoins} {item.symbol}</Box>
+                                </TableCell>
+
+                                <TableCell>{formattedPrice(item.averageBuyingPrice)}</TableCell>
+
+                                <TableCell>{formattedPrice(item.profitLoss)}$</TableCell>
+                                <TableCell sx={{display : "flex",justifyContent : "center"}} >
+                                    <IconButton   style={{ backgroundColor: 'transparent' }} >
+                                        {/*BUY AND SELL CRYPTO*/}
+                                        <AddTransactionContainer
+                                            coinId={item.id}
+                                        />
+                                    </IconButton>
+
+                                </TableCell>
+                            </TableRow>
+                        ))
                         }
                     </TableBody>
                 </Table>
@@ -58,42 +87,3 @@ const PortfolioTable = () => {
 export default PortfolioTable;
 
 
-export const tableDataPortfolio = [{
-    "id": 1,
-    "name": "ZEN",
-    "price": 2.93,
-    "holdings": "4000",
-    "average_price": 2.20,
-    "profit": 1523.99,
-}, {
-    "id": 2,
-    "name": "BTC",
-    "price": 2.22,
-    "holdings": "350",
-    "average_price": 2.20,
-    "profit": 1523.99,
-},
-    {
-        "id": 3,
-        "name": "XRP",
-        "price": 5.85,
-        "holdings": "321",
-        "average_price": 2.20,
-        "profit": 1523.99,
-    }, {
-        "id": 4,
-        "name": "ETH",
-        "price": 2900.36,
-        "holdings": "444",
-        "average_price": 2.20,
-        "profit": 1523.99,
-    },
-    {
-        "id": 5,
-        "name": "ETC",
-        "price": 157.00,
-        "holdings": "213",
-        "average_price": 2.20,
-        "profit": 1523.99,
-    },
-]
