@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {calculateAverageBuyingPrice, calculateProfitLoss, calculateTotalHoldingCoinAmountCash, calculateTotalHoldingCoins} from "../portfolio/add-transaction/PurchaseCoinsFunctions";
+import {calculateAverageBuyingPrice, calculateProfitLoss, calculateTotalHoldingCoinAmountCash, calculateTotalHoldingCoins} from "../portfolio/portfolio-table/PurchaseCoinsFunctions";
 
 
 const myPortfolioLS = localStorage.getItem('myPortfolio')
@@ -12,7 +12,7 @@ const initialState : any = {
     //PurchaseCoinSection
     coinQuantity: 0,
     totalBuyingAmount: 0,
-    // error: '',
+    errorMessage: '',
     myCurrentPortfolioData: myPortfolioLS
         ?JSON.parse(myPortfolioLS)
         :[{
@@ -71,6 +71,11 @@ export const PortfolioReducer = (state = initialState, action: any) => {
                 ...state,
                 myCurrentPortfolioData :  filteredArray
             }
+        case "PORTFOLIO_ERROR_MESSAGE" :
+            return {
+                ...state,
+                errorMessage : action.errorMessage
+            }
         default :
             return state
     }
@@ -100,6 +105,10 @@ export const PortfolioActions = {
     deleteSelectedCoinAC : (id : any) => ({
         type : "DELETE_SELECTED_COIN",
         id
+    }as const),
+    portfolioErrorWarningMessageAC : (errorMessage : any) => ({
+        type : "PORTFOLIO_ERROR_MESSAGE",
+        errorMessage
     }as const)
 
 }

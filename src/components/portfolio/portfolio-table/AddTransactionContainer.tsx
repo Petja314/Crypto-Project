@@ -8,18 +8,18 @@ import {TabPanelCoinSearch} from "./TabPanelCoinSearch";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {PortfolioActions} from "../../redux/PortfolioReducer";
-import {useDispatch} from "react-redux";
-import {SellCoinPortfolio} from "./SellCoinPortfolio";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../redux/ReduxStore";
 const AddTransactionContainer = ({coinId} : any) => {
     const dispatch : any = useDispatch()
+    const {marketCapList} = useSelector((state: RootState) => state.marketCoinList) //List of all coins from market cap
+    const {myCurrentPortfolioData} = useSelector((state: RootState) => state.myPortfolio)
+
     const [openDialog, setOpenDialog] = useState(false)
     const [tabValue, setTabValue] = useState<any>(0)
     const tabValueHandler = (event: any, newValue: any) => {
         setTabValue(newValue)
     }
-
-
-
     return (
         <Box>
             {/*//BUTTONS FROM THE TABLE*/}
@@ -52,12 +52,19 @@ const AddTransactionContainer = ({coinId} : any) => {
                     </Tabs>
 
                     <TabPanel value={tabValue} index={0}>
-                        <TabPanelCoinSearch setOpenDialog={setOpenDialog}/>
+                        <TabPanelCoinSearch
+                            tabValue={tabValue}
+                            portfolioData={marketCapList}
+                            setOpenDialog={setOpenDialog}
+                        />
                     </TabPanel>
 
                     <TabPanel value={tabValue} index={1}>
-                         <SellCoinPortfolio setOpenDialog={setOpenDialog}  />
-                        {/*<TabPanelCoinSearch setOpenDialog={setOpenDialog}/>*/}
+                        <TabPanelCoinSearch
+                            tabValue={tabValue}
+                            portfolioData={myCurrentPortfolioData}
+                            setOpenDialog={setOpenDialog}
+                        />
                     </TabPanel>
                 </DialogContent>
             </Dialog>
@@ -66,6 +73,9 @@ const AddTransactionContainer = ({coinId} : any) => {
 };
 
 export default AddTransactionContainer;
+
+
+
 export const TabPanel = (props: any) => {
     const {children, value, index, ...other} = props;
 

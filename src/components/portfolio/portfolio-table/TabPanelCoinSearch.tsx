@@ -4,13 +4,15 @@ import React, {useEffect, useState} from "react";
 import {actionsCryptoTable, getAllCoinsListThunk} from "../../redux/CryptoTableReducer";
 import {Avatar, Box, Grid, MenuItem, Paper, TextField} from "@mui/material";
 import {formattedPrice} from "../../../commons/formattedPrice";
-import {PurchaseCoinSection} from "./PurchaseCoinSection";
-import {PortfolioActions} from "../../redux/PortfolioReducer";
-export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
+import {createNewCoinInPortfolioThunk, PortfolioActions, updatePortfolioThunk} from "../../redux/PortfolioReducer";
+import {BuySellCoinsComponent} from "./BuySellCoinsComponent";
+import {SearchCoin} from "./SearchCoin";
+
+export const TabPanelCoinSearch = ({setOpenDialog, portfolioData, tabValue}: any) => {
     const dispatch: any = useDispatch()
     const {fetching, rowsPerPage} = useSelector((state: RootState) => state.marketCoinList) //marketCapList
-    const {totalPageCount, currentPage, newCoinValue, selectedCoinArrayData} = useSelector((state: RootState) => state.myPortfolio)
-    const [isTableClosed, setIsTableClosed] = useState(true)
+    const {coinQuantity, totalBuyingAmount, myCurrentPortfolioData, totalPageCount, currentPage, newCoinValue, selectedCoinArrayData} = useSelector((state: RootState) => state.myPortfolio)
+    const {id, icon, rank, name, symbol, price,totalHoldingCoins} = selectedCoinArrayData[0] || {}
 
     useEffect(() => {
         //Fetching coin list data
@@ -20,59 +22,74 @@ export const TabPanelCoinSearch = ({setOpenDialog}: any) => {
                 dispatch(actionsCryptoTable.setFetchingAC(false))
             }, 1000)
         }
-
     }, [fetching, rowsPerPage])
 
-    const selectedCoinHandler = (value: any) => {
-        // setSelectedCoinArrayData([value])
-       dispatch(PortfolioActions.setSelectedCoinArrayData([value]))
-        setIsTableClosed(false)
-    }
 
-    const filteredPortfolioData = () => {
-        return  marketCapList.filter((item) => item.name.toUpperCase().includes(newCoinValue.toUpperCase()))
-    }
-    const portfolioDataArray = filteredPortfolioData()
+    const isExistCoinID = myCurrentPortfolioData.some((item: any) => item.id === id);
+    const BuyCoinHandler = () => {
+        // Function to create coin or add new coin to the portfolio
+        if (coinQuantity <= 0) {
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('The coin quantity must be greater than 0!'))
+            return
+        }
+        //Checking if the selected coin exist in portfolio (myCurrentPortfolioData)
+        if (isExistCoinID) {
+            // Coin already exists, update the existing data
+            dispatch(updatePortfolioThunk(id, price, totalBuyingAmount, coinQuantity))
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('PortfolioComponent was successfully updated'))
+        } else {
+            // Coin doesn't exist, add a new object
+            dispatch(createNewCoinInPortfolioThunk(id, icon, rank, name, symbol, price, totalBuyingAmount, coinQuantity))
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('The new coin was added to the portfolio'))
+        }
+    };
+
+    const SellCoinHandler = () => {
+        // Function to create coin or add new coin to the portfolio
+        if (coinQuantity <= 0) {
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('The coin quantity must be greater than 0!'))
+            return
+        }
+        if (coinQuantity > totalHoldingCoins) {
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('Coin quantity must be less than the total holding coins'))
+            return
+        }
+        //Checking if the selected coin exist in portfolio (myCurrentPortfolioData)
+        if (isExistCoinID) {
+            // Coin already exists, update the existing data
+            //Converting the positive number to negative - that formula of update would work correct
+            const buyingNegativeNumAmount = totalBuyingAmount * -1
+            const negativeCoinQuantity = coinQuantity * -1
+            dispatch(updatePortfolioThunk(id, price, buyingNegativeNumAmount, negativeCoinQuantity))
+        }
+        if (isExistCoinID && coinQuantity >= totalHoldingCoins) {
+            // console.log('in')
+            dispatch(PortfolioActions.deleteSelectedCoinAC(id))
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC('The coin was successfully removed from the portfolio'))
+        }
+    };
     return (
         <Paper sx={{marginTop: "10px"}}>
             <Grid container>
                 <Grid item>
-                    <Box>
-                        <Box sx={{textAlign: "center", margin: "10px 0px 10px 0px"}}>Choose Coin</Box>
-                        <TextField
-                            onClick={() => setIsTableClosed(true)}
-                            value={newCoinValue}
-                            // onChange={(event) => setCoinValue(event.target.value)}
-                            onChange={(event) => dispatch(PortfolioActions.getNewCoinValueAC(event.target.value))}
-                            label='add coin'
-                            sx={{width: "100%",}}
-                        />
-                        {newCoinValue !== '' && isTableClosed && (
-                            portfolioDataArray.map((item, index) => (
-                                <MenuItem
-                                    key={index}
-                                    sx={{color: "#B8B8B8", fontSize: "12px", display: "flex", justifyContent: "space-between"}}
-                                    value={item.name}
-                                    onClick={() => selectedCoinHandler(item)}
-                                >
-                                    <Box sx={{display: "flex"}}>
-                                        <Avatar sx={{width: "30px", height: "30px", marginRight: "10px"}} src={item.icon}/>
-                                        <Box> {item.name} </Box>
-                                    </Box>
-                                    <Box>{formattedPrice(item.price)} $ </Box>
-                                </MenuItem>
-                            ))
-                        )}
-                    </Box>
-                    <PurchaseCoinSection
+                    <SearchCoin
+                        newCoinValue={newCoinValue}
+                        portfolioData={portfolioData}
+                    />
+                    <BuySellCoinsComponent
                         selectedCoinArrayData={selectedCoinArrayData}
-                        setOpenDialog={setOpenDialog}
+                        BuyCoinHandler={BuyCoinHandler}
+                        SellCoinHandler={SellCoinHandler}
+                        tabValue={tabValue}
                     />
                 </Grid>
             </Grid>
         </Paper>
     )
 }
+
+
+
 
 
 const marketCapList = [

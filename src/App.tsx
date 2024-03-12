@@ -11,7 +11,7 @@ import {ReactComponent as NewsIcon} from "./assets/images/header-img/newspaper.s
 import {ReactComponent as NftIcon} from "./assets/images/header-img/image.svg"
 import Header from "./components/header/Header";
 import Dashboard from "./components/dashboard/Dashboard";
-import Portfolio from "./components/portfolio/Portfolio";
+import PortfolioComponent from "./components/portfolio/PortfolioComponent";
 import Nft from "./components/nfts/Nft";
 import News from "./components/news/News";
 import LoginContainer from "./components/login/LoginContainer";
@@ -86,7 +86,7 @@ export const theme = createTheme({
 const routes = [
     // {path: '/login', element: <Login /> },
     {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: DashboardIcon},
-    {path: '/portfolio', element: <Portfolio/>, name: "Portfolio", icon: PortfolioIcon},
+    {path: '/portfolio', element: <PortfolioComponent/>, name: "Portfolio", icon: PortfolioIcon},
     {path: '/nft', element: <Nft/>, name: "NFT", icon: NftIcon},
     {path: '/buy-crypto', element: <PurchaseCrypto/>, name: "PurchaseCrypto", icon: PurchaseIcon},
     {path: '/news', element: <News/>, name: "News", icon: NewsIcon},
@@ -127,7 +127,7 @@ function App() {
             {/*<Suspense fallback={<Preloader visible={isFetching} />} >*/}
             <Routes>
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
-                <Route path={"/portfolio"} element={<Portfolio/>}/>
+                <Route path={"/portfolio"} element={<PortfolioComponent/>}/>
                 <Route path={"/nft"} element={<Nft/>}/>
                 <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
                 <Route path={"/news"} element={<News/>}/>
