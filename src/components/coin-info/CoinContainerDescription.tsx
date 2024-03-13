@@ -4,7 +4,7 @@ import {coinDataArray, coinDescriptionDataThunk} from "../redux/CoinDescriptionR
 import {Box, Button, Container,} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {CryptoChart} from "./chart/CryptoChart";
-import {formattedPrice} from "../../commons/formattedPrice";
+import {formattedPrice} from "../../commons/functions/formattedPrice";
 import {PriceChangesWidget} from "./coin-info-widgets/PriceChangesWidget";
 import {CoinTableInfo} from "./CoinTableInfo";
 import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";

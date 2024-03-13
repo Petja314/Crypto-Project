@@ -2,9 +2,9 @@ import {useDispatch} from "react-redux";
 import React, {useState} from "react";
 import {PortfolioActions} from "../../redux/PortfolioReducer";
 import {Avatar, Box, MenuItem, TextField} from "@mui/material";
-import {formattedPrice} from "../../../commons/formattedPrice";
+import {formattedPrice} from "../../../commons/functions/formattedPrice";
 
-export const SearchCoin = ({ portfolioData, newCoinValue,}: any) => {
+export const SearchCoin = ({portfolioData, newCoinValue,}: any) => {
     const dispatch: any = useDispatch()
     const [isTableClosed, setIsTableClosed] = useState(true)
     const selectedCoinHandler = (value: any) => {
@@ -13,6 +13,7 @@ export const SearchCoin = ({ portfolioData, newCoinValue,}: any) => {
         setIsTableClosed(false)
     }
     const filteredPortfolioData = () => {
+        //Filter selected coin lists data to make a search functionality
         return portfolioData.filter((item: any) => item.name.toUpperCase().includes(newCoinValue.toUpperCase()))
     }
     const portfolioDataArray = filteredPortfolioData()

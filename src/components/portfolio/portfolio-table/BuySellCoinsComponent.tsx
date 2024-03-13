@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
-import { PortfolioActions, updatePortfolioThunk} from "../../redux/PortfolioReducer";
+import { PortfolioActions,} from "../../redux/PortfolioReducer";
 import {Avatar, Box, Button, Paper, TextField, Typography} from "@mui/material";
-import {formattedPrice} from "../../../commons/formattedPrice";
-export const BuySellCoinsComponent = ({selectedCoinArrayData,tabValue,BuyCoinHandler,SellCoinHandler}: any) => {
-    const {price} = selectedCoinArrayData[0] || {}
-    const {coinQuantity, totalBuyingAmount,errorMessage} = useSelector((state: RootState) => state.myPortfolio)
+import {formattedPrice} from "../../../commons/functions/formattedPrice";
+
+export const BuySellCoinsComponent = ({selectedCoinArrayData, price, tabValue,BuyCoinHandler,SellCoinHandler}: any) => {
     const dispatch: any = useDispatch()
+    const {coinQuantity, totalBuyingAmount,errorMessage} = useSelector((state: RootState) => state.myPortfolio)
     useEffect(() => {
         //Setting coin quantity based from selectedCoinArrayData and coinQuantity
         if (coinQuantity > 0) {
@@ -78,7 +78,6 @@ export const BuySellCoinsComponent = ({selectedCoinArrayData,tabValue,BuyCoinHan
                     <Button autoFocus onClick={SellCoinHandler}>Sell</Button>
                 )}
             </Box>
-
         </Box>
     )
 };

@@ -14,7 +14,7 @@ import gbp from "../../../assets/images/icons/currency_icons/GBP.svg";
 import eur from "../../../assets/images/icons/currency_icons/EUR.svg";
 import cad from "../../../assets/images/icons/currency_icons/CAD.svg";
 import aud from "../../../assets/images/icons/currency_icons/AUD.svg";
-import {formattedPrice} from "../../../commons/formattedPrice";
+import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {TableHeadComponent} from "./TableHeadComponent";
 import {TableBodyCoin} from "./TableBodyCoin";
 

@@ -1,5 +1,5 @@
 import {Avatar, Box, TableBody, TableCell, TableRow} from "@mui/material";
-import {formattedPrice} from "../../../commons/formattedPrice";
+import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import React from "react";
 import {changeCurrencyValue, marketCapListArray} from "../../redux/CryptoTableReducer";
 

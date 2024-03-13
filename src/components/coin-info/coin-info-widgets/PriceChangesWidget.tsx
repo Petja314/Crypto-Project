@@ -1,5 +1,5 @@
 import {Box, Paper, Typography} from "@mui/material";
-import {formattedPrice} from "../../../commons/formattedPrice";
+import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import React from "react";
 
 export const PriceChangesWidget = ({item}: any) => {

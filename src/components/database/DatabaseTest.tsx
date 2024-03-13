@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Checkbox, Container, FormControlLabel, TextField, Typography} from "@mui/material";
-import {collection, getDocs, addDoc, deleteDoc, doc, updateDoc} from "firebase/firestore";
+import {collection, getDocs, getDoc, addDoc,setDoc, deleteDoc, doc, updateDoc} from "firebase/firestore";
 import {auth, db, googleProvider, storage} from "../../config/firebase";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import {ref,uploadBytes} from "firebase/storage"
@@ -101,16 +101,41 @@ const MovieDbComponent = () => {
     const [fileUpload, setFileUpload] = useState<any>(null)
 
     // pass the function db and collection name "movies"
-    const moviesCollectionRef = collection(db, "movies")
+    const moviesCollectionRef = collection(db, "movies" )
     const getMovieList = async () => {
-        // READ THE DATA
-        // SET THE MOVIE LIST
         try {
-            const data = await getDocs(moviesCollectionRef)
-            const filterData = data.docs.map((item) => ({...item.data(), id: item.id}))
-            setMovieList(filterData)
-        } catch (error) {
-            console.error(error)
+            // Ensure user is authenticated before accessing Firestore
+            if (!auth.currentUser ||  !auth?.currentUser?.uid) {
+                console.error("User not authenticated.");
+                return;
+            }
+            // Read data from Firestore
+
+            // Version 1
+            const userId =  auth?.currentUser?.uid
+            const movieDocRef = doc(db, 'movies' ,userId )
+            const docSnapshot  = await getDoc(movieDocRef);
+            // console.log('data' , data._document.data.value.mapValue.field)
+            // console.log('data' , docSnapshot )
+            if(docSnapshot) {
+                const data =[docSnapshot.data()];
+                // console.log('filterData' , data)
+                setMovieList(data);
+            }
+            else {
+                console.log('Doc. does not exists')
+            }
+
+
+
+            // const data = await getDocs(moviesCollectionRef);
+            // console.log('data' , data.docs)
+            // const filterData = data.docs.map((item : any) => ({...item.data(), id: item.id}));
+            // console.log('filterData', filterData);
+            // setMovieList(filterData);
+        }
+        catch (error) {
+            console.error("Error fetching movie list:", error);
         }
     }
 
@@ -121,19 +146,50 @@ const MovieDbComponent = () => {
 
     const onSubmitMovie = async () => {
         try {
-            await addDoc(moviesCollectionRef,
-                {title: addMovieTitle,
+            // Ensure auth.currentUser is not null before accessing its properties
+            if (auth.currentUser) {
+                const customDocName = auth.currentUser.uid;
+                const movieDocRef=doc(moviesCollectionRef,customDocName)
+                await setDoc(movieDocRef, {
+                    title: addMovieTitle,
                     releaseDate: addMovieDate,
                     receivedOscar: isOscar,
-                    userId : auth?.currentUser?.uid,
-                    userEmail : auth?.currentUser?.email
-                    })
+                    userId: auth.currentUser.uid,
+                    userEmail: auth.currentUser.email
+                });
 
-            getMovieList()
+                getMovieList();
+            } else {
+                // Handle the case where auth.currentUser is null
+                console.error("User is not authenticated.");
+            }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
+
+
+    // const onSubmitMovie = async () => {
+    //     try {
+    //         // Ensure auth.currentUser is not null before accessing its properties
+    //         if (auth.currentUser) {
+    //             await addDoc(moviesCollectionRef, {
+    //                 title: addMovieTitle,
+    //                 releaseDate: addMovieDate,
+    //                 receivedOscar: isOscar,
+    //                 userId: auth.currentUser.uid,
+    //                 userEmail: auth.currentUser.email
+    //             });
+    //
+    //             getMovieList();
+    //         } else {
+    //             // Handle the case where auth.currentUser is null
+    //             console.error("User is not authenticated.");
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     const deleteMovie = async (id: any) => {
         const movieDoc = doc(db, "movies",id)
@@ -143,7 +199,10 @@ const MovieDbComponent = () => {
 
 
     const updateMovieTitle = async (id : any) => {
+        // debugger
+        console.log('id' , id)
         const movieDoc = doc(db, "movies",id)
+        console.log('updateMovieTitle ID : ', updateMovieTitle)
         try {
             await updateDoc(movieDoc, {title : updateTitle} )
             getMovieList()
@@ -198,14 +257,14 @@ const MovieDbComponent = () => {
             <Box sx={{marginTop: "20px", marginBottom: "20px"}}>
                 {
                     movieList.map((item: any) => (
-                        <Box key={item.id} sx={{border: "1px solid red"}}>
+                        <Box key={item.userId} sx={{border: "1px solid red"}}>
                             {/*<Box>Id : {item.id} </Box>*/}
                             <Box sx={{color: item.receivedOscar ? "green" : "red"}}>Title : {item.title}</Box>
                             <Box>Oscar :{item.releaseDate} </Box>
                             {/*<Box>Oscar : {item.receivedOscar}</Box>*/}
-                            <Button onClick={()  => deleteMovie(item.id)}>Delete Movie</Button>
+                            <Button onClick={()  => deleteMovie(item.userId)}>Delete Movie</Button>
                             <TextField  onChange={(event : any) => setUpdateTitle(event.currentTarget.value)} label='input title...'/>
-                            <Button onClick={() => updateMovieTitle(item.id)} >Update title</Button>
+                            <Button onClick={() => updateMovieTitle(item.userId)} >Update title</Button>
                         </Box>
                     ))
                 }

@@ -1,5 +1,5 @@
 import {Avatar, Box, Paper, Skeleton, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
-import {formattedPrice} from "../../commons/formattedPrice";
+import {formattedPrice} from "../../commons/functions/formattedPrice";
 import React from "react";
 import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";
 import {useSelector} from "react-redux";

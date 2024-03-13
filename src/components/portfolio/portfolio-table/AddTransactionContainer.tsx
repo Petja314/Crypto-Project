@@ -5,42 +5,26 @@ import SellIcon from '@mui/icons-material/Sell';
 import ShopIcon from '@mui/icons-material/Shop';
 import PropTypes from 'prop-types';
 import {TabPanelCoinSearch} from "./TabPanelCoinSearch";
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {PortfolioActions} from "../../redux/PortfolioReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
-const AddTransactionContainer = ({coinId} : any) => {
-    const dispatch : any = useDispatch()
-    const {marketCapList} = useSelector((state: RootState) => state.marketCoinList) //List of all coins from market cap
-    const {myCurrentPortfolioData} = useSelector((state: RootState) => state.myPortfolio)
 
-    const [openDialog, setOpenDialog] = useState(false)
+const AddTransactionContainer = () => {
+    const dispatch: any = useDispatch()
+    const {marketCapList} = useSelector((state: RootState) => state.marketCoinList) //List of all coins from market cap
+    const {myCurrentPortfolioDataFB, isPortfolioDialogOpen} = useSelector((state: RootState) => state.myPortfolio)
     const [tabValue, setTabValue] = useState<any>(0)
     const tabValueHandler = (event: any, newValue: any) => {
         setTabValue(newValue)
     }
     return (
         <Box>
-            {/*//BUTTONS FROM THE TABLE*/}
-            <Box sx={{display : "flex",gap : 2}}>
-                <Button  sx={{padding: 0 }} onClick={() => setOpenDialog(true)}>
-                    <AddCircleOutlineIcon/>
-                </Button>
-
-                <Button
-                    onClick={() => dispatch(PortfolioActions.deleteSelectedCoinAC(coinId))}
-                        sx={{padding: 0  }}>
-                    <DeleteIcon/>
-                </Button>
-            </Box>
-
-            <Dialog open={openDialog}  onClose={() => setOpenDialog(false)}>
+            <Dialog open={isPortfolioDialogOpen} onClose={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}>
                 <DialogTitle>Add transaction</DialogTitle>
                 <IconButton
                     aria-label="close"
-                    onClick={() => setOpenDialog(false)}
-                    sx={{position: 'absolute',right: 8,top: 8,color: (theme) => theme.palette.grey[500],}}
+                    onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}
+                    sx={{position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500],}}
                 >
                     <CloseIcon/>
                 </IconButton>
@@ -54,16 +38,14 @@ const AddTransactionContainer = ({coinId} : any) => {
                     <TabPanel value={tabValue} index={0}>
                         <TabPanelCoinSearch
                             tabValue={tabValue}
-                            portfolioData={marketCapList}
-                            setOpenDialog={setOpenDialog}
+                            portfolioData={marketCapList} //marketCapList - list from the api to select and add new coins
                         />
                     </TabPanel>
 
                     <TabPanel value={tabValue} index={1}>
                         <TabPanelCoinSearch
                             tabValue={tabValue}
-                            portfolioData={myCurrentPortfolioData}
-                            setOpenDialog={setOpenDialog}
+                            portfolioData={myCurrentPortfolioDataFB} // myCurrentPortfolioDataFB - list from current portfolio
                         />
                     </TabPanel>
                 </DialogContent>
@@ -73,7 +55,6 @@ const AddTransactionContainer = ({coinId} : any) => {
 };
 
 export default AddTransactionContainer;
-
 
 
 export const TabPanel = (props: any) => {
