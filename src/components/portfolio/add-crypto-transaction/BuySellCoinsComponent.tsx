@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
-import { PortfolioActions,} from "../../redux/PortfolioReducer";
-import {Avatar, Box, Button, Paper, TextField, Typography} from "@mui/material";
+import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, updatePortfolioThunk,} from "../../redux/PortfolioReducer";
+import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import {formattedPrice} from "../../../commons/functions/formattedPrice";
 
-export const BuySellCoinsComponent = ({selectedCoinArrayData, price, tabValue,BuyCoinHandler,SellCoinHandler}: any) => {
+export const BuySellCoinsComponent = ({ tabValue }: any) => {
     const dispatch: any = useDispatch()
-    const {coinQuantity, totalBuyingAmount,errorMessage} = useSelector((state: RootState) => state.myPortfolio)
+    const {coinQuantity, totalBuyingAmount, errorMessage ,selectedCoinArrayData  , myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
+    const {id, icon, rank, name, symbol, price, totalHoldingCoins} = selectedCoinArrayData[0] || {}; // Selected current coin in search bar
+
     useEffect(() => {
         //Setting coin quantity based from selectedCoinArrayData and coinQuantity
         if (coinQuantity > 0) {
@@ -17,13 +19,55 @@ export const BuySellCoinsComponent = ({selectedCoinArrayData, price, tabValue,Bu
             dispatch(PortfolioActions.setTotalBuyingAmountAC(0))
         }
     }, [selectedCoinArrayData, coinQuantity])
-
     const calculateTotalPrice = () => {
         //Calculating the total price of selected coin
         const totalSpend = coinQuantity * price
         const totalSpendResult = Math.round(totalSpend * 100) / 100
         dispatch(PortfolioActions.setTotalBuyingAmountAC(totalSpendResult))
     }
+    const isExistCoinID = myCurrentPortfolioDataFB.some((item: any) => item.id === id);
+    const coinQuantityCheckHandler = () => {
+        if (coinQuantity <= 0) {
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC("The coin quantity must be greater than 0!"));
+            return false //validation was not successful
+        }
+        return true // validation passed
+    }
+    const BuyCoinHandler = () => {
+        // Function to create coin or add new coin to the portfolio
+        if(!coinQuantityCheckHandler()){
+            return;
+        }
+        //Checking if the selected coin exist in portfolio (myCurrentPortfolioData)
+        if (isExistCoinID) {
+            // Coin already exists, update the existing data
+            dispatch(updatePortfolioThunk(id, price, totalBuyingAmount, coinQuantity));
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC("PortfolioManager was successfully updated"));
+        } else {
+            // Coin doesn't exist, add a new object
+            dispatch(createNewCoinInPortfolioThunk(id, icon, rank, name, symbol, price, totalBuyingAmount, coinQuantity));
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC("The new coin was added to the portfolio"));
+        }
+    };
+    const SellCoinHandler = () => {
+        // Function to create coin or add new coin to the portfolio
+        if(!coinQuantityCheckHandler()){
+            return;
+        }
+        if (coinQuantity >= totalHoldingCoins) {
+            dispatch(deleteCoinFromPortfolioApiFirebase(id));
+            dispatch(PortfolioActions.portfolioErrorWarningMessageAC("The coin was successfully removed from the portfolio"));
+            return;
+        }
+        //Checking if the selected coin exist in portfolio (myCurrentPortfolioData)
+        if (isExistCoinID) {
+            // Coin already exists, update the existing data
+            //Converting the positive number to negative - that formula of update would work correct
+            const buyingNegativeNumAmount = totalBuyingAmount * -1;
+            const negativeCoinQuantity = coinQuantity * -1;
+            dispatch(updatePortfolioThunk(id, price, buyingNegativeNumAmount, negativeCoinQuantity));
+        }
+    };
 
     // Checking if selected coin array does exist to prevent the error!
     if (!selectedCoinArrayData || selectedCoinArrayData.length <= 0) {
@@ -72,7 +116,7 @@ export const BuySellCoinsComponent = ({selectedCoinArrayData, price, tabValue,Bu
             </Paper>
 
             <Box sx={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
-                { tabValue === 0 ? (
+                {tabValue === 0 ? (
                     <Button autoFocus onClick={BuyCoinHandler}>Buy</Button>
                 ) : (
                     <Button autoFocus onClick={SellCoinHandler}>Sell</Button>

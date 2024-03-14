@@ -4,7 +4,7 @@ import {
     calculateProfitLoss,
     calculateTotalHoldingCoinAmountCash,
     calculateTotalHoldingCoins,
-} from "../portfolio/portfolio-table/PurchaseCoinsFunctions";
+} from "../portfolio/portfolio-calculation-functions/PurchaseCoinsFunctions";
 import {
     collection,
     getDocs,
@@ -22,7 +22,7 @@ const initialState: any = {
     //TablePanelCoin Search
     myCurrentPortfolioDataFB: [],
     isPortfolioDialogOpen: false,
-    totalPageCount: 50,
+    totalPageCount: 500,
     currentPage: 1,
     newCoinValue: "",
     //PurchaseCoinSection

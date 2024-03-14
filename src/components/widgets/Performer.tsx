@@ -16,38 +16,37 @@ import coinsBtc from "../../assets/images/image/coinsBtc.webp";
 import backgroundTransparent from "../../assets/images/image/bgTransparent.svg";
 
 const Performer = () => {
-    const {myCurrentPortfolioDataFB} = useSelector(
-        (state: any) => state.myPortfolio,
-    );
-    const dispatch = useDispatch();
+    const {myCurrentPortfolioDataFB} = useSelector((state: any) => state.myPortfolio,);
     const [performers, setPerformers] = useState<any>([]);
     const [totalProfit, setTotalProfit] = useState<any>(0);
 
     useEffect(() => {
         //Checking before initializing if the array is defined
         if (myCurrentPortfolioDataFB && myCurrentPortfolioDataFB.length > 0) {
-            let largestItem = 0; //Counting the largest value from 0
+            console.log('render')
+            let largestItem = myCurrentPortfolioDataFB[0]; //Counting the largest value from 0
             let smallestItem = myCurrentPortfolioDataFB[0]; //Counting the smallest value from the first object of the array.
 
             for (let i = 1; i < myCurrentPortfolioDataFB.length; i++) {
-                if (myCurrentPortfolioDataFB[i].profitLoss > largestItem) {
+                if (myCurrentPortfolioDataFB[i].profitLoss > largestItem.profitLoss) {
                     largestItem = myCurrentPortfolioDataFB[i];
                     // console.log('largestItem' , largestItem)
                 }
-                if (myCurrentPortfolioDataFB[i].profitLoss < smallestItem) {
+                if (myCurrentPortfolioDataFB[i].profitLoss < smallestItem.profitLoss) {
                     smallestItem = myCurrentPortfolioDataFB[i];
                     // console.log('smallestItem' , smallestItem)
                 }
             }
+
+
             setPerformers([largestItem, smallestItem]);
             // CALCULATE TOTAL PORTFOLIO PROFIT
-            const calculateTotalProfit = myCurrentPortfolioDataFB.reduce(
-                (accum: any, value: any) => accum + value.profitLoss,
-                0,
-            );
+            const calculateTotalProfit = myCurrentPortfolioDataFB.reduce((accum: any, value: any) => accum + value.profitLoss, 0,);
             setTotalProfit(calculateTotalProfit);
         }
     }, [myCurrentPortfolioDataFB]);
+    // console.log('performers' , performers)
+    // console.log('myCurrentPortfolioDataFB' , myCurrentPortfolioDataFB)
 
     // const bestPerformer = myCurrentPortfolioDataFB.reduce((worst:any, current:any) => {
     //     return current.profitLoss > worst.profitLoss ? current : worst;
@@ -56,7 +55,6 @@ const Performer = () => {
     // const worstPerformer = myCurrentPortfolioDataFB.reduce((worst:any, current:any) => {
     //     return current.profitLoss < worst.profitLoss ? current : worst;
     // }, myCurrentPortfolioDataFB[0]);
-
     return (
         <Box>
             <Box sx={{display: "flex", gap: 2}}>

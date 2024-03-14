@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Grid, Paper, Stack, Typography} from "@mui/material";
 import CryptoTable from "./crypto table/CryptoTable";
-import BtcPriceWidget from "../widgets/BtcPriceWidget";
+import PortfolioBalanceWidget from "../widgets/PortfolioBalanceWidget";
 import CarouselMui from "../widgets/CarouselMui";
 import LeaderBoard from "../widgets/LeaderBoard";
 import FearGreedIndex from "../widgets/FearGreedIndex";
@@ -19,7 +19,7 @@ const Dashboard = () => {
                     <Grid item xs={6}>
                         <FearGreedIndex/>
                         <CarouselMui/>
-                        <BtcPriceWidget/>
+                        <PortfolioBalanceWidget/>
                     </Grid>
                 </Grid>
 

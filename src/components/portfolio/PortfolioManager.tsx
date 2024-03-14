@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, Container, Grid, Typography} from "@mui/material";
-import BtcPriceWidget from "../widgets/BtcPriceWidget";
+import PortfolioBalanceWidget from "../widgets/PortfolioBalanceWidget";
 import Performer from "../widgets/Performer";
 import PortfolioTable from "./portfolio-table/PortfolioTable";
-import AllocationPortfolioChart from "./portfolio-table/AllocationPortfolioChart";
+import AllocationPortfolioChart from "./allocation-chart-portfolio/AllocationPortfolioChart";
 import {
     fetchPortfolioDataApiFirebase,
     PortfolioActions,
 } from "../redux/PortfolioReducer";
 import {useDispatch, useSelector} from "react-redux";
-import AddTransactionContainer from "./portfolio-table/AddTransactionContainer";
+import AddTransactionContainer from "./add-crypto-transaction/AddTransactionContainer";
 
-const PortfolioComponent = () => {
+const PortfolioManager = () => {
     const dispatch: any = useDispatch();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const PortfolioComponent = () => {
                                 Add Transaction
                             </Button>
                         </Box>
-                        <BtcPriceWidget/>
+                        <PortfolioBalanceWidget/>
                         <Performer/>
                     </Grid>
 
@@ -48,4 +48,4 @@ const PortfolioComponent = () => {
     );
 };
 
-export default PortfolioComponent;
+export default PortfolioManager;

@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Box, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
 import walleticon from "../../assets/images/image/wallet.webp"
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {formattedPrice} from "../../commons/functions/formattedPrice";
 import {coinStatApi, exchangeCurrencyApi} from "../api/CoinStatApi";
+import {fetchPortfolioDataApiFirebase} from "../redux/PortfolioReducer";
 
 
-const BtcPriceWidget = () => {
+const PortfolioBalanceWidget = () => {
+    const dispatch : any = useDispatch()
     const {myCurrentPortfolioDataFB} = useSelector((state: any) => state.myPortfolio)
     const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: any, value: any) => accum + value.totalHoldingCoinAmountCash, 0)
     const [currencyValue, setCurrencyValue] = useState<any>(['USD'])
@@ -48,8 +50,8 @@ const BtcPriceWidget = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchPortfolioDataApiFirebase());
         fetchExchangeApi()
-
         fetchCurrentBtcPrice()
     },[currencyValue])
 
@@ -102,4 +104,4 @@ const BtcPriceWidget = () => {
     );
 };
 
-export default BtcPriceWidget;
+export default PortfolioBalanceWidget;

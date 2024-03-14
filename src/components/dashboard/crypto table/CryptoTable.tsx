@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Box, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, Avatar, IconButton, TextField, Select, MenuItem, CircularProgress} from "@mui/material";
-import BtcPriceWidget from "../../widgets/BtcPriceWidget";
+import PortfolioBalanceWidget from "../../widgets/PortfolioBalanceWidget";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsCryptoTable, getAllCoinsListThunk, handlingTableByRowNumbersThunk, marketCapListArray} from "../../redux/CryptoTableReducer";
 import {RootState} from "../../redux/ReduxStore";
