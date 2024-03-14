@@ -1,39 +1,47 @@
-import React, {useEffect} from 'react';
-import {Box, Container, Typography} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Box, Button, Container, Grid, Typography} from "@mui/material";
 import BtcPriceWidget from "../widgets/BtcPriceWidget";
 import Performer from "../widgets/Performer";
 import PortfolioTable from "./portfolio-table/PortfolioTable";
 import AllocationPortfolioChart from "./portfolio-table/AllocationPortfolioChart";
-import {fetchPortfolioDataApiFirebase} from "../redux/PortfolioReducer";
-import {useDispatch} from "react-redux";
-
+import {
+    fetchPortfolioDataApiFirebase,
+    PortfolioActions,
+} from "../redux/PortfolioReducer";
+import {useDispatch, useSelector} from "react-redux";
+import AddTransactionContainer from "./portfolio-table/AddTransactionContainer";
 
 const PortfolioComponent = () => {
-    const dispatch: any = useDispatch()
+    const dispatch: any = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchPortfolioDataApiFirebase())
-    }, [])
-
+        dispatch(fetchPortfolioDataApiFirebase());
+    }, []);
     return (
         <Box>
-            <Container sx={{marginBottom: "50px"}}>
-                <Typography variant='h4'
-                            sx={{
-                                marginTop: "50px",
-                                marginBottom: "20px",
-                                color: "#fff"
-                            }}
-                >
-                    Portfolio
-                </Typography>
+            <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
 
+                <Grid container spacing={2} sx={{margin: "0 auto"}}>
+                    <Grid item xs={6}>
+                        <Typography variant="h6" sx={{color: "#fff"}} mb={2}>
+                            🚀 Current Portfolio
+                        </Typography>
+                        <Box mb={2}>
+                            <AddTransactionContainer/>
+                            <Button
+                                onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}>
+                                Add Transaction
+                            </Button>
+                        </Box>
+                        <BtcPriceWidget/>
+                        <Performer/>
+                    </Grid>
 
-                <BtcPriceWidget/>
-                <Performer/>
-                <AllocationPortfolioChart
+                    <Grid item xs={6}>
+                        <AllocationPortfolioChart/>
+                    </Grid>
+                </Grid>
 
-                />
                 <PortfolioTable/>
             </Container>
         </Box>
@@ -41,4 +49,3 @@ const PortfolioComponent = () => {
 };
 
 export default PortfolioComponent;
-

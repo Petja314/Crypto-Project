@@ -1,4 +1,4 @@
-import {instanceAlternative, instanceAxios} from "./Api";
+import {instanceAlternative, instanceAxios, instanceExchanger} from "./Api";
 
 
 export const coinStatApi = {
@@ -17,5 +17,11 @@ export const coinStatApi = {
 export const alternativeApi = {
     fetchFearGreedIndex(){
         return instanceAlternative.get("/fng/?limit=31")
+    }
+}
+
+export const exchangeCurrencyApi = {
+    fetchCurrencyRate(currency : any) {
+        return instanceExchanger.get(`/v1/latest?&currencies=${currency}`)
     }
 }

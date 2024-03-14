@@ -15,3 +15,10 @@ export const instanceAlternative = axios.create({
     baseURL  : "https://api.alternative.me/" ,
 })
 
+
+export const instanceExchanger = axios.create({
+    baseURL : "https://api.freecurrencyapi.com/",
+    headers : {
+        "apikey" : "fca_live_HiwSZiRj0cuAwjzOuK41YJR5DXK9uUAn4iwMJDsA"
+    }
+})

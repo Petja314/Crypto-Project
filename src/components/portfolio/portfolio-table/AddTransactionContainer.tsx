@@ -17,14 +17,19 @@ const AddTransactionContainer = () => {
     const tabValueHandler = (event: any, newValue: any) => {
         setTabValue(newValue)
     }
+
+
+
+
+
+
     return (
         <Box>
             <Dialog open={isPortfolioDialogOpen} onClose={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}>
                 <DialogTitle>Add transaction</DialogTitle>
-                <IconButton
-                    aria-label="close"
-                    onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}
-                    sx={{position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500],}}
+                <IconButton  aria-label="close"
+                             onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}
+                             sx={{position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500],}}
                 >
                     <CloseIcon/>
                 </IconButton>
@@ -48,7 +53,10 @@ const AddTransactionContainer = () => {
                             portfolioData={myCurrentPortfolioDataFB} // myCurrentPortfolioDataFB - list from current portfolio
                         />
                     </TabPanel>
+
+
                 </DialogContent>
+
             </Dialog>
         </Box>
     );

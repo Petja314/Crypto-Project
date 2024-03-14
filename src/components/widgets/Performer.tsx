@@ -1,76 +1,175 @@
-import React from 'react';
-import {Box, Button, Grid, IconButton, Paper, Skeleton, Stack, Typography} from "@mui/material";
-import btcIcon from "../../assets/images/icons/btc.svg"
-import AddTransactionContainer from "../portfolio/portfolio-table/AddTransactionContainer";
-import {PortfolioActions} from "../redux/PortfolioReducer";
-import {useDispatch} from "react-redux";
-
-
-const performer = [
-    {id: 1, name: "ICP", price: 152, perecentage: 22},
-    {id: 2, name: "ZEN", price: 321, perecentage: 50},
-]
+import React, {useEffect, useState} from "react";
+import {
+    Avatar,
+    Box,
+    Button,
+    Grid,
+    IconButton,
+    Paper,
+    Skeleton,
+    Stack,
+    Typography,
+} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {formattedPrice} from "../../commons/functions/formattedPrice";
+import coinsBtc from "../../assets/images/image/coinsBtc.webp";
+import backgroundTransparent from "../../assets/images/image/bgTransparent.svg";
 
 const Performer = () => {
-    const dispatch = useDispatch()
+    const {myCurrentPortfolioDataFB} = useSelector(
+        (state: any) => state.myPortfolio,
+    );
+    const dispatch = useDispatch();
+    const [performers, setPerformers] = useState<any>([]);
+    const [totalProfit, setTotalProfit] = useState<any>(0);
+
+    useEffect(() => {
+        //Checking before initializing if the array is defined
+        if (myCurrentPortfolioDataFB && myCurrentPortfolioDataFB.length > 0) {
+            let largestItem = 0; //Counting the largest value from 0
+            let smallestItem = myCurrentPortfolioDataFB[0]; //Counting the smallest value from the first object of the array.
+
+            for (let i = 1; i < myCurrentPortfolioDataFB.length; i++) {
+                if (myCurrentPortfolioDataFB[i].profitLoss > largestItem) {
+                    largestItem = myCurrentPortfolioDataFB[i];
+                    // console.log('largestItem' , largestItem)
+                }
+                if (myCurrentPortfolioDataFB[i].profitLoss < smallestItem) {
+                    smallestItem = myCurrentPortfolioDataFB[i];
+                    // console.log('smallestItem' , smallestItem)
+                }
+            }
+            setPerformers([largestItem, smallestItem]);
+            // CALCULATE TOTAL PORTFOLIO PROFIT
+            const calculateTotalProfit = myCurrentPortfolioDataFB.reduce(
+                (accum: any, value: any) => accum + value.profitLoss,
+                0,
+            );
+            setTotalProfit(calculateTotalProfit);
+        }
+    }, [myCurrentPortfolioDataFB]);
+
+    // const bestPerformer = myCurrentPortfolioDataFB.reduce((worst:any, current:any) => {
+    //     return current.profitLoss > worst.profitLoss ? current : worst;
+    // }, myCurrentPortfolioDataFB[0]);
+    //
+    // const worstPerformer = myCurrentPortfolioDataFB.reduce((worst:any, current:any) => {
+    //     return current.profitLoss < worst.profitLoss ? current : worst;
+    // }, myCurrentPortfolioDataFB[0]);
+
     return (
         <Box>
-            <Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🔥 Winner and Looser of 24h</Typography>
+            <Box sx={{display: "flex", gap: 2}}>
+                <Paper
+                    sx={{
+                        borderRadius: "20px",
+                        width: "270px",
+                        height: "150px",
+                        backgroundImage: `url(${backgroundTransparent})`,
+                        backgroundSize: "cover",
+                        backgroundRepeat: "no-repeat",
+                        backgroundColor: "rgba(143,130,130,0.09)",
+                        position: "relative",
+                    }}
+                >
+                    <Typography variant={"h6"} sx={{fontWeight: "bold"}}>
+                        ALL TIME PROFIT
+                    </Typography>
+                    <Box
+                        sx={{
+                            color: totalProfit >= 0 ? "#1ABC7B" : "#F13005",
+                            fontWeight: "bold",
+                            marginTop: "20px",
+                            fontSize: "20px",
+                        }}
+                    >
+                        {formattedPrice(totalProfit)}$
+                    </Box>
+                    <img
+                        style={{
+                            position: "absolute",
+                            width: "100px",
+                            bottom: "10px",
+                            right: "20px",
+                        }}
+                        src={coinsBtc}
+                        alt=""
+                    />
+                </Paper>
 
-            <Box sx={{
-                display: "flex",
-                gap: 3
-            }}>
-                {
-                    performer.map(item => (
-                        <Paper
+                {performers.map((item: any, index: any) => (
+                    <Paper
+                        key={index}
+                        sx={{borderRadius: "20px", width: "200px", height: "150px"}}
+                    >
+                        <Grid
+                            container
                             sx={{
-                                borderRadius: '20px',
-                                width: "200px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                             }}
                         >
-                            <Grid container
-                                  sx={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                  }}
-                            >
-                                <Grid item>
-                                    <Box component='span' sx={{color: "#B8B8B8", fontSize: "15px"}}>Best Performer</Box>
-                                    <Box sx={{
+                            <Grid item>
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        color: "#B8B8B8",
+                                        fontSize: "15px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {item.profitLoss <= 0 ? (
+                                        <Box>Worst Performer</Box>
+                                    ) : (
+                                        <Box>Best Performer</Box>
+                                    )}
+                                </Box>
+
+                                <Box
+                                    sx={{
                                         display: "flex",
                                         alignItems: "center",
                                         gap: 1,
-                                        marginBottom: "10px"
-                                    }}>
-                                        <img src={btcIcon} alt=""/>
-                                        <Box>
-                                            <Typography variant='h6'>
-                                                {item.name}
-                                            </Typography>
-                                        </Box>
+                                        marginBottom: "10px",
+                                        marginTop: "5px",
+                                    }}
+                                >
+                                    <Avatar src={item.icon}/>
+                                    <Box>
+                                        <Typography variant="h6"> {item.symbol} </Typography>
+                                    </Box>
+                                </Box>
 
-                                    </Box>
-                                    <Box component='span' sx={{color: "#fff", fontSize: "14px", backgroundColor: "#1ABC7B", padding: "5px",}}>
-                                        {`${item.perecentage}%  ${item.price}$`}
-                                    </Box>
-                                </Grid>
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        color: "#fff",
+                                        fontSize: "14px",
+                                        padding: "5px",
+                                        textAlign: "center",
+                                        borderRadius: "5px",
+                                        backgroundColor:
+                                            item.profitLoss > 0 ? "#1ABC7B" : "#F13005",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {formattedPrice(item.profitLoss)}$
+                                </Box>
                             </Grid>
-                        </Paper>
-                    ))
-                }
+                        </Grid>
+                    </Paper>
+                ))}
             </Box>
 
-
-            <AddTransactionContainer
-
-            />
-            <Button
-                onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}
-            >
-                Add Transaction
-            </Button>
+            {/*<Box mt={4} >*/}
+            {/*    <AddTransactionContainer/>*/}
+            {/*    <Button onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}>*/}
+            {/*        Add Transaction*/}
+            {/*    </Button>*/}
+            {/*</Box>*/}
         </Box>
     );
 };

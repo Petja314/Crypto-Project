@@ -8,6 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {marketCapListArray} from "../../redux/CryptoTableReducer";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import AddTransactionContainer from "./AddTransactionContainer";
 
 const PortfolioTable = () => {
     const dispatch: any = useDispatch()
@@ -33,10 +34,10 @@ const PortfolioTable = () => {
             myCurrentPortfolioDataFB.sort((a: any, b: any) => (priceSort ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
         }
     }
-    console.log('myCurrentPortfolioDataFB' , myCurrentPortfolioDataFB)
+    // console.log('myCurrentPortfolioDataFB' , myCurrentPortfolioDataFB)
     return (
         <Box sx={{marginTop: "20px", marginBottom: "20px"}}>
-            <Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🚀 Current Portfolio</Typography>
+            {/*<Typography variant='h6' sx={{color: "#fff", marginBottom: "20px"}}>🚀 Current Portfolio</Typography>*/}
             <TableContainer component={Paper} sx={{borderRadius: '20px'}}>
                 <Table stickyHeader>
                     <TableHead>
@@ -64,6 +65,7 @@ const PortfolioTable = () => {
                     </TableHead>
                     <TableBody
                     >
+                        {/*TABLE BODY*/}
                         {myCurrentPortfolioDataFB.map((item: any, index: any) => (
                             <TableRow key={index} sx={{textAlign: "center"}}>
                                 <TableCell>{item.rank}</TableCell>
@@ -83,9 +85,8 @@ const PortfolioTable = () => {
                                     <IconButton style={{backgroundColor: 'transparent'}}>
                                         {/*BUY AND SELL CRYPTO*/}
                                         <Box sx={{display: "flex", gap: 2}}>
-                                            <Button sx={{padding: 0}}
-                                                    onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}
-                                            >
+                                            <Button sx={{padding: 0}} onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))} >
+                                                {/*/!*<AddTransactionContainer/>*!/ - OPENTS AFTER isPortfolioDialogOpenAC become true*/}
                                                 <AddCircleOutlineIcon/>
                                             </Button>
 

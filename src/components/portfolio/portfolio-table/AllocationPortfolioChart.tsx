@@ -1,9 +1,10 @@
 import React from 'react';
-import {Box, Paper} from "@mui/material";
+import {Box, Paper, Typography} from "@mui/material";
 import {Doughnut} from "react-chartjs-2";
 import {Chart, ArcElement} from 'chart.js'
 import {useSelector} from "react-redux";
 import {formattedPrice} from "../../../commons/functions/formattedPrice";
+import {TypingEffects} from "../../../utils/TypingEffects";
 
 Chart.register(ArcElement);
 
@@ -18,16 +19,15 @@ const AllocationPortfolioChart = () => {
         allocation: (coin.totalHoldingCoinAmountCash / totalPortfolioValue) * 100
     }))
 
-    console.log('allocations' , allocations)
+    // console.log('allocations' , allocations)
 
     const data = {
         labels: allocations.map((item: any) =>
-            `${item.coin } ${ formattedPrice(item.allocation)}%`),
+            `${item.coin} ${formattedPrice(item.allocation)}%`),
         datasets: [
             {
                 label: '% of Portfolio',
                 data: allocations.map((item: any) => item.allocation),
-                // data: [5000, 2000, 1000, 2300, 2000, 300],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -48,12 +48,41 @@ const AllocationPortfolioChart = () => {
             },
         ],
     };
+    const options = {
+        plugins: {
+            legend: {
+                position: 'right' as 'right',
+                align: 'center' as 'center',// Aligns the labels to the start of the legend
+                marginRight: "20px",
+            }
+        }
+    };
 
-    console.log('myCurrentPortfolioDataFB', myCurrentPortfolioDataFB)
+    // console.log('myCurrentPortfolioDataFB', myCurrentPortfolioDataFB)
     return (
         <Box>
-            <Paper sx={{width: "300px", height: "300px" , border : "1px solid red"}}>
-                <Doughnut  style={{display : "inline-flex" , justifyContent : "space-between" , border : "1px solid red"}} data={data}/>
+            <Paper
+                // sx={{borderRadius: "20px", position: "relative"}}
+                sx={{width: "550px", height: "400px", borderRadius: "20px", position: "relative"}}
+            >
+                <Typography
+                    sx={{position: "absolute", top: "40px", left: "20px"}}
+                    variant={'h5'}>
+                    Portfolio
+                    Allocation
+                </Typography>
+
+                <Box sx={{ margin : "0 auto" , width : "400px" , height : "400px"}}>
+                    <Doughnut data={data} options={options}/>
+                </Box>
+
+
+                <Typography sx={{bottom: "0", position: "absolute", fontSize: "14px", padding: "15px", color: "#a29393"}}>
+                    <TypingEffects
+                        speed={20}
+                        text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals while managing the risk associated with the volatile nature of the crypto market."}
+                    />
+                </Typography>
             </Paper>
         </Box>
     );
