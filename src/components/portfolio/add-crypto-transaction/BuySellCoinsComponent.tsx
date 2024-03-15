@@ -1,17 +1,22 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/ReduxStore";
-import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, updatePortfolioThunk,} from "../../redux/PortfolioReducer";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
+import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType, updatePortfolioThunk,} from "../../redux/PortfolioReducer";
 import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import {formattedPrice} from "../../../commons/functions/formattedPrice";
+import {marketCapListArray} from "../../redux/CryptoTableReducer";
 
-export const BuySellCoinsComponent = ({ tabValue }: any) => {
-    const dispatch: any = useDispatch()
+type BuySellCoinsComponentPropsType = {
+    tabValue : number
+}
+
+export const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsType) => {
+    const dispatch: AppDispatch = useDispatch()
     const {coinQuantity, totalBuyingAmount, errorMessage ,selectedCoinArrayData  , myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
     const {id, icon, rank, name, symbol, price, totalHoldingCoins} = selectedCoinArrayData[0] || {}; // Selected current coin in search bar
 
     useEffect(() => {
-        //Setting coin quantity based from selectedCoinArrayData and coinQuantity
+        //Setting coin quantity based from selectedCoinArrayData and coinQuantity - UseEffect would run every time when the coinMMQ was changed
         if (coinQuantity > 0) {
             calculateTotalPrice()
         }
@@ -25,7 +30,7 @@ export const BuySellCoinsComponent = ({ tabValue }: any) => {
         const totalSpendResult = Math.round(totalSpend * 100) / 100
         dispatch(PortfolioActions.setTotalBuyingAmountAC(totalSpendResult))
     }
-    const isExistCoinID = myCurrentPortfolioDataFB.some((item: any) => item.id === id);
+    const isExistCoinID = myCurrentPortfolioDataFB.some((item : portfolioFirebaseDataType): boolean => item.id === id);
     const coinQuantityCheckHandler = () => {
         if (coinQuantity <= 0) {
             dispatch(PortfolioActions.portfolioErrorWarningMessageAC("The coin quantity must be greater than 0!"));
@@ -76,7 +81,7 @@ export const BuySellCoinsComponent = ({ tabValue }: any) => {
     return (
         <Box>
             {
-                selectedCoinArrayData.map((item: any, index: any) => (
+                selectedCoinArrayData.map((item : marketCapListArray, index: number) => (
                     <Box key={index}>
                         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px"}}>
                             <Avatar sx={{width: "30px", height: "30px", marginRight: "10px"}} src={item.icon}/>
@@ -90,7 +95,7 @@ export const BuySellCoinsComponent = ({ tabValue }: any) => {
                                 <TextField
                                     type={"number"}
                                     variant="filled"
-                                    onChange={(event) => {
+                                    onChange={(event : React.ChangeEvent<HTMLInputElement>) => {
                                         const inputValue = Math.max(0, Number(event.target.value));
                                         dispatch(PortfolioActions.setCoinQuantityAC(inputValue))
                                     }}
@@ -116,6 +121,7 @@ export const BuySellCoinsComponent = ({ tabValue }: any) => {
             </Paper>
 
             <Box sx={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+                {/*Show the button base on dialogs popup tab value */}
                 {tabValue === 0 ? (
                     <Button autoFocus onClick={BuyCoinHandler}>Buy</Button>
                 ) : (

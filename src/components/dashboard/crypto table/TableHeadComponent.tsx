@@ -75,14 +75,14 @@ const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) =
         {value: 'CAD', symbol: "$", icon: aud},
     ]
     // Filtration by currency
-    const changeCurrencyHandler = async (event: SelectChangeEvent<any>, child: ReactNode) => {
+    const changeCurrencyHandler =  (event: SelectChangeEvent<any>, child: ReactNode) => {
         const selectedValue = event.target?.value
         if (selectedValue) {
             const filteredCurrency = currency.find((item): boolean => item.value === selectedValue) //find the currency to change it with api call
             dispatch(actionsCryptoTable.setCurrencyValueAC(filteredCurrency))
-            await dispatch(actionsCryptoTable.clearRecentApiCallDataValue()); // clearing current array to display new values
+            dispatch(actionsCryptoTable.clearRecentApiCallDataValue()); // clearing current array to display new values
         }
-        await dispatch(getAllCoinsListThunk(selectedValue, rowsPerPage, 1)) // display new values
+            dispatch(getAllCoinsListThunk(selectedValue, rowsPerPage, 1)) // display new values
     }
 
     return (

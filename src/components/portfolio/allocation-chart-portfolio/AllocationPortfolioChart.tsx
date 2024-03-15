@@ -1,33 +1,35 @@
 import React from 'react';
-import {Box, Paper, Typography} from "@mui/material";
+import {Box, CircularProgress, Paper, Typography} from "@mui/material";
 import {Doughnut} from "react-chartjs-2";
 import {Chart, ArcElement} from 'chart.js'
 import {useSelector} from "react-redux";
 import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {TypingEffects} from "../../../utils/TypingEffects";
-
+import {RootState} from "../../redux/ReduxStore";
+import {portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
 Chart.register(ArcElement);
 
+type AllocationType = {
+            "coin": string,
+            "allocation": number
+}
 const AllocationPortfolioChart = () => {
-    const {myCurrentPortfolioDataFB} = useSelector((state: any) => state.myPortfolio)
-    const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: any, value: any) => accum + value.totalHoldingCoinAmountCash, 0)
-    // console.log('totalPortfolioValue', formattedPrice(totalPortfolioValue))
-
+    const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
+    //Calculation total sum of current portfolio
+    const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: number, value: portfolioFirebaseDataType) => accum + value.totalHoldingCoinAmountCash, 0)
     // Calculating the allocation percentage for each coin
-    const allocations = myCurrentPortfolioDataFB.map((coin: any) => ({
+    const allocations = myCurrentPortfolioDataFB.map((coin : portfolioFirebaseDataType) => ({
         coin: coin.name,
         allocation: (coin.totalHoldingCoinAmountCash / totalPortfolioValue) * 100
     }))
 
-    // console.log('allocations' , allocations)
-
     const data = {
-        labels: allocations.map((item: any) =>
+        labels: allocations.map((item: AllocationType) =>
             `${item.coin} ${formattedPrice(item.allocation)}%`),
         datasets: [
             {
                 label: '% of Portfolio',
-                data: allocations.map((item: any) => item.allocation),
+                data: allocations.map((item: AllocationType) => item.allocation),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -58,12 +60,10 @@ const AllocationPortfolioChart = () => {
         }
     };
 
-    // console.log('myCurrentPortfolioDataFB', myCurrentPortfolioDataFB)
     return (
         <Box>
             <Paper
-                // sx={{borderRadius: "20px", position: "relative"}}
-                sx={{width: "550px", height: "400px", borderRadius: "20px", position: "relative"}}
+                sx={{width: "550px", height: "400px", borderRadius: "20px", position: "relative",}}
             >
                 <Typography
                     sx={{position: "absolute", top: "40px", left: "20px"}}
@@ -72,15 +72,22 @@ const AllocationPortfolioChart = () => {
                     Allocation
                 </Typography>
 
-                <Box sx={{ margin : "0 auto" , width : "400px" , height : "400px"}}>
-                    <Doughnut data={data} options={options}/>
+                <Box sx={{margin: "0 auto", width: "370px", height: "370px"}}>
+                    {allocations.length > 0 ? (
+                        <Doughnut data={data} options={options}/>
+                    ) : (
+                        <Box sx={{ marginTop : "30%", display : "flex", justifyContent : "center",}}>
+                            <CircularProgress sx={{width: "130px !important", height: "130px !important",}} />
+                        </Box>
+                    )}
                 </Box>
 
 
-                <Typography sx={{bottom: "0", position: "absolute", fontSize: "14px", padding: "15px", color: "#a29393"}}>
+                <Typography sx={{bottom: "0", position: "absolute", fontSize: "14px", padding: "15px", color: "#a29393", width: "300px"}}>
                     <TypingEffects
                         speed={20}
-                        text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals while managing the risk associated with the volatile nature of the crypto market."}
+                        text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals."}
+                        // while managing the risk associated with the volatile nature of the crypto market
                     />
                 </Typography>
             </Paper>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Input, MenuItem, Paper, Select, Tab, Tabs, TextField, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SellIcon from '@mui/icons-material/Sell';
@@ -6,16 +6,16 @@ import ShopIcon from '@mui/icons-material/Shop';
 import PropTypes from 'prop-types';
 import {PortfolioActions, updatePortfolioThunk} from "../../redux/PortfolioReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {actionsCryptoTable, getAllCoinsListThunk} from "../../redux/CryptoTableReducer";
 import {SearchCoin} from "./SearchCoin";
 import {BuySellCoinsComponent} from "./BuySellCoinsComponent";
 
 const AddTransactionContainer = () => {
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const {fetching, rowsPerPage, marketCapList} = useSelector((state: RootState) => state.marketCoinList,);
     const {totalPageCount, currentPage, newCoinValue, myCurrentPortfolioDataFB, isPortfolioDialogOpen,} = useSelector((state: RootState) => state.myPortfolio);
-    const [tabValue, setTabValue] = useState<any>(0)
+    const [tabValue, setTabValue] = useState<number>(0)
 
     useEffect(() => {
         //Fetching coin list data
@@ -27,7 +27,7 @@ const AddTransactionContainer = () => {
         }
     }, [fetching, rowsPerPage]);
 
-    const tabValueHandler = (event: any, newValue: any) => {
+    const tabValueHandler = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
         // console.log('tabValueHandler', newValue)
         setTabValue(newValue)
     }

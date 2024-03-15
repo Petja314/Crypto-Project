@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, Container, Grid, Typography} from "@mui/material";
 import PortfolioBalanceWidget from "../widgets/PortfolioBalanceWidget";
-import Performer from "../widgets/Performer";
+import PerformanceAnalyticsWidget from "./analytics-widget-portfolio/PerformanceAnalyticsWidget";
 import PortfolioTable from "./portfolio-table/PortfolioTable";
 import AllocationPortfolioChart from "./allocation-chart-portfolio/AllocationPortfolioChart";
 import {
@@ -10,17 +10,19 @@ import {
 } from "../redux/PortfolioReducer";
 import {useDispatch, useSelector} from "react-redux";
 import AddTransactionContainer from "./add-crypto-transaction/AddTransactionContainer";
+import {ThunkDispatch} from "redux-thunk";
+import {AppDispatch, RootState} from "../redux/ReduxStore";
 
 const PortfolioManager = () => {
-    const dispatch: any = useDispatch();
+    const dispatch:  AppDispatch = useDispatch();
 
+    //Fetching portfolio from Firebase database to get the latest data
     useEffect(() => {
         dispatch(fetchPortfolioDataApiFirebase());
     }, []);
     return (
         <Box>
             <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
-
                 <Grid container spacing={2} sx={{margin: "0 auto"}}>
                     <Grid item xs={6}>
                         <Typography variant="h6" sx={{color: "#fff"}} mb={2}>
@@ -34,7 +36,7 @@ const PortfolioManager = () => {
                             </Button>
                         </Box>
                         <PortfolioBalanceWidget/>
-                        <Performer/>
+                        <PerformanceAnalyticsWidget/>
                     </Grid>
 
                     <Grid item xs={6}>

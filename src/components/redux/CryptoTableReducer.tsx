@@ -25,7 +25,7 @@ export type marketCapListArray = {
     "websiteUrl": string,
     "twitterUrl": string,
     "explorers": [string],
-    [key : string] : any,
+    [key: string]: any,
 }
 export type changeCurrencyValue = {
     value?: string,
@@ -37,10 +37,10 @@ type initialStateType = {
     marketCapList: marketCapListArray[],
     coinValue: string,
     currencyValue: changeCurrencyValue,
-    rowsPerPage : number ,
-    rows : number[],
-    fetching : boolean,
-    page : number
+    rowsPerPage: number,
+    rows: number[],
+    fetching: boolean,
+    page: number
 }
 
 const savedCurrencyValue = localStorage.getItem('currencyValue')
@@ -49,14 +49,12 @@ const initialState: initialStateType = {
     coinValue: '',
     currencyValue: savedCurrencyValue
         ? JSON.parse(savedCurrencyValue)
-        :{value: 'USD', symbol: "$", icon: usd},
-    rowsPerPage : 100,
-    rows : [25, 50, 100],
-    fetching : true,
-    page : 1
+        : {value: 'USD', symbol: "$", icon: usd},
+    rowsPerPage: 100,
+    rows: [25, 50, 100],
+    fetching: true,
+    page: 1
 }
-
-
 
 
 export const CryptoTableReducer = (state = initialState, action: ActionsCryptoTable) => {
@@ -76,22 +74,22 @@ export const CryptoTableReducer = (state = initialState, action: ActionsCryptoTa
                 ...state,
                 coinValue: action.coinSearchValue
             }
-            case "SET_CURRENCY_VALUE" :
-                //Setting the currency value to the localStorage - after refresh the latest currency would be selected to prevent call USD as default currency
-                const newState = {
-                    ...state,
-                    currencyValue: action.currency
-                }
-                localStorage.setItem('currencyValue' , JSON.stringify(action.currency))
+        case "SET_CURRENCY_VALUE" :
+            //Setting the currency value to the localStorage - after refresh the latest currency would be selected to prevent call USD as default currency
+            const newState = {
+                ...state,
+                currencyValue: action.currency
+            }
+            localStorage.setItem('currencyValue', JSON.stringify(action.currency))
             return newState
         case "SET_ROW_NUMBER" :
             return {
                 ...state,
                 fetching: action.isFetching,
                 rowsPerPage: action.selectedRowValue,
-                page : action.page
+                page: action.page
             }
-            case "SET_FETCHING" :
+        case "SET_FETCHING" :
             return {
                 ...state,
                 fetching: action.isFetching
@@ -118,9 +116,9 @@ export const actionsCryptoTable = {
         type: "SET_CURRENCY_VALUE",
         currency
     } as const),
-    setRowNumberAC: (isFetching : boolean ,selectedRowValue: number , page : number) => ({
+    setRowNumberAC: (isFetching: boolean, selectedRowValue: number, page: number) => ({
         type: "SET_ROW_NUMBER",
-        isFetching ,
+        isFetching,
         selectedRowValue,
         page
     } as const),
@@ -136,7 +134,7 @@ export const actionsCryptoTable = {
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsCryptoTable | any>;
 
-export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page: number) : ThunkType => async (dispatch) => {
+export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page: number): ThunkType => async (dispatch) => {
     try {
         const response = await coinStatApi.listOfCoinsApi(currency, rowsPerPage, page)
         if (response?.status === 200) {
@@ -147,48 +145,10 @@ export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page
     }
 }
 
-export const handlingTableByRowNumbersThunk = (isFetching : boolean, selectedRowValue : number,page : number) => (dispatch :ThunkDispatch<RootState,unknown,any>) => {
-    dispatch(actionsCryptoTable.setRowNumberAC(isFetching, selectedRowValue , page))
+export const handlingTableByRowNumbersThunk = (isFetching: boolean, selectedRowValue: number, page: number) => (dispatch: ThunkDispatch<RootState, unknown, any>) => {
+    dispatch(actionsCryptoTable.setRowNumberAC(isFetching, selectedRowValue, page))
     dispatch(actionsCryptoTable.clearRecentApiCallDataValue()); //clearing recent data to avoid duplicates
 }
-
-
-//LOCAL STORAGE LOGIC - SOMETIMES API GIVING THE 429 ERROR (TOO MANY REQUEST BECAUSE OF THE DEMO ACCOUNT)
-// export const getAllCoinsListThunk = (currency: string, pageSize: number, page: number) => async (dispatch: any) => {
-//     // Check the last fetched page from local storage
-//     const lastFetchedPage = localStorage.getItem("lastFetchedPage");
-//
-//     // If the current page is less than or equal to the last fetched page, dispatch the data from local storage
-//     if (lastFetchedPage && page <= parseInt(lastFetchedPage)) {
-//         console.log('dispatching from LS');
-//         const localStorageCoinList = localStorage.getItem("marketCapListLS");
-//         const existingData = JSON.parse(localStorageCoinList || '[]');
-//         dispatch(actionsCryptoTable.setAllCoinsListAC(existingData));
-//     } else {
-//         // If the current page is greater than the last fetched page, fetch new data
-//         try {
-//             const response = await coinGeckoApi.listOfCoinsApi(currency, pageSize, page);
-//             if (response.status === 200) {
-//                 // Retrieve existing data from local storage
-//                 const localStorageCoinList = localStorage.getItem("marketCapListLS");
-//                 const existingData = JSON.parse(localStorageCoinList || '[]');
-//
-//                 // Merge existing data with new data
-//                 const newData = [...existingData, ...response.data];
-//
-//                 // Update local storage with merged data and last fetched page
-//                 console.log('updating LS');
-//                 localStorage.setItem("marketCapListLS", JSON.stringify(newData));
-//                 localStorage.setItem("lastFetchedPage", page.toString());
-//
-//                 // Dispatch the merged data
-//                 dispatch(actionsCryptoTable.setAllCoinsListAC(newData));
-//             }
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     }
-// };
 
 
 

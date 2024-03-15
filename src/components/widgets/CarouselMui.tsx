@@ -35,7 +35,7 @@ export const CarouselMui = () => {
 
 
     return (
-        <Carousel sx={{border: "2px solid #333", borderRadius: "12px"}}>
+        <Carousel sx={{border: "2px solid #333", borderRadius: "12px" , marginBottom : "20px"}}>
             <ItemRefactored data={trendOfHour} title="Trend of Hour" emojiIcon={fire} priceChangeKey="priceChange1h"/>
             <ItemRefactored data={bestPerformanceDay} title="Best Performers 24h" emojiIcon={rocket} priceChangeKey="priceChange1d"/>
             <ItemRefactored data={worstPerformanceDay} title="Worst Performers 24h" emojiIcon={redchart} priceChangeKey="priceChange1d"/>

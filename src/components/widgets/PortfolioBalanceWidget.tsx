@@ -1,61 +1,46 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
+import React, {ChangeEvent, useEffect, useState} from 'react';
+import {Box, Grid, IconButton, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import walleticon from "../../assets/images/image/wallet.webp"
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
 import {useDispatch, useSelector} from "react-redux";
 import {formattedPrice} from "../../commons/functions/formattedPrice";
-import {coinStatApi, exchangeCurrencyApi} from "../api/CoinStatApi";
-import {fetchPortfolioDataApiFirebase} from "../redux/PortfolioReducer";
+import {fetchCurrentBtcPriceThunk, fetchExchangeApiThunk, portfolioBalanceWidgetActions} from "../redux/PortfolioBalanceWidgetReducer";
+import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../redux/PortfolioReducer";
+import {RootState} from "../redux/ReduxStore";
+import {ThunkDispatch} from "redux-thunk";
 
 
 const PortfolioBalanceWidget = () => {
-    const dispatch : any = useDispatch()
-    const {myCurrentPortfolioDataFB} = useSelector((state: any) => state.myPortfolio)
-    const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: any, value: any) => accum + value.totalHoldingCoinAmountCash, 0)
-    const [currencyValue, setCurrencyValue] = useState<any>(['USD'])
-    const currency = ["USD", "GBP", "EUR", "CAD", "AUD"]
-    const [exchangingRate, setExchangingRate] = useState<any>([])
-    const [btcPrice, setBtcPrice] = useState<any>(null)
+    const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
+    const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
+    const {currencyValueBalance, currency, exchangingRate, btcPrice} = useSelector((state: RootState) => state.portfolioBalanceWidget)
+    //Getting the total sum of current user portfolio
+    const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: number, value: portfolioFirebaseDataType) => accum + value.totalHoldingCoinAmountCash, 0)
 
-
-    const portfolioBalanceCurrency = totalPortfolioValue * exchangingRate[0]
-    const btcInPortfolio = portfolioBalanceCurrency / btcPrice
-    const btcFormattedPrice = btcInPortfolio.toFixed(5)
-
-    const currencyHandleChange = (event: any) => {
-        const selectedValue = event.target?.value
-        setCurrencyValue(selectedValue.split(" "))
+    //Calculating the total amount in selected currency $ £ ...
+    const portfolioBalanceCurrency: number = totalPortfolioValue * exchangingRate[0]
+    //Calculating total amount of BTC in portfolio , based on selected currency
+    const btcInPortfolio: number = portfolioBalanceCurrency / btcPrice! // - is no null !
+    //Final formatted BTC price with correct decimals
+    const btcFormattedPrice: string = btcInPortfolio.toFixed(5)
+    const currencyHandleChange = (event: SelectChangeEvent) => {
+        //Function that get selected currency USD , GBP , AUD ... and setting it into the redux initial State
+        const selectedValue: string = event.target?.value
+        const selectedValueArray: string[] = selectedValue.split(" ")
+        dispatch(portfolioBalanceWidgetActions.balanceCurrencyValue(selectedValueArray))
     }
 
-    const fetchExchangeApi = async () => {
-        try {
-            let response = await exchangeCurrencyApi.fetchCurrencyRate(currencyValue)
-            const currentExchangeValue = Object.values(response.data.data)
-            setExchangingRate(currentExchangeValue)
-        }
-        catch(error){
-            console.error(error)
-        }
-    }
-
-    const fetchCurrentBtcPrice = async () => {
-        try {
-            const response = await coinStatApi.coinDetails("bitcoin", "usd")
-            // console.log('response :' , response.data.price)
-            setBtcPrice(response.data.price)
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
 
     useEffect(() => {
+        //Fetching portfolio data from DB  , to get the latest total amount in portfolio $
         dispatch(fetchPortfolioDataApiFirebase());
-        fetchExchangeApi()
-        fetchCurrentBtcPrice()
-    },[currencyValue])
+        //Making the api call to get the exchanging rate
+        dispatch(fetchExchangeApiThunk(currencyValueBalance))
+        //Fetching the selected coin
+        dispatch(fetchCurrentBtcPriceThunk())
+    }, [currencyValueBalance])
 
-    // console.log('currencyValue',currencyValue)
+
     return (
         <Box>
             {/*sx={{width : "500px"}}*/}
@@ -67,39 +52,33 @@ const PortfolioBalanceWidget = () => {
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: "rgba(255, 255, 255, 0.09)"
             }}>
-                <Grid container
-                      sx={{position : "relative"}}
-                >
-                    <Grid item >
+                <Grid container sx={{position: "relative"}}>
+                    <Grid item>
                         <Box component='span' sx={{color: "#B8B8B8", fontSize: "15px"}}>Portfolio Balance</Box>
                         <Typography variant='h5'>
                             {formattedPrice(portfolioBalanceCurrency)}
                             <Select
-                                sx={{marginLeft: "10px",color: "#B8B8B8", fontSize: "12px",}}
+                                sx={{marginLeft: "10px", color: "#B8B8B8", fontSize: "12px"}}
                                 onChange={currencyHandleChange}
                                 label='currency'
-                                value={currencyValue}
+                                value={currencyValueBalance[0]}
                             >
-                                {currency.map((item , index) => (
-                                    <MenuItem  key={index} sx={{color: "#B8B8B8", fontSize: "12px"}} value={item}>{item}</MenuItem>
+                                {currency.map((item, index: number) => (
+                                    <MenuItem key={index} sx={{color: "#B8B8B8", fontSize: "12px"}} value={item}>{item}</MenuItem>
                                 ))}
 
                             </Select>
                         </Typography>
                         <Box component='span' sx={{color: "#B8B8B8", fontSize: "12px"}}>{Number(btcFormattedPrice)} BTC</Box>
-
-
                     </Grid>
 
 
-                    <Box component='span' sx={{position: "absolute",bottom: -20,right: 0, maxWidth: "140px",width: "100%",height: "auto",}}>
-                        <img src={walleticon} alt="WebP Image" style={{ width: "100%", height: "auto" }} />
+                    <Box component='span' sx={{position: "absolute", bottom: -20, right: 0, maxWidth: "140px", width: "100%", height: "auto",}}>
+                        <img src={walleticon} alt="WebP Image" style={{width: "100%", height: "auto"}}/>
                     </Box>
 
                 </Grid>
-
             </Paper>
-
         </Box>
     );
 };
