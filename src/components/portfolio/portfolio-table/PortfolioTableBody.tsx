@@ -6,18 +6,24 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {AppDispatch} from "../../redux/ReduxStore";
+import {useNavigate} from "react-router-dom";
 
 type PortfolioTableBodyPropsType = {
     myCurrentPortfolioDataFB : portfolioFirebaseDataType[]
 }
 
 export const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsType) => {
+    const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
+    const navigateToCoinPageHandler = (id : string) => {
+        // navigate(`/coin_info/${id}?`)
+    }
+
     return (
         <>
             {/*TABLE BODY*/}
             {myCurrentPortfolioDataFB.map((item: portfolioFirebaseDataType , index: number) => (
-                <TableRow key={index} sx={{textAlign: "center"}}>
+                <TableRow key={index} sx={{textAlign: "center" , cursor : "pointer"}} onClick={() => navigateToCoinPageHandler(item.id)} >
                     <TableCell>{item.rank}</TableCell>
                     <TableCell>
                         <Box sx={{display: "flex", gap: 1, alignItems: "center",}}>

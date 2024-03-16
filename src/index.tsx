@@ -7,6 +7,14 @@ import {BrowserRouter, RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import store from "./components/redux/ReduxStore";
+import {WagmiProvider} from "wagmi";
+import {config} from "./config";
+import {
+    QueryClient,
+    QueryClientProvider,
+    useQuery,
+} from '@tanstack/react-query'
+const queryClient = new QueryClient()
 
 
 const root = ReactDOM.createRoot(
@@ -17,7 +25,11 @@ root.render(
         <CssBaseline/>
         <BrowserRouter>
             <Provider store={store}>
-                <App/>
+                <WagmiProvider config={config}>
+                    <QueryClientProvider client={queryClient}>
+                    <App/>
+                    </QueryClientProvider>
+                </WagmiProvider>
             </Provider>
         </BrowserRouter>
     </ThemeProvider>

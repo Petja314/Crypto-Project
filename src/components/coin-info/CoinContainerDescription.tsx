@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
 import {coinDataArray, coinDescriptionDataThunk} from "../redux/CoinDescriptionReducer";
 import {Box, Button, Container,} from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {CryptoChart} from "./chart/CryptoChart";
 import {formattedPrice} from "../../commons/functions/formattedPrice";
 import {PriceChangesWidget} from "./coin-info-widgets/PriceChangesWidget";
@@ -13,6 +13,7 @@ import {RootState} from "../redux/ReduxStore";
 
 export const CoinContainerDescription = () => {
     const dispatch: any = useDispatch()
+    const navigate =  useNavigate()
     const {id  }= useParams()
     const {coinData} = useSelector((state: RootState) => state.coinDetails) as { coinData: coinDataArray[] }
     const {currencyValue} = useSelector((state: RootState) => state.marketCoinList)
@@ -20,6 +21,11 @@ export const CoinContainerDescription = () => {
     useEffect(() => {
         dispatch(coinDescriptionDataThunk(id, currencyValue.value))
     }, [id]);
+
+    const navigateToPortfolioPage = () => {
+        navigate(`/portfolio`)
+    }
+
     return (
         <Container>
             <Box sx={{marginTop: "50px", marginBottom: "50px"}}>
@@ -35,7 +41,7 @@ export const CoinContainerDescription = () => {
                                         item={item}
                                     />
                                     <CoinDataLinksWidget item={item}/>
-                                    <Button sx={{marginTop: "20px"}}>Add to portfolio</Button>
+                                    <Button onClick={navigateToPortfolioPage} sx={{marginTop: "20px"}}>Add to portfolio</Button>
 
                                 </Box>
 
