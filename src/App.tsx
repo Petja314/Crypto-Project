@@ -24,6 +24,7 @@ import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch} from "react-redux";
 import {CoinContainerDescription} from "./components/coin-info/CoinContainerDescription";
 import Preloader from "./commons/preloader/Preloader";
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 
 // @ts-ignore
 export const theme = createTheme({

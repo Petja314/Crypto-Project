@@ -3,13 +3,15 @@ import {Avatar, Box, Button, Container, Dialog, DialogContent, DialogTitle, Icon
 import tokenList from "./tokenList.json"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
-import {actionsProfile} from "../redux/ProfileReducer";
 import CloseIcon from "@mui/icons-material/Close";
 import {TypingEffects} from "../../utils/TypingEffects";
 import WalletIcon from '@mui/icons-material/Wallet';
 import axios from "axios";
+import {useWeb3Modal} from "@web3modal/wagmi/react";
+import {useAccount} from "wagmi";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
-
+const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImVjMzllYjNjLWY5YWQtNGU3OC1hZjI3LTRlM2U3MWZlYjA5YiIsIm9yZ0lkIjoiMzgzMTI1IiwidXNlcklkIjoiMzkzNjYyIiwidHlwZUlkIjoiOWJjMDA5MDItMWYyZi00OWI2LThkMzYtNjQ2ZmYxNTEzYTJkIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA1OTc2MTUsImV4cCI6NDg2NjM1NzYxNX0.nOP7wkEL30W2x3v17CSbNl-XnGzVBXlIeI0qvqJavHw"
 
 const PurchaseCrypto = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -19,9 +21,9 @@ const PurchaseCrypto = () => {
     const [tokenTwoPrice, setTokenTwoPrice] = useState(0)
     const [ratio, setRatio] = useState(0)
     const [tabValue, setTabValue] = useState(0)
-
-
-
+    const queryClient = new QueryClient()
+    const { open, close } = useWeb3Modal()
+    const { address, isConnecting, isDisconnected } = useAccount()
 
     // const response = await axios.get("https://deep-index.moralis.io/api/v2.2/erc20/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0/price", {
     const fetchMoralisDataApi = async (addressOne: any, addressTwo: any) => {
@@ -29,7 +31,7 @@ const PurchaseCrypto = () => {
             console.log('in')
             const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`, {
                 headers: {
-                    // "X-API-Key": apiKey
+                    "X-API-Key": apiKey
                 }
             })
             setTokenOnePrice(response.data.tokenOne)
@@ -41,9 +43,9 @@ const PurchaseCrypto = () => {
         }
     }
 
-    useEffect(() => {
-        fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
-    }, [selectedTokenOne, selectedTokenTwo])
+    // useEffect(() => {
+    //     fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
+    // }, [selectedTokenOne, selectedTokenTwo])
 
 
     const handleTokenChange = (selectedToken: any) => {
@@ -67,25 +69,41 @@ const PurchaseCrypto = () => {
 
     }
 
+
     // console.log('tabValue' , tabValue)
     // console.log('selectedTokenOne', selectedTokenOne)
     // console.log('selectedTokenTwo', selectedTokenTwo)
     // console.log('tokenList' , tokenList)
     // console.log('tokenOnePrice' , tokenOnePrice)
     // console.log('tokenTwoPrice' , tokenTwoPrice)
+    // console.log('open' , open)
+    // console.log("address" , address)
+    // console.log("isConnecting" , isConnecting)
+    // console.log("isDisconnected" , isDisconnected)
     return (
         <Container sx={{marginTop: "50px", marginBottom: "50px"}}>
-            <Button sx={{
-                borderRadius : "20px",
-                padding: "8px 12px 8px 8px",
-                fontSize: "13px",
-                textTransform: "lowercase",
-                float: "right",
-                fontWeight: "bold"
-            }}>
-                <WalletIcon sx={{width: "18px", height: "18px", marginRight: "8px"}}/>
-                Connect wallet
-            </Button>
+
+            <Box  sx={{float: "right"}}>
+                <QueryClientProvider client={queryClient} ><w3m-button /></QueryClientProvider>
+            </Box>
+
+            {/*<Button*/}
+            {/*    onClick={() => open()}*/}
+            {/*    sx={{*/}
+            {/*    borderRadius : "20px",*/}
+            {/*    padding: "8px 12px 8px 8px",*/}
+            {/*    fontSize: "13px",*/}
+            {/*    textTransform: "lowercase",*/}
+            {/*    float: "right",*/}
+            {/*    fontWeight: "bold"*/}
+            {/*}}*/}
+            {/*>*/}
+            {/*    <WalletIcon*/}
+            {/*        sx={{width: "18px", height: "18px", marginRight: "8px"}}*/}
+
+            {/*    />*/}
+            {/*    Connect wallet*/}
+            {/*</Button>*/}
 
             <Typography variant='h4' sx={{color: "#fff", width: "300px", height: "100px", textAlign: "center", margin: "0 auto", marginBottom: "50px"}}>
                 <TypingEffects
