@@ -25,6 +25,7 @@ import {useDispatch} from "react-redux";
 import {CoinContainerDescription} from "./components/coin-info/CoinContainerDescription";
 import Preloader from "./commons/preloader/Preloader";
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import {useAccount, useSendTransaction} from "wagmi";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -94,10 +95,10 @@ const routes = [
 ]
 
 function App() {
+
     const [userLogged, setUserLogged] = useState<null>(null)
     const [isFetching, setIsFetching] = useState(true)
     const dispatch: any = useDispatch()
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user: any) => {
             if (user) {
@@ -121,6 +122,8 @@ function App() {
     }
     // console.log('userLogged App : ', userLogged)
     // console.log('isFetching' , isFetching)
+
+
     return (
         <Box>
             <Header routes={routes} userLogged={userLogged}/>
@@ -130,7 +133,7 @@ function App() {
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
                 <Route path={"/portfolio"} element={<PortfolioManager/>}/>
                 <Route path={"/nft"} element={<Nft/>}/>
-                <Route path={"/buy-crypto"} element={<PurchaseCrypto/>}/>
+                <Route path={"/buy-crypto"} element={<PurchaseCrypto />}/>
                 <Route path={"/news"} element={<News/>}/>
                 <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
                 <Route path={"/reset"} element={<ForgotPasswords/>}/>

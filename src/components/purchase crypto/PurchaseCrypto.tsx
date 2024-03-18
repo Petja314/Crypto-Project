@@ -8,47 +8,114 @@ import {TypingEffects} from "../../utils/TypingEffects";
 import WalletIcon from '@mui/icons-material/Wallet';
 import axios from "axios";
 import {useWeb3Modal} from "@web3modal/wagmi/react";
-import {useAccount} from "wagmi";
+import {useAccount, useSendTransaction} from "wagmi";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {parseEther} from "viem";
 
-const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImVjMzllYjNjLWY5YWQtNGU3OC1hZjI3LTRlM2U3MWZlYjA5YiIsIm9yZ0lkIjoiMzgzMTI1IiwidXNlcklkIjoiMzkzNjYyIiwidHlwZUlkIjoiOWJjMDA5MDItMWYyZi00OWI2LThkMzYtNjQ2ZmYxNTEzYTJkIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA1OTc2MTUsImV4cCI6NDg2NjM1NzYxNX0.nOP7wkEL30W2x3v17CSbNl-XnGzVBXlIeI0qvqJavHw"
+
+
+
+
+
+type txType = {
+    to:any,
+    data:any,
+    value:any
+}
 
 const PurchaseCrypto = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [selectedTokenOne, setSelectedTokenOne] = useState<any>(tokenList[0]);
     const [selectedTokenTwo, setSelectedTokenTwo] = useState<any>(tokenList[1]);
-    const [tokenOnePrice, setTokenOnePrice] = useState(0)
-    const [tokenTwoPrice, setTokenTwoPrice] = useState(0)
-    const [ratio, setRatio] = useState(0)
+    const [tokenOnePrice, setTokenOnePrice] = useState<any>(null)
+    const [tokenTwoPrice, setTokenTwoPrice] = useState<any>(null)
+    const [prices, setPrices] = useState<any>([])
     const [tabValue, setTabValue] = useState(0)
-    const queryClient = new QueryClient()
-    const { open, close } = useWeb3Modal()
-    const { address, isConnecting, isDisconnected } = useAccount()
-
-    // const response = await axios.get("https://deep-index.moralis.io/api/v2.2/erc20/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0/price", {
+    const [transactionDetails, setTransactionDetails] = useState<any>([])
+    const [txDetails, setTxDetails] = useState<any>({
+        to:null,
+        data:null,
+        value:null
+    })
+    const {open, close} = useWeb3Modal()
+    const {address, isConnecting, isDisconnected} = useAccount()
+    const {  sendTransaction } = useSendTransaction();
+    console.log('price two' , tokenTwoPrice)
     const fetchMoralisDataApi = async (addressOne: any, addressTwo: any) => {
         try {
-            console.log('in')
-            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`, {
-                headers: {
-                    "X-API-Key": apiKey
+            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`,{
+                headers : {
+                    apiKey : apiKey
                 }
             })
-            setTokenOnePrice(response.data.tokenOne)
-            setTokenTwoPrice(response.data.tokenTwo)
-            setRatio(response.data.ratio)
-            console.log('response : ', response)
+            setPrices(response.data)
         } catch (error) {
             console.error(error)
         }
     }
 
-    // useEffect(() => {
-    //     fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
-    // }, [selectedTokenOne, selectedTokenTwo])
+    const changeAmount = (event : any) => {
+        console.log('changeAmount')
+        setTokenOnePrice(event.target.value)
+        if(event.target.value && prices) {
+            console.log('in')
+            setTokenTwoPrice((event.target.value * prices.ratio).toFixed(2))
+        }
+        else {
+            setTokenTwoPrice(null)
+        }
+    }
+    const dexApproveAllowanceApi = async () => {
+            // Make a GET request to your backend API endpoint
+            const allowance = await axios.get(`http://localhost:3001/dexApproveAllowance?tokenAddress=${selectedTokenOne.address}&walletAddress=${address}`);
+            console.log('Response from backend:', allowance.data.allowance);
+            if (allowance.data.allowance === "0") {
+                try{
+                    setTimeout(async () => {
+                        const approve =  await axios.get(`http://localhost:3001/approveTransactionDex?tokenAddress=${selectedTokenOne.address}`)
+                        setTransactionDetails(approve.data)
+                        setTxDetails(approve.data)
+                        return;
+                        console.log('approve transaction : ' , approve.data)
+                    },1000) // 1RPS by api call
+                }
+                catch(error) {
+                    console.error(error)
+                }
+            }
+            setTimeout(() => {
+                console.log('dex swap api called')
+                dexSwapApiCall()
+            },1000)
+    }
+    const dexSwapApiCall = async () => {
+        const response = await axios
+            .get(`http://localhost:3001/swapCoinDex?src=${selectedTokenOne}&dst=${selectedTokenTwo}&amount=${tokenOnePrice}from=${address}`)
+        console.log('Swap response : ' , response.data);
+    }
+
+    useEffect(() => {
+        fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
+    }, [selectedTokenOne, selectedTokenTwo])
+
+    useEffect(() => {
+        if(txDetails.to ) {
+            sendTransaction({
+                // from: address,
+                // from: "0x3c1c2f918c38BdE38c1018F4Ade2a1159FF1f2d8" ,
+                to: txDetails.to,
+                data: txDetails.data,
+                value: txDetails.value,
+            })
+        }
+    },[txDetails])
+
 
 
     const handleTokenChange = (selectedToken: any) => {
+        setPrices(null)
+        setTokenOnePrice(null)
+        setTokenTwoPrice(null)
         if (tabValue === 0) {
             // console.log('selected one')
             setSelectedTokenOne(selectedToken)
@@ -61,49 +128,28 @@ const PurchaseCrypto = () => {
     };
 
     const swapDialogsAround = () => {
+        setPrices(null)
+        setSelectedTokenOne(null)
+        setTokenOnePrice(null)
+
         setSelectedTokenOne(selectedTokenTwo)
         setTokenOnePrice(tokenTwoPrice)
         //Swap dialogs around
         setSelectedTokenTwo(selectedTokenOne)
         setTokenTwoPrice(tokenOnePrice)
-
+        fetchMoralisDataApi(selectedTokenTwo.address , selectedTokenOne.address)
     }
 
-
-    // console.log('tabValue' , tabValue)
-    // console.log('selectedTokenOne', selectedTokenOne)
-    // console.log('selectedTokenTwo', selectedTokenTwo)
-    // console.log('tokenList' , tokenList)
-    // console.log('tokenOnePrice' , tokenOnePrice)
-    // console.log('tokenTwoPrice' , tokenTwoPrice)
-    // console.log('open' , open)
-    // console.log("address" , address)
-    // console.log("isConnecting" , isConnecting)
-    // console.log("isDisconnected" , isDisconnected)
+    console.log('token one price,' , tokenOnePrice)
     return (
+        // <QueryClientProvider client={queryClient}>
         <Container sx={{marginTop: "50px", marginBottom: "50px"}}>
-
-            <Box  sx={{float: "right"}}>
-                <QueryClientProvider client={queryClient} ><w3m-button /></QueryClientProvider>
+            <button onClick={() => dexSwapApiCall()}>SWAP</button>
+            <Box sx={{float: "right"}}>
+                {/*<QueryClientProvider client={queryClient}>*/}
+                    <w3m-button/>
+                {/*</QueryClientProvider>*/}
             </Box>
-
-            {/*<Button*/}
-            {/*    onClick={() => open()}*/}
-            {/*    sx={{*/}
-            {/*    borderRadius : "20px",*/}
-            {/*    padding: "8px 12px 8px 8px",*/}
-            {/*    fontSize: "13px",*/}
-            {/*    textTransform: "lowercase",*/}
-            {/*    float: "right",*/}
-            {/*    fontWeight: "bold"*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*    <WalletIcon*/}
-            {/*        sx={{width: "18px", height: "18px", marginRight: "8px"}}*/}
-
-            {/*    />*/}
-            {/*    Connect wallet*/}
-            {/*</Button>*/}
 
             <Typography variant='h4' sx={{color: "#fff", width: "300px", height: "100px", textAlign: "center", margin: "0 auto", marginBottom: "50px"}}>
                 <TypingEffects
@@ -124,8 +170,10 @@ const PurchaseCrypto = () => {
                         {/*YOU PAY*/}
                         <Box sx={{display: "flex",}}>
                             <input
-                                onChange={(event: any) => setTokenOnePrice(event.target.value)}
-                                value={tokenOnePrice.toFixed(2)}
+                                // onChange={(event: any) => setTokenOnePrice(event.target.value)}
+                                onChange={changeAmount}
+                                // value={tokenOnePrice?.toFixed(2)}
+                                value={tokenOnePrice === null ? 0 : tokenOnePrice}
                                 style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
                                 type={'number'}/>
 
@@ -170,8 +218,9 @@ const PurchaseCrypto = () => {
 
                         <Box sx={{display: "flex",}}>
                             <input
-                                onChange={(event: any) => setTokenTwoPrice(event.target.value)}
-                                value={tokenTwoPrice.toFixed(2)}
+                                // onChange={(event: any) => setTokenTwoPrice(event.target.value)}
+                                // value={tokenTwoPrice?.toFixed(2)}
+                                value={tokenTwoPrice === null ? 0 : tokenTwoPrice}
                                 style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
                                 type={'number'}/>
 
@@ -199,7 +248,9 @@ const PurchaseCrypto = () => {
                         </Box>
                     </Box>
                     {/*SWAP BUTTON */}
-                    <Button sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}>Swap</Button>
+                    <Button sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}
+                    onClick={() => dexApproveAllowanceApi()}
+                    >Swap</Button>
                 </Box>
             </Paper>
 
@@ -230,6 +281,8 @@ const PurchaseCrypto = () => {
 
 
         </Container>
+        // </QueryClientProvider>
+
     );
 };
 

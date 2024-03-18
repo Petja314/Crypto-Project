@@ -9,8 +9,8 @@ import {CssBaseline, ThemeProvider} from "@mui/material";
 import store from "./components/redux/ReduxStore";
 import {createWeb3Modal} from '@web3modal/wagmi/react'
 import {defaultWagmiConfig} from '@web3modal/wagmi/react/config'
-import {WagmiProvider} from 'wagmi'
-import {arbitrum, mainnet} from 'wagmi/chains'
+import {useSendTransaction, WagmiProvider} from 'wagmi'
+import {arbitrum, mainnet, scrollSepolia, sepolia} from 'wagmi/chains'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 
@@ -28,7 +28,7 @@ const metadata = {
     icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 
-const chains = [mainnet] as const // Can add more chains if needed
+const chains = [mainnet,sepolia] as const // Can add more chains if needed
 const config = defaultWagmiConfig({
     chains,
     projectId,
@@ -42,7 +42,6 @@ createWeb3Modal({
     enableAnalytics: true, // Optional - defaults to your Cloud configuration
     enableOnramp: true // Optional - false as default
 })
-
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
@@ -52,9 +51,11 @@ root.render(
         <CssBaseline/>
         <Provider store={store}>
             <BrowserRouter>
+                <QueryClientProvider client={queryClient}>
                 <WagmiProvider config={config}>
                     <App/>
                 </WagmiProvider>
+                </QueryClientProvider>
             </BrowserRouter>
         </Provider>
     </ThemeProvider>
