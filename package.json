@@ -19,6 +19,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@uidotdev/usehooks": "^2.4.1",
+    "@walletconnect/modal": "^2.6.2",
     "@web3modal/wagmi": "^4.1.1",
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",

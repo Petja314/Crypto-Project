@@ -129,3 +129,4 @@ const Nft = () => {
 };
 
 export default Nft;
+

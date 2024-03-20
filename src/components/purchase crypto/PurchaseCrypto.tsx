@@ -5,47 +5,47 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
 import CloseIcon from "@mui/icons-material/Close";
 import {TypingEffects} from "../../utils/TypingEffects";
-import WalletIcon from '@mui/icons-material/Wallet';
 import axios from "axios";
-import {useWeb3Modal} from "@web3modal/wagmi/react";
-import {useAccount, useSendTransaction} from "wagmi";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {parseEther} from "viem";
+import {BaseError, useAccount, useSendTransaction, useWaitForTransactionReceipt} from "wagmi";
+import {Alert} from "@mui/lab";
 
 
-
-
+const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjhhNGNlNzY1LTU3YTctNDRhMy1hZTkyLTRjZmVmOWVhYTE2MiIsIm9yZ0lkIjoiMzgzNTAwIiwidXNlcklkIjoiMzk0MDU2IiwidHlwZUlkIjoiMmIwNjFlMDItNDdiOS00NmE0LTgzZjgtMDAzZmMwMWNiMjE4IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA3ODY0MzksImV4cCI6NDg2NjU0NjQzOX0.BVCxqr5Tvzzm4vxQOtMEaWFQk5uRdJyUUvJRcrt9Tb8"
 
 
 type txType = {
-    to:any,
-    data:any,
-    value:any
+    to: any,
+    data: any,
+    value: any
 }
 
 const PurchaseCrypto = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [selectedTokenOne, setSelectedTokenOne] = useState<any>(tokenList[0]);
+    const [selectedTokenOne, setSelectedTokenOne] = useState<any>(tokenList[2]);
     const [selectedTokenTwo, setSelectedTokenTwo] = useState<any>(tokenList[1]);
     const [tokenOnePrice, setTokenOnePrice] = useState<any>(null)
     const [tokenTwoPrice, setTokenTwoPrice] = useState<any>(null)
     const [prices, setPrices] = useState<any>([])
     const [tabValue, setTabValue] = useState(0)
-    const [transactionDetails, setTransactionDetails] = useState<any>([])
     const [txDetails, setTxDetails] = useState<any>({
-        to:null,
-        data:null,
-        value:null
+        to: null,
+        data: null,
+        value: null
     })
-    const {open, close} = useWeb3Modal()
     const {address, isConnecting, isDisconnected} = useAccount()
-    const {  sendTransaction } = useSendTransaction();
-    console.log('price two' , tokenTwoPrice)
+    const {
+        error,
+        data: hash,
+        isPending,
+        sendTransaction
+    } = useSendTransaction()
+    const {isLoading: isConfirming, isSuccess: isConfirmed} = useWaitForTransactionReceipt({hash})
+    const [showAlertTime, setShowAlertTime] = useState(true)
     const fetchMoralisDataApi = async (addressOne: any, addressTwo: any) => {
         try {
-            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`,{
-                headers : {
-                    apiKey : apiKey
+            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`, {
+                headers: {
+                    apiKey: apiKey
                 }
             })
             setPrices(response.data)
@@ -54,63 +54,85 @@ const PurchaseCrypto = () => {
         }
     }
 
-    const changeAmount = (event : any) => {
-        console.log('changeAmount')
+    const changeAmount = (event: any) => {
         setTokenOnePrice(event.target.value)
-        if(event.target.value && prices) {
-            console.log('in')
+        if (event.target.value && prices) {
             setTokenTwoPrice((event.target.value * prices.ratio).toFixed(2))
-        }
-        else {
+        } else {
             setTokenTwoPrice(null)
         }
     }
-    const dexApproveAllowanceApi = async () => {
-            // Make a GET request to your backend API endpoint
-            const allowance = await axios.get(`http://localhost:3001/dexApproveAllowance?tokenAddress=${selectedTokenOne.address}&walletAddress=${address}`);
-            console.log('Response from backend:', allowance.data.allowance);
-            if (allowance.data.allowance === "0") {
-                try{
-                    setTimeout(async () => {
-                        const approve =  await axios.get(`http://localhost:3001/approveTransactionDex?tokenAddress=${selectedTokenOne.address}`)
-                        setTransactionDetails(approve.data)
-                        setTxDetails(approve.data)
-                        return;
-                        console.log('approve transaction : ' , approve.data)
-                    },1000) // 1RPS by api call
-                }
-                catch(error) {
-                    console.error(error)
-                }
-            }
-            setTimeout(() => {
-                console.log('dex swap api called')
-                dexSwapApiCall()
-            },1000)
-    }
+
+
     const dexSwapApiCall = async () => {
-        const response = await axios
-            .get(`http://localhost:3001/swapCoinDex?src=${selectedTokenOne}&dst=${selectedTokenTwo}&amount=${tokenOnePrice}from=${address}`)
-        console.log('Swap response : ' , response.data);
+        debugger
+        const response = await axios.get(`http://localhost:3001/swapCoinDex`, {
+            params: {
+                selectedTokenOne: selectedTokenOne.address,
+                selectedTokenTwo: selectedTokenTwo.address,
+                tokenOnePrice: tokenOnePrice.padEnd(selectedTokenOne.decimals + tokenOnePrice?.length, '0'),
+                address: address
+            }
+        });
+        // console.log('Swap response : ', response.data);
+        setTxDetails(response.data.tx);
     }
 
+    const dexApproveAllowanceApi = async () => {
+        // Make a GET request to check allowance
+        const allowance = await axios.get(`http://localhost:3001/dexApproveAllowance`, {
+            params: {
+                tokenAddress: selectedTokenOne.address,
+                walletAddress: address
+            }
+        });
+        if (allowance.data.allowance === "0") {
+            // If allowance is 0, initiate approval process
+
+            setTimeout(async () => {
+                const approve = await axios.get(`http://localhost:3001/approveTransactionDex`, {
+                    params: {
+                        tokenAddress: selectedTokenOne.address
+                    }
+                });
+                setTxDetails(approve.data);
+                console.log('not approved')
+                return;
+            }, 1000) //1RPS BY API
+        }
+        await dexSwapApiCall()
+    }
+
+
     useEffect(() => {
-        fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
+        // fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
     }, [selectedTokenOne, selectedTokenTwo])
 
     useEffect(() => {
-        if(txDetails.to ) {
+        if (txDetails.to && address) { // && isConnecting
             sendTransaction({
                 // from: address,
-                // from: "0x3c1c2f918c38BdE38c1018F4Ade2a1159FF1f2d8" ,
                 to: txDetails.to,
                 data: txDetails.data,
                 value: txDetails.value,
             })
+
         }
-    },[txDetails])
+    }, [txDetails])
 
 
+    useEffect(() => {
+        if (isConnecting || isDisconnected || error || hash || isConfirming || isConfirmed) {
+            setShowAlertTime(true);
+            const timer = setTimeout(() => {
+                setShowAlertTime(false);
+            }, 5000);
+            return () => {
+                clearTimeout(timer);
+                console.log("Timer cleared"); // Check if this is logged to ensure the cleanup function is triggered
+            };
+        }
+    }, [isConnecting, isDisconnected, error, hash, isConfirming, isConfirmed]);
 
     const handleTokenChange = (selectedToken: any) => {
         setPrices(null)
@@ -137,18 +159,14 @@ const PurchaseCrypto = () => {
         //Swap dialogs around
         setSelectedTokenTwo(selectedTokenOne)
         setTokenTwoPrice(tokenOnePrice)
-        fetchMoralisDataApi(selectedTokenTwo.address , selectedTokenOne.address)
+        fetchMoralisDataApi(selectedTokenTwo.address, selectedTokenOne.address)
     }
 
-    console.log('token one price,' , tokenOnePrice)
     return (
-        // <QueryClientProvider client={queryClient}>
         <Container sx={{marginTop: "50px", marginBottom: "50px"}}>
-            <button onClick={() => dexSwapApiCall()}>SWAP</button>
+
             <Box sx={{float: "right"}}>
-                {/*<QueryClientProvider client={queryClient}>*/}
-                    <w3m-button/>
-                {/*</QueryClientProvider>*/}
+                <w3m-button/>
             </Box>
 
             <Typography variant='h4' sx={{color: "#fff", width: "300px", height: "100px", textAlign: "center", margin: "0 auto", marginBottom: "50px"}}>
@@ -158,6 +176,37 @@ const PurchaseCrypto = () => {
                 />
             </Typography>
 
+            {/*STATUS OF SWAP*/}
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItem: "center",
+                    marginBottom: "30px"
+                }}>
+                {showAlertTime && (
+                    <>
+                        {error && (
+                            <Alert severity="error">Error: {(error as BaseError).shortMessage || error.message}</Alert>
+                        )}
+                        {hash && (
+                            <Alert severity="success"> Transaction Hash: {hash}</Alert>
+                        )}
+                        {isConfirming && (
+                            <Alert severity="info">Waiting for confirmation...</Alert>
+                        )}
+                        {isConfirmed && (
+                            <Alert severity="success">Transaction confirmed.</Alert>
+                        )}
+                        {isConnecting && (
+                            <Alert severity="success">Wallet is connected!</Alert>
+                        )}
+                        {isDisconnected && (
+                            <Alert severity="error">Wallet has disconnected!</Alert>
+                        )}
+                    </>
+                )}
+            </Box>
 
             <Paper sx={{borderRadius: "24px", width: "600px", margin: "0 auto", paddingBottom: "30px"}}>
                 <Typography variant='h5' sx={{padding: "20px"}}>Dex Exchange</Typography>
@@ -170,9 +219,7 @@ const PurchaseCrypto = () => {
                         {/*YOU PAY*/}
                         <Box sx={{display: "flex",}}>
                             <input
-                                // onChange={(event: any) => setTokenOnePrice(event.target.value)}
                                 onChange={changeAmount}
-                                // value={tokenOnePrice?.toFixed(2)}
                                 value={tokenOnePrice === null ? 0 : tokenOnePrice}
                                 style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
                                 type={'number'}/>
@@ -218,8 +265,7 @@ const PurchaseCrypto = () => {
 
                         <Box sx={{display: "flex",}}>
                             <input
-                                // onChange={(event: any) => setTokenTwoPrice(event.target.value)}
-                                // value={tokenTwoPrice?.toFixed(2)}
+                                disabled
                                 value={tokenTwoPrice === null ? 0 : tokenTwoPrice}
                                 style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
                                 type={'number'}/>
@@ -248,9 +294,14 @@ const PurchaseCrypto = () => {
                         </Box>
                     </Box>
                     {/*SWAP BUTTON */}
-                    <Button sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}
-                    onClick={() => dexApproveAllowanceApi()}
-                    >Swap</Button>
+                    <Button
+                        disabled={!address || !tokenOnePrice || tokenOnePrice == 0}
+                        sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}
+                        onClick={() => dexApproveAllowanceApi()}
+                    >
+                        Swap
+                    </Button>
+
                 </Box>
             </Paper>
 
@@ -281,8 +332,6 @@ const PurchaseCrypto = () => {
 
 
         </Container>
-        // </QueryClientProvider>
-
     );
 };
 

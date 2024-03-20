@@ -35,13 +35,6 @@
     "decimals": 18
   },
   {
-    "ticker": "WETH",
-    "img": "https://cdn.moralis.io/eth/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
-    "name": "Wrapped Ethereum",
-    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-    "decimals": 18
-  },
-  {
     "ticker": "WBTC",
     "img": "https://cdn.moralis.io/eth/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599.png",
     "name": "Wrapped Bitcoin",
