@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Avatar, Box, Button, Container, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
 import tokenList from "./tokenList.json"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,16 +8,18 @@ import {TypingEffects} from "../../utils/TypingEffects";
 import axios from "axios";
 import {BaseError, useAccount, useSendTransaction, useWaitForTransactionReceipt} from "wagmi";
 import {Alert} from "@mui/lab";
-
-
-const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjhhNGNlNzY1LTU3YTctNDRhMy1hZTkyLTRjZmVmOWVhYTE2MiIsIm9yZ0lkIjoiMzgzNTAwIiwidXNlcklkIjoiMzk0MDU2IiwidHlwZUlkIjoiMmIwNjFlMDItNDdiOS00NmE0LTgzZjgtMDAzZmMwMWNiMjE4IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTA3ODY0MzksImV4cCI6NDg2NjU0NjQzOX0.BVCxqr5Tvzzm4vxQOtMEaWFQk5uRdJyUUvJRcrt9Tb8"
-
-
-type txType = {
-    to: any,
-    data: any,
-    value: any
-}
+import {loadSlim} from "tsparticles-slim";
+import Particles from "react-particles";
+import type {Engine} from "tsparticles-engine";
+import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
+import connectMetamask from "../../assets/images/image/connectmetamask.jpeg"
+import tokenSwap from "../../assets/images/image/tokenswap.png"
+import metamaskLogo from "../../assets/images/image/metamaskLogo.svg"
+import stepOne from "../../assets/images/icons/numbers/1icon.svg"
+import stepTwo from "../../assets/images/icons/numbers/2icon.svg"
+import stepThree from "../../assets/images/icons/numbers/3icon.svg"
+import titleBG from "../../assets/images/image/titleBackground.svg"
+import {DexUsageInstruction} from "./DexUsageInstruction";
 
 const PurchaseCrypto = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -43,11 +45,7 @@ const PurchaseCrypto = () => {
     const [showAlertTime, setShowAlertTime] = useState(true)
     const fetchMoralisDataApi = async (addressOne: any, addressTwo: any) => {
         try {
-            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`, {
-                headers: {
-                    apiKey: apiKey
-                }
-            })
+            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`)
             setPrices(response.data)
         } catch (error) {
             console.error(error)
@@ -88,17 +86,16 @@ const PurchaseCrypto = () => {
         });
         if (allowance.data.allowance === "0") {
             // If allowance is 0, initiate approval process
-
-            setTimeout(async () => {
-                const approve = await axios.get(`http://localhost:3001/approveTransactionDex`, {
-                    params: {
-                        tokenAddress: selectedTokenOne.address
-                    }
-                });
-                setTxDetails(approve.data);
-                console.log('not approved')
-                return;
-            }, 1000) //1RPS BY API
+            // setTimeout(async () => {
+            const approve = await axios.get(`http://localhost:3001/approveTransactionDex`, {
+                params: {
+                    tokenAddress: selectedTokenOne.address
+                }
+            });
+            setTxDetails(approve.data);
+            console.log('not approved')
+            return;
+            // }, 1000) //1RPS BY API
         }
         await dexSwapApiCall()
     }
@@ -111,7 +108,6 @@ const PurchaseCrypto = () => {
     useEffect(() => {
         if (txDetails.to && address) { // && isConnecting
             sendTransaction({
-                // from: address,
                 to: txDetails.to,
                 data: txDetails.data,
                 value: txDetails.value,
@@ -162,19 +158,28 @@ const PurchaseCrypto = () => {
         fetchMoralisDataApi(selectedTokenTwo.address, selectedTokenOne.address)
     }
 
+
     return (
         <Container sx={{marginTop: "50px", marginBottom: "50px"}}>
+            <ParticleBackgroundAnimation/>
 
             <Box sx={{float: "right"}}>
                 <w3m-button/>
             </Box>
 
-            <Typography variant='h4' sx={{color: "#fff", width: "300px", height: "100px", textAlign: "center", margin: "0 auto", marginBottom: "50px"}}>
-                <TypingEffects
-                    speed={60}
-                    text={"Swap anytime, anywhere."}
-                />
-            </Typography>
+            <Box sx={{
+                padding : "20px",
+                backgroundImage: `url(${titleBG})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                borderRadius : "20px",
+                width : "25%",
+                margin : "0 auto"
+            }} >
+                <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold",textAlign: "center",}}>
+                        Swap anytime anywhere
+                </Typography>
+            </Box>
 
             {/*STATUS OF SWAP*/}
             <Box
@@ -182,7 +187,10 @@ const PurchaseCrypto = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItem: "center",
-                    marginBottom: "30px"
+                    marginBottom: "30px",
+                    marginTop : "20px",
+                    height: "50px",
+                    maxHeight: "100%"
                 }}>
                 {showAlertTime && (
                     <>
@@ -202,7 +210,7 @@ const PurchaseCrypto = () => {
                             <Alert severity="success">Wallet is connected!</Alert>
                         )}
                         {isDisconnected && (
-                            <Alert severity="error">Wallet has disconnected!</Alert>
+                            <Alert severity="error">Wallet is disconnected!</Alert>
                         )}
                     </>
                 )}
@@ -330,9 +338,12 @@ const PurchaseCrypto = () => {
                 ))}
             </Dialog>
 
+            <DexUsageInstruction/>
 
         </Container>
     );
 };
 
 export default PurchaseCrypto;
+
+

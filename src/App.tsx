@@ -26,7 +26,7 @@ import {CoinContainerDescription} from "./components/coin-info/CoinContainerDesc
 import Preloader from "./commons/preloader/Preloader";
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import {useAccount, useSendTransaction} from "wagmi";
-import TestNet from "./components/purchase crypto/TestNet";
+import ParticleBackgroundAnimation from "./components/hooks/particle-background/ParticleBackgroundAnimation";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -131,7 +131,7 @@ function App() {
             {/*<TickerTape colorTheme="dark"></TickerTape>*/}
             {/*<Suspense fallback={<Preloader visible={isFetching} />} >*/}
             <Routes>
-                <Route path={"/testnet"} element={<TestNet/>}/>
+                <Route path={"/testnet"} element={<ParticleBackgroundAnimation/>}/>
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
                 <Route path={"/portfolio"} element={<PortfolioManager/>}/>
                 <Route path={"/nft"} element={<Nft/>}/>

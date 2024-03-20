@@ -5,10 +5,12 @@ import PortfolioBalanceWidget from "../widgets/PortfolioBalanceWidget";
 import CarouselMui from "../widgets/CarouselMui";
 import LeaderBoard from "../widgets/LeaderBoard";
 import FearGreedIndex from "../widgets/FearGreedIndex";
+import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 
 const Dashboard = () => {
     return (
             <Container sx={{marginBottom: "50px", marginTop : "50px"}}>
+
 
                 <Typography  variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
 

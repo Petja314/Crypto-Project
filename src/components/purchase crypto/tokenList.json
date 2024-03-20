@@ -82,6 +82,20 @@
     "name": "AAVE",
     "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
     "decimals": 18
+  }  ,
+  {
+    "ticker": "STRK",
+    "img": "https://etherscan.io/token/images/starknet_new_32.png",
+    "name": "STRK",
+    "address": "0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766",
+    "decimals": 18
+  } ,
+  {
+    "ticker": "IMX",
+    "img": "https://etherscan.io/token/images/immutableimx_new_32.png",
+    "name": "Immutable X",
+    "address": "0xF57e7e7C23978C3cAEC3C3548E3D615c346e79fF",
+    "decimals": 18
   }
 
 
