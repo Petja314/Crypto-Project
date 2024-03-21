@@ -1,183 +1,133 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {Avatar, Box, Button, Container, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
 import tokenList from "./tokenList.json"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
 import CloseIcon from "@mui/icons-material/Close";
-import {TypingEffects} from "../../utils/TypingEffects";
-import axios from "axios";
 import {BaseError, useAccount, useSendTransaction, useWaitForTransactionReceipt} from "wagmi";
 import {Alert} from "@mui/lab";
-import {loadSlim} from "tsparticles-slim";
-import Particles from "react-particles";
-import type {Engine} from "tsparticles-engine";
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
-import connectMetamask from "../../assets/images/image/connectmetamask.jpeg"
-import tokenSwap from "../../assets/images/image/tokenswap.png"
-import metamaskLogo from "../../assets/images/image/metamaskLogo.svg"
-import stepOne from "../../assets/images/icons/numbers/1icon.svg"
-import stepTwo from "../../assets/images/icons/numbers/2icon.svg"
-import stepThree from "../../assets/images/icons/numbers/3icon.svg"
 import titleBG from "../../assets/images/image/titleBackground.svg"
 import {DexUsageInstruction} from "./DexUsageInstruction";
-
-const PurchaseCrypto = () => {
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [selectedTokenOne, setSelectedTokenOne] = useState<any>(tokenList[2]);
-    const [selectedTokenTwo, setSelectedTokenTwo] = useState<any>(tokenList[1]);
-    const [tokenOnePrice, setTokenOnePrice] = useState<any>(null)
-    const [tokenTwoPrice, setTokenTwoPrice] = useState<any>(null)
-    const [prices, setPrices] = useState<any>([])
-    const [tabValue, setTabValue] = useState(0)
-    const [txDetails, setTxDetails] = useState<any>({
-        to: null,
-        data: null,
-        value: null
-    })
-    const {address, isConnecting, isDisconnected} = useAccount()
-    const {
-        error,
-        data: hash,
-        isPending,
-        sendTransaction
-    } = useSendTransaction()
-    const {isLoading: isConfirming, isSuccess: isConfirmed} = useWaitForTransactionReceipt({hash})
-    const [showAlertTime, setShowAlertTime] = useState(true)
-    const fetchMoralisDataApi = async (addressOne: any, addressTwo: any) => {
-        try {
-            const response = await axios.get(`http://localhost:3001/tokenPrice?addressOne=${addressOne}&addressTwo=${addressTwo}`)
-            setPrices(response.data)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    const changeAmount = (event: any) => {
-        setTokenOnePrice(event.target.value)
-        if (event.target.value && prices) {
-            setTokenTwoPrice((event.target.value * prices.ratio).toFixed(2))
-        } else {
-            setTokenTwoPrice(null)
-        }
-    }
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../redux/ReduxStore";
+import {
+    dexApproveAllowance,
+    fetchMoralisData,
+    setPricesAC,
+    setSelectedTokenOneAC,
+    setSelectedTokenTwoAC,
+    setTokenOnePriceAC,
+    setTokenTwoPriceAC,
+    tokenListArrayType
+} from "../redux/DexExchangeReducer";
+import {DexWarnings} from "./DexWarnings";
 
 
-    const dexSwapApiCall = async () => {
-        debugger
-        const response = await axios.get(`http://localhost:3001/swapCoinDex`, {
-            params: {
-                selectedTokenOne: selectedTokenOne.address,
-                selectedTokenTwo: selectedTokenTwo.address,
-                tokenOnePrice: tokenOnePrice.padEnd(selectedTokenOne.decimals + tokenOnePrice?.length, '0'),
-                address: address
-            }
-        });
-        // console.log('Swap response : ', response.data);
-        setTxDetails(response.data.tx);
-    }
+// WAGMI: Facilitates the connection between our app and the chosen wallet for transactions, swaps, fetching information, etc.
+// Moralis: API that provides current prices from DEX exchanges on the selected ERC-20 network.
+// 1INCH: API enabling us to swap selected tokens.
+//Step 1 - Fetch current token prices using Moralis from DEX.
+//Step 2 - Utilize 1inch API to approve allowances; prior to executing swaps, approval is necessary.
+//Step 3 - Invoke 1inch API for transaction approval; if the allowance was denied, 1inch requests transaction approval to enable swaps.
+//Step 4 - Transmit transaction details to MetaMask using WAGMI's sendTransaction hook.
+//Step 5 - Execute token swaps by calling the 1inch API for selected tokens.
 
-    const dexApproveAllowanceApi = async () => {
-        // Make a GET request to check allowance
-        const allowance = await axios.get(`http://localhost:3001/dexApproveAllowance`, {
-            params: {
-                tokenAddress: selectedTokenOne.address,
-                walletAddress: address
-            }
-        });
-        if (allowance.data.allowance === "0") {
-            // If allowance is 0, initiate approval process
-            // setTimeout(async () => {
-            const approve = await axios.get(`http://localhost:3001/approveTransactionDex`, {
-                params: {
-                    tokenAddress: selectedTokenOne.address
-                }
-            });
-            setTxDetails(approve.data);
-            console.log('not approved')
-            return;
-            // }, 1000) //1RPS BY API
-        }
-        await dexSwapApiCall()
-    }
+const DexExchange = () => {
+    const dispatch: any = useDispatch()
+    const {selectedTokenOne, selectedTokenTwo, tokenOnePrice, tokenTwoPrice, prices, txDetails} = useSelector((state: RootState) => state.dexReducer)
+    //local state
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+    const [tabValue, setTabValue] = useState<number>(0)
+    //Wagmi Hooks - wallet connection
+    const {address} = useAccount()
+    const {data: hash, sendTransaction} = useSendTransaction()
 
+    // console.log('selectedTokenOne' , selectedTokenOne)
+    console.log('prices', prices)
 
     useEffect(() => {
+        //Step 1 - Fetch current token prices using Moralis from DEX.
+        dispatch(fetchMoralisData({addressOne: selectedTokenOne.address, addressTwo: selectedTokenTwo.address}))
         // fetchMoralisDataApi(selectedTokenOne.address, selectedTokenTwo.address)
     }, [selectedTokenOne, selectedTokenTwo])
 
     useEffect(() => {
-        if (txDetails.to && address) { // && isConnecting
+        //Transmit transaction details to MetaMask using WAGMI's sendTransaction hook.
+        if (txDetails.to && address) {
             sendTransaction({
                 to: txDetails.to,
                 data: txDetails.data,
-                value: txDetails.value,
+                value: txDetails.value
+                // to:  `0x${txDetails?.to}` as `0x${string}` ,
+                // data: `0x${txDetails?.data}` as `0x${string}` ,
+                // value: BigInt(`0x${txDetails?.value}`) ,
             })
 
         }
     }, [txDetails])
 
-
-    useEffect(() => {
-        if (isConnecting || isDisconnected || error || hash || isConfirming || isConfirmed) {
-            setShowAlertTime(true);
-            const timer = setTimeout(() => {
-                setShowAlertTime(false);
-            }, 5000);
-            return () => {
-                clearTimeout(timer);
-                console.log("Timer cleared"); // Check if this is logged to ensure the cleanup function is triggered
-            };
+    const changeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+        //Change the selected token amount
+        dispatch(setTokenOnePriceAC(event.target.value))
+        // setTokenOnePrice(event.target.value)
+        if (event.target.value && prices) {
+            const price : number = Number(event.target.value)
+            const priceWithRatio = price * prices.ratio
+            dispatch(setTokenTwoPriceAC(priceWithRatio.toFixed(2)))
+        } else {
+            dispatch(setTokenTwoPriceAC(null))
         }
-    }, [isConnecting, isDisconnected, error, hash, isConfirming, isConfirmed]);
-
-    const handleTokenChange = (selectedToken: any) => {
-        setPrices(null)
-        setTokenOnePrice(null)
-        setTokenTwoPrice(null)
+    }
+    const handleTokenChange = (selectedToken: tokenListArrayType) => {
+        //Set the selected tokens to the input
+        dispatch(setPricesAC(null))
+        dispatch(setTokenOnePriceAC(null))
+        dispatch(setTokenTwoPriceAC(null))
         if (tabValue === 0) {
             // console.log('selected one')
-            setSelectedTokenOne(selectedToken)
+            dispatch(setSelectedTokenOneAC(selectedToken))
+            // setSelectedTokenOne(selectedToken)
         }
         if (tabValue === 1) {
             // console.log('selected two')
-            setSelectedTokenTwo(selectedToken)
+            dispatch(setSelectedTokenTwoAC(selectedToken))
         }
         setIsDialogOpen(false)
     };
-
     const swapDialogsAround = () => {
-        setPrices(null)
-        setSelectedTokenOne(null)
-        setTokenOnePrice(null)
+        //Swap button , allows us to swap around selected tokens
+        dispatch(setPricesAC(null))
+        dispatch(setSelectedTokenOneAC(null))
+        dispatch(setTokenOnePriceAC(null))
 
-        setSelectedTokenOne(selectedTokenTwo)
-        setTokenOnePrice(tokenTwoPrice)
+        dispatch(setSelectedTokenOneAC(selectedTokenTwo))
+        dispatch(setTokenOnePriceAC(tokenTwoPrice))
         //Swap dialogs around
-        setSelectedTokenTwo(selectedTokenOne)
-        setTokenTwoPrice(tokenOnePrice)
-        fetchMoralisDataApi(selectedTokenTwo.address, selectedTokenOne.address)
-    }
+        dispatch(setSelectedTokenTwoAC(selectedTokenOne))
+        dispatch(setTokenTwoPriceAC(tokenOnePrice))
+        dispatch(fetchMoralisData({addressOne: selectedTokenOne.address, addressTwo: selectedTokenTwo.address}))
 
+    }
 
     return (
         <Container sx={{marginTop: "50px", marginBottom: "50px"}}>
             <ParticleBackgroundAnimation/>
-
             <Box sx={{float: "right"}}>
                 <w3m-button/>
             </Box>
 
             <Box sx={{
-                padding : "20px",
+                padding: "20px",
                 backgroundImage: `url(${titleBG})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                borderRadius : "20px",
-                width : "25%",
-                margin : "0 auto"
-            }} >
-                <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold",textAlign: "center",}}>
-                        Swap anytime anywhere
+                borderRadius: "20px",
+                width: "25%",
+                margin: "0 auto"
+            }}>
+                <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold", textAlign: "center",}}>
+                    Swap anytime anywhere
                 </Typography>
             </Box>
 
@@ -188,32 +138,11 @@ const PurchaseCrypto = () => {
                     justifyContent: "center",
                     alignItem: "center",
                     marginBottom: "30px",
-                    marginTop : "20px",
+                    marginTop: "20px",
                     height: "50px",
                     maxHeight: "100%"
                 }}>
-                {showAlertTime && (
-                    <>
-                        {error && (
-                            <Alert severity="error">Error: {(error as BaseError).shortMessage || error.message}</Alert>
-                        )}
-                        {hash && (
-                            <Alert severity="success"> Transaction Hash: {hash}</Alert>
-                        )}
-                        {isConfirming && (
-                            <Alert severity="info">Waiting for confirmation...</Alert>
-                        )}
-                        {isConfirmed && (
-                            <Alert severity="success">Transaction confirmed.</Alert>
-                        )}
-                        {isConnecting && (
-                            <Alert severity="success">Wallet is connected!</Alert>
-                        )}
-                        {isDisconnected && (
-                            <Alert severity="error">Wallet is disconnected!</Alert>
-                        )}
-                    </>
-                )}
+                <DexWarnings/>
             </Box>
 
             <Paper sx={{borderRadius: "24px", width: "600px", margin: "0 auto", paddingBottom: "30px"}}>
@@ -305,7 +234,7 @@ const PurchaseCrypto = () => {
                     <Button
                         disabled={!address || !tokenOnePrice || tokenOnePrice == 0}
                         sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}
-                        onClick={() => dexApproveAllowanceApi()}
+                        onClick={() => dispatch(dexApproveAllowance({selectedTokenOne: selectedTokenOne, address: address}))}
                     >
                         Swap
                     </Button>
@@ -344,6 +273,6 @@ const PurchaseCrypto = () => {
     );
 };
 
-export default PurchaseCrypto;
+export default DexExchange;
 
 

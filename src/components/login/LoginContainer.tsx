@@ -29,9 +29,6 @@ const LoginContainer = ({userLogged} : any) => {
     // console.log('log con' , userLogged)
 
 
-
-
-
     // console.log('isAuth :' , isAuth.isAuth)
     // console.log('user : :' , isAuth.user)
 

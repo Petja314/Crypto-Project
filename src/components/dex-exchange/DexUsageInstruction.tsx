@@ -6,6 +6,7 @@ import connectMetamask from "../../assets/images/image/connectmetamask.jpeg";
 import stepThree from "../../assets/images/icons/numbers/3icon.svg";
 import tokenSwap from "../../assets/images/image/tokenswap.png";
 import React from "react";
+import dexWorld from "../../assets/images/image/dex-world.webp"
 
 export const DexUsageInstruction = () => {
     return (
@@ -17,7 +18,7 @@ export const DexUsageInstruction = () => {
                 </Box>
 
                 <Box>
-                    <img src="https://images.ctfassets.net/9sy2a0egs6zh/24jLGpgkTWP6LLaik7VZtX/03ff80ac8e526a166c5cbd59c4a2835e/Portfolio2x.png?w=1152&h=957&q=80&fm=webp" alt=""
+                    <img src={dexWorld} alt=""
                          style={{width: "450px"}}
                     />
                 </Box>

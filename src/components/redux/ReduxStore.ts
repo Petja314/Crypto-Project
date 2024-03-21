@@ -8,6 +8,7 @@ import {CoinDescriptionReducer} from "./CoinDescriptionReducer";
 import {FearGreedIndexReducer} from "./FearGreedIndexReducer";
 import {PortfolioReducer} from "./PortfolioReducer";
 import PortfolioBalanceWidgetReducer from "./PortfolioBalanceWidgetReducer";
+import DexExchangeReducer from "./DexExchangeReducer";
 
 
 // export const store = configureStore({
@@ -34,7 +35,8 @@ let rootReducers = combineReducers({
     coinDetails : CoinDescriptionReducer,
     fearAndGreed : FearGreedIndexReducer,
     myPortfolio : PortfolioReducer,
-    portfolioBalanceWidget : PortfolioBalanceWidgetReducer
+    portfolioBalanceWidget : PortfolioBalanceWidgetReducer,
+    dexReducer : DexExchangeReducer
 });
 
 

@@ -1,7 +1,7 @@
 import React, {Suspense, useEffect, useState} from 'react';
 import './App.css';
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
-import PurchaseCrypto from "./components/purchase crypto/PurchaseCrypto";
+import DexExchange from "./components/dex-exchange/DexExchange";
 import {Box, CircularProgress, Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {lime} from "@mui/material/colors";
 import {ReactComponent as PurchaseIcon} from "./assets/images/header-img/credit-card.svg"
@@ -91,7 +91,7 @@ const routes = [
     {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: DashboardIcon},
     {path: '/portfolio', element: <PortfolioManager/>, name: "Portfolio", icon: PortfolioIcon},
     {path: '/nft', element: <Nft/>, name: "NFT", icon: NftIcon},
-    {path: '/buy-crypto', element: <PurchaseCrypto/>, name: "PurchaseCrypto", icon: PurchaseIcon},
+    {path: '/dex-exchange', element: <DexExchange/>, name: "DEX Exchange", icon: PurchaseIcon},
     {path: '/news', element: <News/>, name: "News", icon: NewsIcon},
 ]
 
@@ -131,11 +131,10 @@ function App() {
             {/*<TickerTape colorTheme="dark"></TickerTape>*/}
             {/*<Suspense fallback={<Preloader visible={isFetching} />} >*/}
             <Routes>
-                <Route path={"/testnet"} element={<ParticleBackgroundAnimation/>}/>
                 <Route path={"/dashboard"} element={<Dashboard/>}/>
                 <Route path={"/portfolio"} element={<PortfolioManager/>}/>
                 <Route path={"/nft"} element={<Nft/>}/>
-                <Route path={"/buy-crypto"} element={<PurchaseCrypto />}/>
+                <Route path={"/dex-exchange"} element={<DexExchange />}/>
                 <Route path={"/news"} element={<News/>}/>
                 <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
                 <Route path={"/reset"} element={<ForgotPasswords/>}/>
