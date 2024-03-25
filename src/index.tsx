@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App, {theme} from './App';
@@ -12,6 +12,7 @@ import {defaultWagmiConfig} from '@web3modal/wagmi/react/config'
 import {useSendTransaction, WagmiProvider} from 'wagmi'
 import {arbitrum, mainnet, scrollSepolia, sepolia} from 'wagmi/chains'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import Preloader from "./commons/preloader/Preloader";
 
 
 // WAGMI

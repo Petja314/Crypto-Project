@@ -16,8 +16,9 @@ import {
 } from 'chart.js';
 import {Line} from "react-chartjs-2";
 import moment from "moment";
-import {Home, KeyboardArrowRight} from "@mui/icons-material";
 import {RootState} from "../../redux/ReduxStore";
+import {ListSkeleton} from "../../widgets/ListSkeleton";
+import styles from "../../../css/coin-info/skeleton-coinInfo.module.css"
 
 ChartJS.register(
     CategoryScale,
@@ -31,10 +32,10 @@ ChartJS.register(
 );
 
 export const CryptoChart = () => {
-    const timeframe : string[] = ["24h", "1w", "1m", "3m", "6m", "1y",]
+    const timeframe: string[] = ["24h", "1w", "1m", "3m", "6m", "1y",]
 
     const {id} = useParams()
-    const {cryptoChartData,chartTimeFrame} = useSelector((state: RootState) => state.coinDetails)
+    const {cryptoChartData, chartTimeFrame} = useSelector((state: RootState) => state.coinDetails)
     const dispatch: any = useDispatch()
 
     useEffect(() => {
@@ -43,14 +44,14 @@ export const CryptoChart = () => {
     }, [id, chartTimeFrame]);
 
     //GETTING THE VALUE X and Y to Display chart by the current price
-    const coinCharData = cryptoChartData.map((value : any) => ({
+    const coinCharData = cryptoChartData.map((value: any) => ({
         x: value[0], y: value[1].toFixed(2)
     }))
-    const options : { responsive : boolean } = {
+    const options: { responsive: boolean } = {
         responsive: true
     }
     const data: any = {
-        labels: coinCharData.map((value : any) => moment(value.x * 1000).format('MMM D')),
+        labels: coinCharData.map((value: any) => moment(value.x * 1000).format('MMM D')),
         datasets: [
             {
                 fill: true,
@@ -61,42 +62,62 @@ export const CryptoChart = () => {
             }
         ]
     }
+
     return (
         <Box mt={5}>
-            <Paper sx={{borderRadius: '20px', marginBottom: "10px"}}>
-                <Typography sx={{textAlign: "center"}}>Chart time frame</Typography>
-                <List sx={{display: "flex", justifyContent: "space-evenly"}}>
-                    {timeframe.map((item : any , index : number) => (
-                        <ListItem
-                            value={chartTimeFrame}
-                            onClick={() => dispatch(coinDescriptionActions.setChartTimeFrameAC(item))}
-                            key={index}
-                            sx={{
-                                fontWeight: "bold",
 
-                            }}
-                        >
-                            <ListItemButton
-                                style={{
-                                    border: "1px solid #e0f64b",
-                                    borderRadius: '5px',
-                                    padding: "0",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    color: item === chartTimeFrame ? "#e0f64b" : "white"
+            {timeframe.length <= 0 ? (
+                <ListSkeleton columns={1}
+                              skeletonClass={styles.skeletonChartTimeFrame}
+                              variant={"rectangle"}
+                />
+            ) : (
+                <Paper sx={{borderRadius: '20px', marginBottom: "10px", height: "100px"}}>
+                    <Typography sx={{textAlign: "center"}}>Chart time frame</Typography>
+                    <List sx={{display: "flex", justifyContent: "space-evenly"}}>
+                        {timeframe.map((item: any, index: number) => (
+                            <ListItem
+                                value={chartTimeFrame}
+                                onClick={() => dispatch(coinDescriptionActions.setChartTimeFrameAC(item))}
+                                key={index}
+                                sx={{
+                                    fontWeight: "bold",
+
                                 }}
                             >
-                                {item}
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+                                <ListItemButton
+                                    style={{
+                                        border: "1px solid #e0f64b",
+                                        borderRadius: '5px',
+                                        padding: "0",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        color: item === chartTimeFrame ? "#e0f64b" : "white"
+                                    }}
+                                >
+                                    {item}
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
 
-            </Paper>
+                </Paper>
+            )
+            }
 
-            <Paper sx={{borderRadius: '20px', padding: "30px"}}>
-                <Line options={options} data={data}/>
-            </Paper>
+
+            {data.labels.length <= 0 ? (
+                <ListSkeleton columns={1}
+                              skeletonClass={styles.skeletonChart}
+                              variant={"rectangle"}
+                />
+            ) : (
+                <Paper sx={{borderRadius: '20px', padding: "30px", height: "350px"}}>
+                    <Line options={options} data={data}/>
+                </Paper>
+            )
+            }
+
         </Box>
     )
 }

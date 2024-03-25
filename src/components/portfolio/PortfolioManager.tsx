@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import AddTransactionContainer from "./add-crypto-transaction/AddTransactionContainer";
 import {ThunkDispatch} from "redux-thunk";
 import {AppDispatch, RootState} from "../redux/ReduxStore";
+import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 
 const PortfolioManager = () => {
     const dispatch:  AppDispatch = useDispatch();
@@ -22,6 +23,7 @@ const PortfolioManager = () => {
     }, []);
     return (
         <Box>
+
             <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
                 <Grid container spacing={2} sx={{margin: "0 auto"}}>
                     <Grid item xs={6}>

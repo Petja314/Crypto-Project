@@ -48,7 +48,7 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                     <Box sx={{
                         // border: "2px solid red",
                         flexGrow: 1,
-                        display: {xs: 'none', md: 'flex', justifyContent: "flex-start", gap: 40},
+                        display: {xs: 'none', md: 'flex', justifyContent: "flex-start", gap: 80},
 
                     }}>
                         {routes.map((page: any) => (
@@ -66,10 +66,6 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                                     display: "flex",
                                     gap: 1,
                                     alignItems: "center",
-                                    // '&:hover': {
-                                    //     color: 'red',
-                                    // transition: "fill 0.2s ease-in-out"
-                                    // },
                                 }}>
                                     < page.icon style={{fill: "white", width: 20, height: 20,}}/>
                                     {page.name}

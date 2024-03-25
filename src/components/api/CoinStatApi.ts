@@ -3,14 +3,17 @@ import {instanceAlternative, instanceAxios, instanceExchanger} from "./Api";
 
 export const coinStatApi = {
     listOfCoinsApi(currency: string, rowsPerPage: number, page: number) {
-        return instanceAxios.get(`?page=${page}&limit=${rowsPerPage}&currency=${currency}`)
+        return instanceAxios.get(`coins/?page=${page}&limit=${rowsPerPage}&currency=${currency}`)
     },
     coinDetails(id: string | undefined , currency : string) {
-        return instanceAxios.get(`${id}?currency=${currency}`)
+        return instanceAxios.get(`coins/${id}?currency=${currency}`)
     },
     coinChart(id: string | undefined, period: string) {
-        return instanceAxios.get(`${id}/charts?period=${period}`)
+        return instanceAxios.get(`coins/${id}/charts?period=${period}`)
     },
+    cryptoNews(type : any , page : any , limit : any) {
+        return instanceAxios.get(`/news/type/${type}?page=${page}&limit=${limit}`)
+    }
 };
 
 

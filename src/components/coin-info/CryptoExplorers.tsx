@@ -2,51 +2,65 @@ import React from 'react';
 import {Box, Paper, Typography} from "@mui/material";
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
+import {ListSkeleton} from "../widgets/ListSkeleton";
+import styles from "../../css/coin-info/skeleton-coinInfo.module.css";
+import {coinDataArray} from "../redux/CoinDescriptionReducer";
 
-const CryptoExplorers = ({item}: any) => {
+type CryptoExplorersPropsType = {
+    coinData : coinDataArray[] ,
+    isLoading: boolean
+}
+
+const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
+    const topExplorers = coinData[0]?.explorers
 
 
     return (
-        <Box mt={3} sx={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <Box mt={3} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+            {!isLoading ? (
+                <ListSkeleton columns={1}
+                              skeletonClass={styles.skeletonCryptoExplorers}
+                              variant={"rectangle"}
+                />
+            ) : (
+                <Paper sx={{
+                    borderRadius: '20px', padding: "30px",
+                    height: "1000px",
+                    backgroundImage: `url(${BackgroundBlock})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: "rgba(255, 255, 255, 0.09)"
+                }}>
+                    <Typography variant={'h5'} mb={2}>What is Crypto Explorers? <QueryStatsIcon sx={{color: "#E0F64B"}}/> </Typography>
 
-            <Paper sx={{borderRadius: '20px', padding: "30px",
-                backgroundImage: `url(${BackgroundBlock})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: "rgba(255, 255, 255, 0.09)"
-            }}>
-                <Typography variant={'h5'} mb={2}>What is Crypto Explorers? <QueryStatsIcon sx={{color: "#E0F64B"}}/> </Typography>
-
-                {
-                    cryptoExplorersInfo.map(explorersInfo => (
-                        <Box mt={3}>
-                            <Typography variant={'h6'}>{explorersInfo.title}</Typography>
-                            <Box>{explorersInfo.description}</Box>
-                        </Box>
-                    ))
-                }
-
-                <Typography mt={3} variant={'h5'}>
-                    Top Explorers 🔥
-                </Typography>
-
-
-                {
-                    item.map((explorer: any, index: any) => (
-                        <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
-                            <Box component={"li"}>
-
-                                <a style={{color: "white", textDecoration: 'none'}} href={explorer}>
-                                    🚀  {explorer}
-                                </a>
+                    {
+                        cryptoExplorersInfo.map(explorersInfo => (
+                            <Box mt={3}>
+                                <Typography variant={'h6'}>{explorersInfo.title}</Typography>
+                                <Box>{explorersInfo.description}</Box>
                             </Box>
-                        </Box>
-                    ))
-                }
+                        ))
+                    }
+
+                    <Typography mt={3} variant={'h5'}>
+                        Top Explorers 🔥
+                    </Typography>
 
 
-            </Paper>
+                    {topExplorers &&
+                        topExplorers.map((explorer: any, index: any) => (
+                            <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
+                                <Box component={"li"}>
 
+                                    <a style={{color: "white", textDecoration: 'none'}} href={explorer}>
+                                        🚀 {explorer}
+                                    </a>
+                                </Box>
+                            </Box>
+                        ))
+                    }
+                </Paper>
+            )}
         </Box>
     );
 };
