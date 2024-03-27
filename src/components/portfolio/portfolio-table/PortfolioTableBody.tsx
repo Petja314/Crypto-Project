@@ -1,12 +1,12 @@
 import {useDispatch} from "react-redux";
 import {Avatar, Box, Button, IconButton, TableCell, TableRow} from "@mui/material";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {AppDispatch} from "../../redux/ReduxStore";
 import {useNavigate} from "react-router-dom";
+import { formatCurrency } from "@coingecko/cryptoformat";
 
 type PortfolioTableBodyPropsType = {
     myCurrentPortfolioDataFB : portfolioFirebaseDataType[]
@@ -16,27 +16,29 @@ export const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBod
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
     const navigateToCoinPageHandler = (id : string) => {
-        // navigate(`/coin_info/${id}?`)
+        navigate(`/coin_info/${id}?`)
     }
-
+    console.log('myCurrentPortfolioDataFB', myCurrentPortfolioDataFB)
     return (
         <>
             {/*TABLE BODY*/}
             {myCurrentPortfolioDataFB.map((item: portfolioFirebaseDataType , index: number) => (
-                <TableRow key={index} sx={{textAlign: "center" , cursor : "pointer"}} onClick={() => navigateToCoinPageHandler(item.id)} >
+                <TableRow key={index} sx={{textAlign: "center" , cursor : "pointer"}} >
+
                     <TableCell>{item.rank}</TableCell>
-                    <TableCell>
+                    <TableCell  onClick={() => navigateToCoinPageHandler(item.id)}>
                         <Box sx={{display: "flex", gap: 1, alignItems: "center",}}>
                             <Avatar src={item.icon}/>
                             <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
                             <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>
                         </Box>
                     </TableCell>
-                    <TableCell>{formattedPrice(item.price)}$</TableCell>
-                    <TableCell><Box>{formattedPrice(item.totalHoldingCoinAmountCash)}$</Box> </TableCell>
+                    <TableCell>{formatCurrency(item.price, "USD", "en")}</TableCell>
+                    <TableCell><Box>{formatCurrency(item.totalHoldingCoinAmountCash ,  "USD", "en")}</Box> </TableCell>
                     <TableCell>{item.totalHoldingCoins} {item.symbol} </TableCell>
-                    <TableCell>{formattedPrice(item.averageBuyingPrice)}</TableCell>
-                    <TableCell>{formattedPrice(item.profitLoss)}$</TableCell>
+                    <TableCell>{formatCurrency(item.averageBuyingPrice ,  "USD", "en")}</TableCell>
+                    <TableCell>{formatCurrency(item.profitLoss ,  "USD", "en" )}</TableCell>
+
                     <TableCell sx={{display: "flex", justifyContent: "center"}}>
                         <IconButton style={{backgroundColor: 'transparent'}}>
                             {/*BUY AND SELL CRYPTO*/}

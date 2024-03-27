@@ -4,42 +4,45 @@ import LoginContainer from "../login/LoginContainer";
 import React from "react";
 import {Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, MenuList, styled, Typography} from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import {Link, Navigate, NavLink, useNavigate} from "react-router-dom";
+import {Link, Navigate, NavLink, Outlet, useNavigate} from "react-router-dom";
 import {auth} from "../../config/firebase";
 import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
 import {logOuThunkCreator} from "../redux/AuthReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {UserAvatar} from "./UserAvatar";
 import {actionsProfile} from "../redux/ProfileReducer";
+import PortfolioManager from "../portfolio/PortfolioManager";
+import DexExchange from "../dex-exchange/DexExchange";
+import News from "../news/News";
+import Profile from "../profile/Profile";
 
 
-const settings = [
-    {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: dashboard},
-    // {path: '/login', element: <LoginContainer/>, name: "Logout"},
+const menu_options = [
+    {path: '/profile', element: <Profile/>, name: "Profile"},
+    {path: '/dashboard', element: <Dashboard/>, name: "Dashboard"},
+    {path: '/portfolio', element: <PortfolioManager/>, name: "Portfolio"},
+    {path: '/dex-exchange', element: <DexExchange/>, name: "DEX Exchange"},
+    {path: '/news', element: <News/>, name: "News"},
 ];
 
- const LoginSettings = ({userLogged} : any) => {
-     const dispatch : any = useDispatch()
+// Quick Description: LoginSettings Component
+// Displays the user avatar with a menu containing options such as logout and navigation routes.
+
+const LoginSettings = () => {
+    const dispatch: any = useDispatch()
+    const navigate = useNavigate()
+    // anchorElUser - handle to display the menu with app name and path's
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const handleCloseUserMenu = () => {
+
+    //Handling the logout logic -  logOuThunkCreator make an api call to sign out , closing the menu , and navigate back to login page.
+    const logOutHandler = async () => {
+        await dispatch(logOuThunkCreator())
+        navigate('/login')
         setAnchorElUser(null);
-    };
-
-
-     const logOutHandler = async () => {
-         dispatch(logOuThunkCreator())
-     }
-     // console.log('isAuth :' , isAuth.isAuth)
-
-     if (userLogged === null) {
-         return <Navigate to="/login" />
-     }
-
-     // console.log('userLogged SETTINGS :' , userLogged)
+    }
 
     return (
         <Box sx={{
-            // border : "2px solid red",
             flexGrow: 0,
         }}>
             <UserAvatar
@@ -59,37 +62,30 @@ const settings = [
                     horizontal: 'right',
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                onClose={() => setAnchorElUser(null)}
             >
 
+
                 <MenuList>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                            <Box onClick={logOutHandler}>Logout</Box>
+                    <MenuItem onClick={() => setAnchorElUser(null)}>
+                        <Box onClick={logOutHandler}>Logout</Box>
                     </MenuItem>
-
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Link to={"/dashboard"} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            Dashboard
-                        </Link>
+                </MenuList>
+                {menu_options.map((menu) => (
+                    <MenuItem key={menu.name} onClick={() => setAnchorElUser(null)}>
+                        <Typography textAlign="center">
+                            <NavLink
+                                style={{textDecoration: 'none', listStyleType: "none", color: "white", cursor: "pointer"}}
+                                to={menu.path}
+                            >
+                                {menu.name}
+                            </NavLink>
+                        </Typography>
                     </MenuItem>
-
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Link to={"/profile"} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            Profile
-                        </Link>
-                    </MenuItem>
-                </MenuList  >
+                ))}
 
 
-                {/*{settings.map((setting) => (*/}
-                {/*    <MenuItem key={setting.name} onClick={handleCloseUserMenu}>*/}
-                {/*        <Typography textAlign="center">*/}
-                {/*            <NavLink style={{textDecoration: 'none', listStyleType: "none", color: "white", cursor: "pointer"}} to={setting.path}>*/}
-                {/*                {setting.name}*/}
-                {/*            </NavLink>*/}
-                {/*        </Typography>*/}
-                {/*    </MenuItem>*/}
-                {/*))}*/}
+
             </Menu>
         </Box>
     )

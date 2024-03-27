@@ -15,13 +15,14 @@ import {useDispatch, useSelector} from "react-redux";
 type TableHeadPropsType = {
     rowNumberHandler: (event: any) => void
     sortingFieldsHandler: (key: string) => void
-    priceSort: boolean
+    priceSort: boolean,
+    selectedKey : null | string
 }
 type tableHeaderColumnsType = {
     key: string,
     label: string,
 }
-export const TableHeadComponent = ({rowNumberHandler, sortingFieldsHandler, priceSort}: TableHeadPropsType) => {
+export const TableHeadComponent = ({rowNumberHandler, sortingFieldsHandler, priceSort,selectedKey}: TableHeadPropsType) => {
     const tableHeaderColumns: tableHeaderColumnsType[] = [
         {key: "rank", label: "Rank"},
         {key: "name", label: "Coin"},
@@ -31,7 +32,6 @@ export const TableHeadComponent = ({rowNumberHandler, sortingFieldsHandler, pric
         {key: "priceChange1w", label: "Price Change 1w"},
         {key: "market_cap", label: "Market Cap"},
     ]
-    const [selectedKey, setSelectedKey] = useState<null | string>(null) //Getting values from table head cells for filtration sortingFieldsHandler
     return (
         <TableHead>
             <TableHeadFiltration
@@ -43,7 +43,6 @@ export const TableHeadComponent = ({rowNumberHandler, sortingFieldsHandler, pric
                         <TableCell key={index}
                                    onClick={() => {
                                        sortingFieldsHandler(item.key)
-                                       setSelectedKey(item.key)
                                    }}
                         >
                             {item.label}

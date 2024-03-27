@@ -6,26 +6,34 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, signInThunkCreator} from "../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
+import {RootState} from "../redux/ReduxStore";
 
+// Quick Description: SignUpSection Component
+// Creating a new username, email, and password and handling the login process.
+// Checking for password matching and handling errors.
+// Sending the data to the reducer for future API calls.
 
 export const SignUpSection = ({ setIsRegistered}: any) => {
-
     const dispatch : any = useDispatch()
-    const navigate = useNavigate()
+    //Conformation password handler
     const [confirmPassword, setConfirmPassword] = useState("")
+    //Setting the new username
     const [userName, setUserName] = useState('')
-    const accountCreateError = useSelector((state : any) => state.auth.signInError)
-    const password = useSelector((state : any) => state.auth.password)
+    const {signInError, password} = useSelector((state : RootState) => state.auth)
 
     const signIn = async () => {
+        //Checking if username was empty during the registration process
         if ( userName === "") {
+            //Exit the reg. process if username was empty
             dispatch(actionsAuth.setSignInErrorAC('Create User name'))
             return
         }
         else if (password !== confirmPassword) {
+            //Exit the reg. process if password was not matched
             dispatch(actionsAuth.setSignInErrorAC('Password are not matching'))
             return
         }
+        //Sending the new username
         dispatch(signInThunkCreator(userName))
     }
 
@@ -74,7 +82,7 @@ export const SignUpSection = ({ setIsRegistered}: any) => {
                     label='Confirm Password'
                     type='password'
                 />
-                <Box sx={{color: "red", textAlign: "center"}}>{accountCreateError}</Box>
+                <Box sx={{color: "red", textAlign: "center"}}>{signInError}</Box>
                 <Button sx={{marginBottom: "70px"}} onClick={signIn}>Create Personal Account</Button>
 
                 <Typography sx={{color: "#848484", textAlign: "center", maxWidth: "250px", margin: "0 auto", fontSize: "14px"}}>Not looking for an account?</Typography>

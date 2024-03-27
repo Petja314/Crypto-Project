@@ -3,17 +3,32 @@ import preloader from "../../assets/images/preloader-img/loader.svg"
 import {Box, Container, Fade} from "@mui/material";
 import "./preloader.css"
 import styles from "./loader.module.css"
-const Preloader = () => {
+// const Preloader = () => {
+//     return (
+//         <Container>
+//                 <Box className={"container"} >
+//                     <img  className={"animation"}  src={preloader} alt="preloader"/>
+//                 </Box>
+//         </Container>
+//     );
+// };
+//
+// export default Preloader;
+//
+
+const Preloader = (props : any) => {
     return (
         <Container>
-                <Box className={"container"} >
-                    <img  className={"animation"}  src={preloader} alt="preloader"/>
-                </Box>
+            <Box className={"container"} >
+                { props.isFetching ?    <img  className={"animation"}  src={preloader} alt="preloader"/> : null  }
+            </Box>
         </Container>
     );
 };
 
 export default Preloader;
+
+
 
 
 export const Loader = ({visible , isFetching} : any) => {

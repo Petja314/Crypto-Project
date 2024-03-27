@@ -60,7 +60,6 @@ const News = () => {
 
     const descriptionMock: string = 'For detailed information on the latest news, kindly visit the source website by clicking on title. There, you will find comprehensive details regarding the post.'
     const titleMock: string = 'Title is coming soon...'
-    console.log('isLoading', isLoading)
     return (
         <Box>
             {/*<ParticleBackgroundAnimation/>*/}

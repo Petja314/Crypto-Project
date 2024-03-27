@@ -1,16 +1,17 @@
 import React from 'react';
 import {auth} from "../../config/firebase";
+import {profileThunkCreator} from "./ProfileReducer";
 
 const initialState : any = {
-    isFetching: true,
-    userLogged: null
+    isFetching: false,
+    authUser : null
 }
 export const AppInitialization = (state = initialState, action: any) => {
     switch (action.type) {
         case "SET_USER_IS_AUTH" :
             return {
                 ...state,
-                userLogged: action.user
+                authUser: action.authUser
             }
         case "SET_IS_FETCHING" :
             return {
@@ -23,9 +24,9 @@ export const AppInitialization = (state = initialState, action: any) => {
 };
 
 export const appInitActions = ({
-    setUserAuth: (user: any) => ({
+    setUserAuth: (authUser: any) => ({
         type: "SET_USER_IS_AUTH",
-        user
+        authUser
     } as const),
     setIsFetchingAC: (isFetching: any) => ({
         type: "SET_IS_FETCHING",
@@ -33,20 +34,23 @@ export const appInitActions = ({
     } as const),
 })
 
-// export const appInitializationThunkCreator = () =>  async (dispatch: any) => {
-//     const unsubscribe = await auth.onAuthStateChanged((user: any) => {
-//         if (user) {
-//             console.log('in')
-//             dispatch(appInitActions.setUserAuth(user))
-//             dispatch(appInitActions.setIsFetchingAC(false))
-//             return
-//         }
-//         console.log('out')
-//         dispatch(appInitActions.setUserAuth(null))
-//         dispatch(appInitActions.setIsFetchingAC(false))
-//         return () => unsubscribe
-//     })
-// }
+export const appInitializationThunkCreator = () =>  async (dispatch: any) => {
+    //Calling the api to get authenticated user data
+    const unsubscribe = await auth.onAuthStateChanged((user: any) => {
+        if (user) {
+            //Set authenticated current user
+            dispatch(appInitActions.setUserAuth(user))
+            //Set all user info into the profile
+            dispatch(profileThunkCreator(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid))
+            //Initialize the app by isFetching state - true/false
+            dispatch(appInitActions.setIsFetchingAC(true))
+            return
+        }
+        dispatch(appInitActions.setUserAuth(null))
+        dispatch(appInitActions.setIsFetchingAC(true))
+        return () => unsubscribe
+    })
+}
 
 
 

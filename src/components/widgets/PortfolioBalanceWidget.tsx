@@ -3,11 +3,11 @@ import {Box, Grid, IconButton, MenuItem, Paper, Select, SelectChangeEvent, TextF
 import walleticon from "../../assets/images/image/wallet.webp"
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
 import {useDispatch, useSelector} from "react-redux";
-import {formattedPrice} from "../../commons/functions/formattedPrice";
 import {fetchCurrentBtcPriceThunk, fetchExchangeApiThunk, portfolioBalanceWidgetActions} from "../redux/PortfolioBalanceWidgetReducer";
 import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../redux/PortfolioReducer";
 import {RootState} from "../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
+import {formatCurrency} from "@coingecko/cryptoformat";
 
 
 const PortfolioBalanceWidget = () => {
@@ -56,7 +56,7 @@ const PortfolioBalanceWidget = () => {
                     <Grid item>
                         <Box component='span' sx={{color: "#B8B8B8", fontSize: "15px"}}>Portfolio Balance</Box>
                         <Typography variant='h5'>
-                            {formattedPrice(portfolioBalanceCurrency)}
+                            {formatCurrency(portfolioBalanceCurrency, "USD", "en")}
                             <Select
                                 sx={{marginLeft: "10px", color: "#B8B8B8", fontSize: "12px"}}
                                 onChange={currencyHandleChange}

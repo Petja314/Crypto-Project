@@ -1,28 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Box, Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, Avatar, IconButton, TextField, Select, MenuItem, CircularProgress} from "@mui/material";
-import PortfolioBalanceWidget from "../../widgets/PortfolioBalanceWidget";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsCryptoTable, getAllCoinsListThunk, handlingTableByRowNumbersThunk, marketCapListArray} from "../../redux/CryptoTableReducer";
 import {RootState} from "../../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {Link, NavigateFunction, useNavigate} from "react-router-dom";
-import TablePagination from '@mui/material/TablePagination';
-import usd from "../../../assets/images/icons/currency_icons/USD.svg";
-import gbp from "../../../assets/images/icons/currency_icons/GBP.svg";
-import eur from "../../../assets/images/icons/currency_icons/EUR.svg";
-import cad from "../../../assets/images/icons/currency_icons/CAD.svg";
-import aud from "../../../assets/images/icons/currency_icons/AUD.svg";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {TableHeadComponent} from "./TableHeadComponent";
 import {TableBodyCoin} from "./TableBodyCoin";
+import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
 
 const CryptoTable = () => {
     const navigate: NavigateFunction = useNavigate();
     const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
     const {marketCapList, coinValue, currencyValue, rowsPerPage, fetching, page} = useSelector((state: RootState) => state.marketCoinList)
     const [priceSort, setPriceSort] = useState<boolean>(true)
+    const [selectedKey, setSelectedKey] = useState<null | string>(null) //Getting values from table head cells for filtration sortingFieldsHandler
+
 
     useEffect(() => {
         //Fetching coin list data
@@ -55,14 +48,12 @@ const CryptoTable = () => {
     }
 
     // Function to sort table fields alphabetically or numerically
-    const sortingFieldsHandler = (key: string) => {
-        // console.log('key - ', key)
-        setPriceSort((PrevValue: boolean) => !PrevValue)
-        marketCapList.sort((a : marketCapListArray, b: marketCapListArray)  => priceSort ? b[key] - a[key] : a[key] - b[key])
-        if (key === "name") {
-            marketCapList.sort((a:marketCapListArray, b:marketCapListArray) => (priceSort ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
-        }
+    const handleSorting = (key : any) => {
+        setPriceSort(prevValue => !prevValue)
+        setSelectedKey(key)
+        sortingFieldsHandler(marketCapList, selectedKey, priceSort)
     }
+
     // Function that creates a new array with the ability to search by name
      const findCoinHandler = () => {
         const filteredDataName : marketCapListArray[] = marketCapList.filter((item) => item.name.toUpperCase().includes(coinValue.toUpperCase()))
@@ -71,7 +62,6 @@ const CryptoTable = () => {
     //New array to display in JSX
     const filteredDataByName: marketCapListArray[] = findCoinHandler()
 
-    // console.log('fetching , ' ,fetching)
     return (
         <TableContainer
             component={Paper}
@@ -81,7 +71,8 @@ const CryptoTable = () => {
             <Table stickyHeader>
                 {/*TABLE HEAD*/}
                 <TableHeadComponent
-                    sortingFieldsHandler={sortingFieldsHandler}
+                    sortingFieldsHandler={handleSorting}
+                    selectedKey={selectedKey}
                     priceSort={priceSort}
                     rowNumberHandler={rowNumberHandler}
                 />

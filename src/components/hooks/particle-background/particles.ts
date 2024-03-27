@@ -370,9 +370,6 @@ export const backgroundAnimation : any = {
         {
           name: "xrp"
         },
-        // {
-        //   name: "watermelon_slice"
-        // }
       ]
     },
     type: "image"
@@ -650,13 +647,6 @@ export const backgroundAnimation : any = {
     name: "xrp",
     width: 32
   },
-  // {
-  //   src: require("../../assets/images/icons/coins_icons/b"),
-  //   gif: false,
-  //   height: 32,
-  //   name: "watermelon_slice",
-  //   width: 32
-  // }
 ],
     motion: {
   disable: false,

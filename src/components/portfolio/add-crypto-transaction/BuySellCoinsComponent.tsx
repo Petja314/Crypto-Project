@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType, updatePortfolioThunk,} from "../../redux/PortfolioReducer";
 import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {marketCapListArray} from "../../redux/CryptoTableReducer";
+import {formatCurrency} from "@coingecko/cryptoformat";
 
 type BuySellCoinsComponentPropsType = {
     tabValue : number
@@ -105,7 +105,7 @@ export const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsTy
 
                             <Box>
                                 <Typography>Price Per Coin</Typography>
-                                <TextField disabled variant="filled" value={`${formattedPrice(item.price)} $`}/>
+                                <TextField disabled variant="filled" value={`${formatCurrency(item.price, "USD", "en")} `}/>
                             </Box>
                         </Box>
                     </Box>
@@ -116,7 +116,7 @@ export const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsTy
                 <Box sx={{color: "#24de19", fontWeight: "bold", marginBottom: "10px"}}>{errorMessage}</Box>
                 <Typography>Total Spend</Typography>
                 <Box sx={{marginTop: "10px", fontWeight: "bold", fontSize: "20px"}}>
-                    {formattedPrice(totalBuyingAmount)}$
+                    {formatCurrency(totalBuyingAmount, "USD", "en")}
                 </Box>
             </Paper>
 

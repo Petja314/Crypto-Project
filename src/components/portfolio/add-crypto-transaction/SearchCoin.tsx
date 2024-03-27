@@ -2,9 +2,9 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
 import {PortfolioActions, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
 import {Avatar, Box, CircularProgress, Grid, MenuItem, Paper, TextField} from "@mui/material";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {marketCapListArray} from "../../redux/CryptoTableReducer";
+import {formatCurrency} from "@coingecko/cryptoformat";
 
 type SearchCoinPropsType = {
     portfolioData: any ,//marketCapListArray[] | portfolioFirebaseDataType[] ,
@@ -53,7 +53,7 @@ export const SearchCoin = ({portfolioData, newCoinValue}: SearchCoinPropsType) =
                                 />
                                 <Box> {item.name} </Box>
                             </Box>
-                            <Box>{formattedPrice(item.price)} $ </Box>
+                            <Box>{formatCurrency(item.price, "USD", "en")} $ </Box>
                             {fetching &&
                                 <CircularProgress/>
                             }

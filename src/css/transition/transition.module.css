@@ -1,17 +1,22 @@
-.fadeEnter {
+.page_enter {
     opacity: 0;
+    transform: scale(1.1);
 }
 
-.fadeEnterActive {
+.page_enter_active {
     opacity: 1;
-    transition: opacity 200ms;
+    transform: scale(1);
+    transition: opacity 800ms, transform 800ms;
 }
 
-.fadeExit {
+.page_exit {
     opacity: 1;
+    transform: scale(1);
 }
 
-.fadeExitActive {
+.page_exit_active {
     opacity: 0;
-    transition: opacity 200ms;
+    transform: scale(0.9);
+    transition: opacity 800ms, transform 800ms;
 }
+

@@ -30,7 +30,7 @@ import NewsSliceReducer from "./NewsReducer";
 export type RootState = ReturnType<typeof rootReducers>
 let rootReducers = combineReducers({
     auth: AuthReducer,
-    appInitial : AppInitialization,
+    appInitialization : AppInitialization,
     userProfile : ProfileReducer,
     marketCoinList : CryptoTableReducer,
     coinDetails : CoinDescriptionReducer,

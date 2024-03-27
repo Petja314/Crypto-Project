@@ -6,17 +6,26 @@ import {actionsProfile, deleteUserAccountThunk, updateUserDetailsFirebaseThunk} 
 import { RootState} from "../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
 
+// Quick Description: Profile Component
+// Displays the current user details including ID, name, and email.
+// Provides functionality to change the user's name and email.
+// Offers an option to delete the user account, with confirmation required.
+// Saves the updated profile information to the database.
+
 const Profile = () => {
     const dispatch: ThunkDispatch<RootState, void, any>  = useDispatch()
     const {notification, user} = useSelector((state: RootState) => state.userProfile)
+    //Check box state to confirm the account delete (confirm delete acc.)
     const [checked, setChecked] = useState<boolean>(false)
+    //State to track if the delete button was clicked to show the checkbox (confirm delete acc.)
     const [deleteButtonClicked, setDeleteButtonClicked] = useState<boolean>(false);
-    const handleAccountDeleteConformation = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAccountDeleteConformation = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked)
     }
-    const deleteUserAccount = async () => {
+    //Delete user account handles
+    const deleteUserAccount = () => {
         setDeleteButtonClicked(true)
-        await dispatch(deleteUserAccountThunk(checked))
+        dispatch(deleteUserAccountThunk(checked))
     }
     return (
         <Box mt={12} sx={{display: "flex"}}>
@@ -25,7 +34,7 @@ const Profile = () => {
                 <Paper sx={{maxWidth: "600px", width: "100%", position: "relative", margin: "0 auto"}}>
                     <Box>
 
-
+                        {/*UPLOAD USER AVATAR*/}
                         <ProfileAvatarUpload user={user}/>
 
                         <Box mt={5} p={10}>

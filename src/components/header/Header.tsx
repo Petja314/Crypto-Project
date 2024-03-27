@@ -1,23 +1,23 @@
 import React from 'react';
-import {AppBar, Box, Container, Toolbar} from "@mui/material";
+import {Box} from "@mui/material";
 import {UseMobileHook} from "../hooks/UseMobileHook";
 import HeaderDesktop from "./HeaderDesktop";
 import MobileHeader from "./HeaderMobile";
-import {ReactComponent as LeaderIcon} from "../../assets/images/icons/icon-cup-dark.svg"
 
 
+// Quick Description: Header Component
+// Showing the header based on device mobile/desktop
 
-const Header = ({routes,userLogged} : any) => {
+const Header = () => {
    const {width} = UseMobileHook()
     const isMobile : boolean = width <= 900
-
 
     return (
         <Box>
             { isMobile ?
-                <MobileHeader routes={routes} userLogged={userLogged}/>
+                <MobileHeader  />
                 :
-                <HeaderDesktop routes={routes} userLogged={userLogged}/>
+                <HeaderDesktop/>
             }
         </Box>
 

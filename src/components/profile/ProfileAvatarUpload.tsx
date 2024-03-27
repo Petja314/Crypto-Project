@@ -18,12 +18,19 @@ type ProfileAvatarUploadPropsType = {
     user: UserAuthArrayDetailsType[]
 }
 
+
+// Quick Description: ProfileAvatarUpload Component
+// Manages the process of uploading a new avatar image and converting it into a Blob - a data type used to store binary data.
+// Provides the user with the option to select from default avatars if they choose.
+// Submits the blob image to the database to update the user's avatar.
+
 export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
     const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
     const {urlDisplayImage , openAvatarPopUpWindow} = useSelector((state: RootState) => state.userProfile)
     //UPLOAD IMG
     const [newImageFile, setNewImageFile] = useState<null | File>(null)
-    const userImg: string | null = user[0].photoURL
+    const userImg: string | null = user[0]?.photoURL
+    //Store the selected image
     const fileInput: React.MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
@@ -47,6 +54,7 @@ export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
 
     const getValue = async (event: React.MouseEvent<HTMLImageElement>) => {
         // compiling the src file to the blob , that we can send it to the server - event.target.src - cannot be send to the server
+
         const selectedSrc = (event.target as HTMLImageElement).src; //event.target.src
         let selectedFile;
         if (selectedSrc) {
@@ -61,7 +69,7 @@ export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
         }
     }
 
-    console.log('urlDisplayImage' , urlDisplayImage)
+    // console.log('urlDisplayImage' , urlDisplayImage)
     return (
         <Box>
             <Box onClick={() => dispatch(actionsProfile.openAvatarPopUpWindowAC(true))} sx={{position: "absolute", top: "-35px", left: "40%", cursor: "pointer"}}>

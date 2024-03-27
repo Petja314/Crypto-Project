@@ -1,11 +1,17 @@
 import {AppBar, Avatar, Box, Container, Toolbar, Typography} from "@mui/material";
 import logo from "../../assets/images/logo/logo-dark.svg";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import React from "react";
 import LoginSettings from "./LoginSettings";
+import {routesNavigation} from "../../Routes/navigation";
 
-const HeaderDesktop = ({routes,userLogged }: any) => {
-    // console.log('desktop')
+
+// Quick Description: HeaderDesktop Component
+// This component represents the desktop version of the application header.
+// It includes a logo section with an onClick event to redirect users to the dashboard.
+// RoutesNavigation is displayed based on the isMenu status, controlling the visibility of navigation options.
+const HeaderDesktop = () => {
+    const navigate = useNavigate()
     return (
         <AppBar position="static">
             <Container
@@ -21,6 +27,7 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
 
                     {/*LOGO SECTION*/}
                     <Box
+                        onClick={() => navigate("/dashboard")}
                         sx={{
                             display: {md: "flex"},
                             alignItems: {md: "center"}
@@ -30,7 +37,6 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="#app-bar-with-responsive-menu"
                             sx={{
                                 mr: 10,
                                 display: {xs: 'none', md: 'flex'},
@@ -40,7 +46,7 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                                 textDecoration: 'none',
                             }}
                         >
-                            Mi CRYPTO
+                            MiCrypto
                         </Typography>
                     </Box>
 
@@ -51,7 +57,8 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                         display: {xs: 'none', md: 'flex', justifyContent: "flex-start", gap: 80},
 
                     }}>
-                        {routes.map((page: any) => (
+                        {routesNavigation &&
+                            routesNavigation.map((page: any) => (
                             <NavLink
                                 key={page.path}
                                 to={page.path}
@@ -62,20 +69,22 @@ const HeaderDesktop = ({routes,userLogged }: any) => {
                                     cursor: "pointer",
                                 }}
                             >
-                                <Box sx={{
-                                    display: "flex",
-                                    gap: 1,
-                                    alignItems: "center",
-                                }}>
-                                    < page.icon style={{fill: "white", width: 20, height: 20,}}/>
-                                    {page.name}
-                                </Box>
+                                {page.isMenu &&
+                                    <Box sx={{
+                                        display: "flex",
+                                        gap: 1,
+                                        alignItems: "center",
+                                    }}>
+                                        < page.icon style={{fill: "white", width: 20, height: 20,}}/>
+                                        {page.name}
+                                    </Box>
+                                }
 
                             </NavLink>
                         ))}
                     </Box>
 
-                    <LoginSettings userLogged={userLogged}/>
+                    <LoginSettings />
                 </Toolbar>
             </Container>
         </AppBar>

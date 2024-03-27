@@ -1,33 +1,16 @@
-import React, {createRef, lazy, Suspense, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import {Navigate, Route, Routes, useLocation, useNavigate} from "react-router-dom";
-import {Box, Card, CircularProgress, Container, createTheme, CssBaseline, styled, ThemeProvider} from "@mui/material";
+import {Route, Routes, useLocation} from "react-router-dom";
+import {Box, Card, createTheme, styled} from "@mui/material";
 import {lime} from "@mui/material/colors";
-import {ReactComponent as PurchaseIcon} from "./assets/images/header-img/credit-card.svg"
-import {ReactComponent as PortfolioIcon} from "./assets/images/header-img/database.svg"
-import {ReactComponent as DashboardIcon} from "./assets/images/header-img/delicious.svg"
-import {ReactComponent as NewsIcon} from "./assets/images/header-img/newspaper.svg"
-import {auth} from "./config/firebase";
-import {profileThunkCreator} from "./components/redux/ProfileReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {CoinContainerDescription} from "./components/coin-info/CoinContainerDescription";
-import Preloader, {Loader} from "./commons/preloader/Preloader";
-import {appInitActions} from "./components/redux/AppInitialization";
-import {RootState} from "./components/redux/ReduxStore";
-import FadeTransition from "./utils/FadeTransition";
-import Dashboard from './components/dashboard/Dashboard';
-import PortfolioManager from './components/portfolio/PortfolioManager';
-import News from './components/news/News';
-import ForgotPasswords from "./components/login/ForgotPasswords";
-import LoginContainer from "./components/login/LoginContainer";
-import DexExchange from "./components/dex-exchange/DexExchange";
-import DatabaseTest from "./components/database/DatabaseTest";
-import Profile from "./components/profile/Profile";
+import Preloader from "./commons/preloader/Preloader";
 import Header from "./components/header/Header";
-import styles from "./css/transition/transition.module.css";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-import "./style.css"
-
+import styles from "./css/transition/transition.module.css"
+import PrivateRoutes from "./Routes/PrivateRoutes";
+import {routesNavigation} from "./Routes/navigation";
+import {appInitializationThunkCreator} from "./components/redux/AppInitialization";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -85,146 +68,66 @@ export const theme = createTheme({
     },
 
 });
-
 export const StyledCard = styled(Card)(({theme: any}) => ({
     transition: "transform 0.15s ease-in-out",
     "&:hover": {transform: "scale3d(1.09, 1.09, 1)"},
 }))
 
-// const Header = lazy(() => import('./components/header/Header'));
-// const Dashboard = lazy(() => import('./components/dashboard/Dashboard'));
-// const PortfolioManager = lazy(() => import('./components/portfolio/PortfolioManager'));
-// const News = lazy(() => import('./components/news/News'));
-// const LoginContainer = lazy(() => import('./components/login/LoginContainer'));
-// const DatabaseTest = lazy(() => import('./components/database/DatabaseTest'));
-// const ForgotPasswords = lazy(() => import('./components/login/ForgotPasswords'));
-// const Profile = lazy(() => import('./components/profile/Profile'));
-// const DexExchange = lazy(() => import('./components/dex-exchange/DexExchange'));
-
-const routesHeader = [
-    {path: '/dashboard', element: <Dashboard/>, name: "Dashboard", icon: DashboardIcon},
-    {path: '/portfolio', element: <PortfolioManager/>, name: "Portfolio", icon: PortfolioIcon},
-    {path: '/dex-exchange', element: <DexExchange/>, name: "DEX Exchange", icon: PurchaseIcon},
-    {path: '/news', element: <News/>, name: "News", icon: NewsIcon},
-]
+// Quick Description: App Component
+// This component serves as the entry point of the application.
+// It initializes the app, displaying a preloader while fetching initialization data.
+// Routes are set up for different components, with private routes displayed based on the user's authentication status.
+// Components are rendered based on whether the user is logged in or not.
 
 function App() {
     const dispatch: any = useDispatch()
-    const [userLogged, setUserLogged] = useState<null>(null);
-    const [isFetching, setIsFetching] = useState<any>(true);
     const location = useLocation();
+    const {authUser , isFetching} = useSelector((state : any) => state.appInitialization)
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user: any) => {
-            if (user) {
-                // console.log('in')
-                setUserLogged(user)
-                dispatch(profileThunkCreator(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid))
-                setIsFetching(false)
-                return
-            }
-            // console.log('out')
-            setUserLogged(null)
-            setIsFetching(false)
-            return () => unsubscribe
-        })
-    }, [])
+    //Initializing the app
+    useEffect( () => {
+         dispatch(appInitializationThunkCreator())
+    },[dispatch])
 
 
-    if (isFetching) {
-        return <Preloader/>;
+    if (!isFetching) {
+        //Show the Preloader based on app status - initialized - true/false
+        return <Preloader isFetching={true}/>;
     }
-
     return (
         <Box>
-            <Header routes={routesHeader} userLogged={userLogged}/>
+            { authUser && <Header/> }
             <TransitionGroup>
                 <CSSTransition
+                    // By the location.pathname applying the transition effect
                     key={location.pathname}
-                    timeout={800}
-                    classNames={"page"}
+                    timeout={1000}
+                    classNames={{
+                        enter: styles.page_enter,
+                        enterActive: styles.page_enter_active,
+                        exit: styles.page_exit,
+                        exitActive: styles.page_exit_activeT
+                    }}
                     unmountOnExit
                 >
-                    <Box >
-                        <Routes location={location}>
-                            <Route path={"/dashboard"} element={<Dashboard/>}/>
-                            <Route path={"/portfolio"} element={<PortfolioManager/>}/>
-                            <Route path={"/dex-exchange"} element={<DexExchange/>}/>
-                            <Route path={"/news"} element={<News/>}/>
-                            <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
-                            <Route path={"/database"} element={<DatabaseTest/>}/>
-                            <Route path={"/profile"} element={<Profile/>}/>
-                            <Route path={"/coin_info/:id?"} element={<CoinContainerDescription/>}/>
-                        </Routes>
-                    </Box>
+                    {/*Wrapping the components in Private Routes based on requirement*/}
+                    <Routes location={location.pathname}>
+                            {
+                                routesNavigation.map((routes: any) => (
+                                    routes.isPrivate ? (
+                                        <Route element={<PrivateRoutes userLogged={authUser}/>}>
+                                            <Route path={routes.path} element={routes.element}/>
+                                        </Route>
+                                    ) : (
+                                        <Route path={routes.path} element={routes.element}/>
+                                    )
+                                ))
+                            }
+                    </Routes>
                 </CSSTransition>
             </TransitionGroup>
         </Box>
-    );
+    )
 }
-
-
-// function App() {
-//     const [userLogged, setUserLogged] = useState<null>(null)
-//     const [isFetching, setIsFetching] = useState(true)
-//     // const {isFetching} = useSelector((state: RootState) => state.appInitial)
-//     const location = useLocation()
-//     const [key,setKey] = useState('')
-//
-//
-//     const dispatch: any = useDispatch()
-//     useEffect(() => {
-//         const unsubscribe = auth.onAuthStateChanged((user: any) => {
-//             if (user) {
-//                 // console.log('in')
-//                 setUserLogged(user)
-//                 dispatch(profileThunkCreator(user.displayName, user.email, user.emailVerified, user.photoURL, user.uid))
-//                 // dispatch(appInitActions.setIsFetchingAC(false))
-//                 setIsFetching(false)
-//                 return
-//             }
-//             // console.log('out')
-//             setUserLogged(null)
-//             // dispatch(appInitActions.setIsFetchingAC(false))
-//             setIsFetching(false)
-//             return () => unsubscribe
-//         })
-//     }, [])
-//
-//     useEffect(() => {
-//         setKey(location.pathname)
-//     },[location])
-//
-//
-//     if (isFetching) {
-//         return <Preloader/>
-//     }
-//     // console.log('app')
-//     // console.log('isFetching' ,isFetching)
-//     return (
-//         <Box>
-//             {/*<Suspense fallback={<Loader visible/>}>*/}
-//                 <Header routes={routes} userLogged={userLogged}/>
-//                 {/*<TickerTape colorTheme="dark"></TickerTape>*/}
-//                 {/*<FadeTransition>*/}
-//
-//                     <Routes>
-//                         <Route path={"/dashboard"} element={<Dashboard/>}/>
-//                         <Route path={"/portfolio"} element={<PortfolioManager/>}/>
-//                         <Route path={"/dex-exchange"} element={<DexExchange/>}/>
-//                         <Route path={"/news"} element={<News/>}/>
-//                         <Route path={"/login"} element={<LoginContainer userLogged={userLogged}/>}/>
-//                         <Route path={"/reset"} element={<ForgotPasswords/>}/>
-//                         <Route path={"/database"} element={<DatabaseTest/>}/>
-//                         <Route path={"/profile"} element={<Profile/>}/>
-//                         <Route path={"/coin_info/:id?"} element={<CoinContainerDescription/>}/>
-//                     </Routes>
-//
-//                 {/*</FadeTransition>*/}
-//             {/*</Suspense>*/}
-//         </Box>
-//     );
-// }
-
 export default App;
 

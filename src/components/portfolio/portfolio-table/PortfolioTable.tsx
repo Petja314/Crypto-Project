@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
-import {deleteCoinFromPortfolioApiFirebase, fetchPortfolioDataApiFirebase, PortfolioActions} from "../../redux/PortfolioReducer";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {marketCapListArray} from "../../redux/CryptoTableReducer";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import AddTransactionContainer from "../add-crypto-transaction/AddTransactionContainer";
 import {PortfolioTableHeader} from "./PortfolioTableHeader";
 import {PortfolioTableBody} from "./PortfolioTableBody";
 import {RootState} from "../../redux/ReduxStore";
+import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
 
 const PortfolioTable = () => {
     const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
+    const [priceSort, setPriceSort] = useState<boolean>(true)
+    const [selectedKey, setSelectedKey] = useState<null | string>(null) //Getting values from table head cells for filtration
 
+    // Function to sort table fields alphabetically or numerically
+    const handleSorting = (key: any) => {
+        setPriceSort(prevValue => !prevValue)
+        setSelectedKey(key)
+        sortingFieldsHandler(myCurrentPortfolioDataFB, selectedKey, priceSort)
+    }
     return (
         <Box sx={{marginTop: "20px", marginBottom: "20px"}}>
             <TableContainer component={Paper} sx={{borderRadius: '20px'}}>
@@ -23,7 +24,9 @@ const PortfolioTable = () => {
                     <TableHead>
                         <TableRow sx={{background: "red", paddingTop: "120px"}}>
                             <PortfolioTableHeader
-                                myCurrentPortfolioDataFB={myCurrentPortfolioDataFB}
+                                priceSort={priceSort}
+                                sortingFieldsHandler={handleSorting}
+                                selectedKey={selectedKey}
                             />
                         </TableRow>
                     </TableHead>

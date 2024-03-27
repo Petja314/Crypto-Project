@@ -5,11 +5,19 @@ import noAvatar from "../../assets/images/image/blankAvatar.jpg";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/ReduxStore";
 
+
+// Quick Description: UserAvatar Component
+// Showing the current user avatar from his account , if avatar does not exist , showing default avatar picture.
+
 export const UserAvatar = ({setAnchorElUser} : any) => {
     const {user} = useSelector((state : RootState) => state.userProfile)
-    const userAvatarServer : string | null = user[0].photoURL // current user profile avatar
+    // current user profile avatar from db firebase
+    const userAvatarServer : string | null = user[0]?.photoURL
+
+    //handleOpenUserMenu func. handle to open menu by passing openMenu state
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
+        const openMenu = event.currentTarget
+        setAnchorElUser(openMenu);
     };
 
     return (

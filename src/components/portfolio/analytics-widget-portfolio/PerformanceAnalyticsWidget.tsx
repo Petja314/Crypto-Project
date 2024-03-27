@@ -1,19 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {
-    Avatar,
     Box,
-    Button,
-    Grid,
-    IconButton,
-    Paper,
-    Skeleton,
-    Stack,
-    Typography,
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
-import coinsBtc from "../../../assets/images/image/coinsBtc.webp";
-import backgroundTransparent from "../../../assets/images/image/bgTransparent.svg";
+
 import {AllTimeProfitWidget} from "./AllTimeProfitWidget";
 import {PerformersWidgets} from "./PerformersWidgets";
 import {RootState} from "../../redux/ReduxStore";

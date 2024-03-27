@@ -4,8 +4,9 @@ import logo from "../../assets/images/logo/logo-dark.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import {Link} from "react-router-dom";
 import LoginSettings from "./LoginSettings";
+import {routesNavigation} from "../../Routes/navigation";
 
-export const MobileHeader = ({routes,userLogged}: any) => {
+export const MobileHeader = () => {
     const [selectedMenu, setSelectedMenu] = useState<any>(0)
 
     return (
@@ -75,7 +76,7 @@ export const MobileHeader = ({routes,userLogged}: any) => {
                             />
                         </Box>
 
-                        <LoginSettings userLogged={userLogged} />
+                        <LoginSettings/>
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -103,26 +104,30 @@ export const MobileHeader = ({routes,userLogged}: any) => {
                         paddingBottom: "30px",
                     }}
                 >
-                    {routes.map((item: any, index: any) => (
-
-                        <BottomNavigationAction
-                            label={item.name}
-                            key={item.path}
-                            icon={
-                                <Box
-                                    sx={{
-                                        marginBottom: "10px",
-                                    }}>
-                                    < item.icon style={{fill: "white"}}/>
-                                </Box>
-                            }
-                            component={Link}
-                            to={item.path}
-                            sx={{}}
-                        />
 
 
-                    ))
+                    {routesNavigation &&
+                        routesNavigation.map((item: any) => (
+                            <>
+                                {item.isMenu &&
+                                    <BottomNavigationAction
+                                        label={item.name}
+                                        key={item.path}
+                                        icon={
+                                            <Box
+                                                sx={{
+                                                    marginBottom: "10px",
+                                                }}>
+                                                < item.icon style={{fill: "white"}}/>
+                                            </Box>
+                                        }
+                                        component={Link}
+                                        to={item.path}
+                                        sx={{}}
+                                    />
+                                }
+                            </>
+                        ))
                     }
                 </BottomNavigation>
             </Box>

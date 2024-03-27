@@ -1,8 +1,6 @@
-import React, {useState} from 'react';
-import {auth, db, googleProvider} from "../../config/firebase";
-import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
-import {profileThunkCreator} from "./ProfileReducer";
+import React from 'react';
+import {auth, googleProvider} from "../../config/firebase";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from "firebase/auth";
 
 
 const initialState: any = {
@@ -12,7 +10,7 @@ const initialState: any = {
     usersDb: [],
     loginError: '',
     signInError: '',
-
+    isLoggedIn : false
 }
 export const AuthReducer = (state = initialState, action: any) => {
     switch (action.type) {
@@ -35,6 +33,11 @@ export const AuthReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 signInError: action.error
+            }
+        case "IS_LOGGED_IN" :
+            return {
+                ...state,
+                isLoggedIn : action.isLoggedIn
             }
         default :
             return state
@@ -60,18 +63,21 @@ export const actionsAuth = {
         type: "SET_SIGN_IN_ERROR",
         error
     } as const),
+    setIsLoggedIn: (isLoggedIn: any) => ({
+        type: "IS_LOGGED_IN",
+        isLoggedIn
+    } as const),
 }
 
 
 export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
     const {tempEmailValue, password} = getState().auth
     try {
-        let response = await signInWithEmailAndPassword(auth, tempEmailValue, password)
-        // console.log('response' , response)
+        // loginUser - Handles the login process by sending user details to the server for authentication
+        await signInWithEmailAndPassword(auth, tempEmailValue, password)
     } catch (error: any) {
         const errorCode = error.code;
         if (errorCode) {
-
             dispatch(actionsAuth.setLoginErrorAC(errorCode))
         }
     }
@@ -79,6 +85,8 @@ export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
 
 export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
     try {
+        // If signing in with Google, there's no need to register with username, password, etc. Google handles user registration.
+        // If we are already was registered with Google, it will direct us to existing account
          await signInWithPopup(auth, googleProvider)
     } catch (error: any) {
         const errorCode = error.code;
@@ -90,6 +98,7 @@ export const signInWithGoogleThunkCreator = () => async (dispatch: any) => {
 
 export const logOuThunkCreator = () => async (dispatch: any) => {
     try {
+        //Sign out from current account
         await signOut(auth)
     } catch (error: any) {
         const errorCode = error.code;
@@ -101,14 +110,16 @@ export const logOuThunkCreator = () => async (dispatch: any) => {
 
 
 export const signInThunkCreator = (userName: any) => async (dispatch: any, getState: any) => {
+    //Creating the new account
     const {tempEmailValue, password} = getState().auth
     try {
+        //Sending the req. details to the server
         const userCredentials = await createUserWithEmailAndPassword(auth, tempEmailValue, password)
+        // Creating a new username by updating the user profile using the updateProfile API call.
+        // CreateUserWithEmailAndPassword does not support adding usernames and other fields.
         await updateProfile(userCredentials.user, {displayName: userName})
     } catch (error: any) {
         const errorCode = error.code;
-        console.log('errorCode', errorCode)
-        console.log('error', error)
         if (errorCode) {
             dispatch(actionsAuth.setSignInErrorAC(errorCode))
         }

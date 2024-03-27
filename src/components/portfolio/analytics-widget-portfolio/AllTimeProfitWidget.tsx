@@ -1,8 +1,8 @@
 import {Box, Paper, Typography} from "@mui/material";
 import backgroundTransparent from "../../../assets/images/image/bgTransparent.svg";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import coinsBtc from "../../../assets/images/image/coinsBtc.webp";
 import React from "react";
+import {formatCurrency} from "@coingecko/cryptoformat";
 
 type AllTimeProfitWidgetPropsType = {
     totalProfit : number
@@ -34,7 +34,7 @@ export const AllTimeProfitWidget = ({totalProfit} : AllTimeProfitWidgetPropsType
                     fontSize: "20px",
                 }}
             >
-                {formattedPrice(totalProfit)}$
+                {formatCurrency(totalProfit, "USD", "en")}$
             </Box>
             <img
                 style={{

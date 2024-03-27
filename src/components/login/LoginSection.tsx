@@ -10,10 +10,17 @@ import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
 
+// Quick Description: LoginSection Component
+// Logging in with existing credentials: username, password.
+// Providing options for login/sign-in with Google based on whether the user is registered or new.
+// Handling errors during the login process.
+// Sending the data to the reducer for future API calls.
 
-export const LoginSection = ({ setIsRegistered , userLogged }: any) => {
+export const LoginSection = ({ setIsRegistered }: any) => {
+    // loginError - Displays an error message if there is one during the login process
     const invalidLogin = useSelector((state : any) => state.auth.loginError)
     const dispatch : any = useDispatch()
+
 
     const logIn = async () => {
         dispatch(loginThunkCreator())

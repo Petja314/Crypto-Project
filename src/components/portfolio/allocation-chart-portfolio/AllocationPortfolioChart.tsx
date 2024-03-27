@@ -3,10 +3,10 @@ import {Box, CircularProgress, Paper, Typography} from "@mui/material";
 import {Doughnut} from "react-chartjs-2";
 import {Chart, ArcElement} from 'chart.js'
 import {useSelector} from "react-redux";
-import {formattedPrice} from "../../../commons/functions/formattedPrice";
 import {TypingEffects} from "../../../utils/TypingEffects";
 import {RootState} from "../../redux/ReduxStore";
 import {portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {formatCurrency} from "@coingecko/cryptoformat";
 Chart.register(ArcElement);
 
 type AllocationType = {
@@ -25,7 +25,7 @@ const AllocationPortfolioChart = () => {
 
     const data = {
         labels: allocations.map((item: AllocationType) =>
-            `${item.coin} ${formattedPrice(item.allocation)}%`),
+            `${item.coin} ${formatCurrency(item.allocation, "USD", "en")}%`),
         datasets: [
             {
                 label: '% of Portfolio',
