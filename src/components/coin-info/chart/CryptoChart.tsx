@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {coinChartDataThunk, coinDescriptionActions, cryptoChartDataType} from "../../redux/CoinDescriptionReducer";
+import {coinChartDataThunk, coinDescriptionActions, cryptoChartDataType} from "../../../redux/CoinDescriptionReducer";
 import {Box, List, ListItem, ListItemButton, Paper, Typography} from "@mui/material";
 import {
     Chart as ChartJS,
@@ -16,7 +16,7 @@ import {
 } from 'chart.js';
 import {Line} from "react-chartjs-2";
 import moment from "moment";
-import {RootState} from "../../redux/ReduxStore";
+import {RootState} from "../../../redux/ReduxStore";
 import {ListSkeleton} from "../../widgets/ListSkeleton";
 import styles from "../../../css/coin-info/skeleton-coinInfo.module.css"
 
@@ -31,15 +31,26 @@ ChartJS.register(
     Legend
 );
 
-export const CryptoChart = () => {
-    const timeframe: string[] = ["24h", "1w", "1m", "3m", "6m", "1y",]
 
+
+/**
+ * CryptoChart Component:
+ * Sends the selected coin data to generate a chart, specifying the time frame, currency, and compiling it into the chart by making API calls.
+ * Utilizes the ChartJS library for chart creation using selected data from the API.
+ */
+
+
+ const CryptoChart = () => {
+    //Variations of different time frames for a crypto chart
+    const timeframe: string[] = ["24h", "1w", "1m", "3m", "6m", "1y",]
     const {id} = useParams()
+
+    // CryptoChartData - selected coin data for a chart
     const {cryptoChartData, chartTimeFrame} = useSelector((state: RootState) => state.coinDetails)
     const dispatch: any = useDispatch()
 
     useEffect(() => {
-        // console.log('call')
+        // Dispatching the coin id from URL params & selected time frame (as a first render by default is 1 month)
         dispatch(coinChartDataThunk(id, chartTimeFrame))
     }, [id, chartTimeFrame]);
 
@@ -47,9 +58,11 @@ export const CryptoChart = () => {
     const coinCharData = cryptoChartData.map((value: any) => ({
         x: value[0], y: value[1].toFixed(2)
     }))
+
     const options: { responsive: boolean } = {
         responsive: true
     }
+    //Creating the relevant data for a crypto chart with , selected coin , currency , date and etc.
     const data: any = {
         labels: coinCharData.map((value: any) => moment(value.x * 1000).format('MMM D')),
         datasets: [
@@ -121,3 +134,7 @@ export const CryptoChart = () => {
         </Box>
     )
 }
+
+
+export default React.memo(CryptoChart);
+

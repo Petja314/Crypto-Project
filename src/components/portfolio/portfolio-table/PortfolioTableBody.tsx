@@ -1,10 +1,10 @@
 import {useDispatch} from "react-redux";
 import {Avatar, Box, Button, IconButton, TableCell, TableRow} from "@mui/material";
-import {deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
-import {AppDispatch} from "../../redux/ReduxStore";
+import {AppDispatch} from "../../../redux/ReduxStore";
 import {useNavigate} from "react-router-dom";
 import { formatCurrency } from "@coingecko/cryptoformat";
 
@@ -12,13 +12,12 @@ type PortfolioTableBodyPropsType = {
     myCurrentPortfolioDataFB : portfolioFirebaseDataType[]
 }
 
-export const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsType) => {
+const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsType) => {
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
     const navigateToCoinPageHandler = (id : string) => {
         navigate(`/coin_info/${id}?`)
     }
-    console.log('myCurrentPortfolioDataFB', myCurrentPortfolioDataFB)
     return (
         <>
             {/*TABLE BODY*/}
@@ -62,3 +61,4 @@ export const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBod
         </>
     )
 }
+export default PortfolioTableBody;

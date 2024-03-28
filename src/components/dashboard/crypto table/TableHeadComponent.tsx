@@ -7,9 +7,9 @@ import gbp from "../../../assets/images/icons/currency_icons/GBP.svg";
 import eur from "../../../assets/images/icons/currency_icons/EUR.svg";
 import cad from "../../../assets/images/icons/currency_icons/CAD.svg";
 import aud from "../../../assets/images/icons/currency_icons/AUD.svg";
-import {actionsCryptoTable, changeCurrencyValue, getAllCoinsListThunk} from "../../redux/CryptoTableReducer";
+import {actionsCryptoTable, changeCurrencyValue, getAllCoinsListThunk} from "../../../redux/CryptoTableReducer";
 import {ThunkDispatch} from "redux-thunk";
-import {RootState} from "../../redux/ReduxStore";
+import {RootState} from "../../../redux/ReduxStore";
 import {useDispatch, useSelector} from "react-redux";
 
 type TableHeadPropsType = {

@@ -6,7 +6,7 @@ import React from "react";
 import BackgroundBlock from "../../../assets/images/image/block_bg.svg"
 import {ListSkeleton} from "../../widgets/ListSkeleton";
 import styles from "../../../css/coin-info/skeleton-coinInfo.module.css"
-import {coinDataArray} from "../../redux/CoinDescriptionReducer";
+import {coinDataArray} from "../../../redux/CoinDescriptionReducer";
 
 
 type coinDataWidgetType = {
@@ -19,7 +19,15 @@ type CoinDataLinksWidgetPropsType = {
     coinData : coinDataArray[],
     isLoading: boolean
 }
-export const CoinDataLinksWidget = ({coinData,isLoading}: CoinDataLinksWidgetPropsType) => {
+
+/**
+ * CoinDataLinksWidget Component:
+ * Organizes data into an array to display social media accounts associated with the selected coins.
+ */
+
+
+const CoinDataLinksWidget = ({coinData,isLoading}: CoinDataLinksWidgetPropsType) => {
+    // coinDataWidget array was created to make jsx more structural , contains data about the coin social media accounts
     const coinDataWidget : coinDataWidgetType[] = [
         {label: 'Website', icon: <LanguageIcon/>, value: coinData[0]?.websiteUrl},
         {label: 'Github', icon: <XIcon/>, value: coinData[0]?.twitterUrl},
@@ -66,3 +74,6 @@ export const CoinDataLinksWidget = ({coinData,isLoading}: CoinDataLinksWidgetPro
         </Box>
     )
 }
+
+export default React.memo(CoinDataLinksWidget);
+

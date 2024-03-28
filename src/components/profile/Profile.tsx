@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {Box, Button, Checkbox, Container, Paper, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {ProfileAvatarUpload} from "./ProfileAvatarUpload";
-import {actionsProfile, deleteUserAccountThunk, updateUserDetailsFirebaseThunk} from "../redux/ProfileReducer";
-import { RootState} from "../redux/ReduxStore";
+import {actionsProfile, deleteUserAccountThunk, updateUserDetailsFirebaseThunk} from "../../redux/ProfileReducer";
+import { RootState} from "../../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
+import ProfileAvatarUpload from "./ProfileAvatarUpload";
 
 // Quick Description: Profile Component
 // Displays the current user details including ID, name, and email.
@@ -106,7 +106,8 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default React.memo(Profile);
+
 
 
 

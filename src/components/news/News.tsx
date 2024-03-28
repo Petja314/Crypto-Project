@@ -7,8 +7,8 @@ import latest from "../../assets/images/news/latest.png"
 import imgComingSoon from "../../assets/images/news/comingsoon.png"
 import {StyledCard} from "../../App";
 import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../redux/ReduxStore";
-import {clearNewsDataAC, fetchCryptoNewsThunk, newsDataType, setCurrentPageAC, setIsLoadingAC, setNewsDataAC, setTypeAC} from "../redux/NewsReducer";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
+import {clearNewsDataAC, fetchCryptoNewsThunk, newsDataType, setCurrentPageAC, setIsLoadingAC, setNewsDataAC, setTypeAC} from "../../redux/NewsReducer";
 import {ListSkeleton} from "../widgets/ListSkeleton";
 import styles from "../../css/news/skeleton-news.module.css"
 
@@ -19,15 +19,25 @@ type NewsType = {
     value: string
 }
 
+
+/**
+ * News Component:
+ * Fetches and displays news articles via API calls.
+ * Provides the ability to select news types such as bullish, bearish, trending, etc. The selected type is sent to the API to retrieve the latest news data.
+ */
 const News = () => {
-    const newsType: NewsType[] = [
-        {type: "Bearish", image: bear, value: "bearish"},
-        {type: "Bullish", image: bull, value: "bullish"},
-        {type: "Trending", image: trend, value: "trending"},
-        {type: "Latest", image: latest, value: "latest"},
-    ]
     const {newsData, type, currentPage, isLoading} = useSelector((state: RootState) => state.newsReducer)
     const dispatch: AppDispatch = useDispatch()
+
+    //Array with type of news to select
+    const newsType: NewsType[] = [
+        {type: "Bearish",   image: bear,    value: "bearish"},
+        {type: "Bullish",   image: bull,    value: "bullish"},
+        {type: "Trending",  image: trend,   value: "trending"},
+        {type: "Latest",    image: latest,  value: "latest"},
+    ]
+
+    //Dispatching the selected type of news to make an API call , reset current page and Loading state to default (page - 1 , loading - true)
     const newsTypeHandler = (value: string) => {
         if (value) {
             dispatch(setTypeAC(value))
@@ -37,13 +47,15 @@ const News = () => {
         }
         return;
     }
-
+    //Dispatching next portion of news if type or isLoading state was changed (scroll or type)
     useEffect(() => {
         if (isLoading) {
             dispatch(fetchCryptoNewsThunk({type, currentPage}))
         }
     }, [type, isLoading])
 
+
+    //Add event listener for a scroll
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
         return () => {
@@ -57,6 +69,7 @@ const News = () => {
             dispatch(setIsLoadingAC(true))
         }
     }
+
 
     const descriptionMock: string = 'For detailed information on the latest news, kindly visit the source website by clicking on title. There, you will find comprehensive details regarding the post.'
     const titleMock: string = 'Title is coming soon...'
@@ -149,6 +162,7 @@ const News = () => {
     )
 };
 
-export default News;
+export default React.memo(News);
+
 
 

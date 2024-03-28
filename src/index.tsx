@@ -6,7 +6,7 @@ import {BrowserRouter, RouterProvider} from "react-router-dom";
 // import {store} from "./components/redux/ReduxStore";
 import {Provider} from "react-redux";
 import {CssBaseline, ThemeProvider} from "@mui/material";
-import store from "./components/redux/ReduxStore";
+import store from "./redux/ReduxStore";
 import {createWeb3Modal} from '@web3modal/wagmi/react'
 import {defaultWagmiConfig} from '@web3modal/wagmi/react/config'
 import {useSendTransaction, WagmiProvider} from 'wagmi'

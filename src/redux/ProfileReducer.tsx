@@ -1,7 +1,7 @@
 // @ts-ignore
 import {v4 as uuidv4} from 'uuid';
 import React from 'react';
-import {auth, storage} from "../../config/firebase";
+import {auth, storage} from "../config/firebase";
 import {
     getDownloadURL,
     ref as storageRef,

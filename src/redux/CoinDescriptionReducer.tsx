@@ -33,14 +33,21 @@ type initialStateCoinType = {
     coinData: coinDataArray[],
     cryptoChartData: any,
     chartTimeFrame: string,
-    isLoading : boolean
+    isLoading: boolean
 }
+/**
+ * Overview of Initial State:
+ * coinData         : An array containing data of the selected coin including price, name, symbol, etc.
+ * cryptoChartData  : Data representing the selected coin's price and date for chart visualization.
+ * chartTimeFrame   : Specifies the time frame for the chart, options include: 1m, 1w, 1m, 1y.
+ * isLoading        : Tracks the loading status of the current API request, indicating whether it's pending or loaded.
+ */
 
 const initialState: initialStateCoinType = {
     coinData: [],
     cryptoChartData: [],
     chartTimeFrame: "1m",
-    isLoading : false
+    isLoading: false
 }
 export const CoinDescriptionReducer = (state = initialState, action: ActionsCryptoTable) => {
     switch (action.type) {
@@ -62,7 +69,7 @@ export const CoinDescriptionReducer = (state = initialState, action: ActionsCryp
         case "IS_LOADING_COIN_DETAILS" :
             return {
                 ...state,
-                isLoading : action.isLoading
+                isLoading: action.isLoading
             }
 
         default :
@@ -87,21 +94,22 @@ export const coinDescriptionActions = {
         chartTimeFrame
     } as const),
     isLoadingCoinDetailsAC: (isLoading: boolean) => ({
-            type: "IS_LOADING_COIN_DETAILS",
-            isLoading
-        }as const)
+        type: "IS_LOADING_COIN_DETAILS",
+        isLoading
+    } as const)
 }
 
-
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsCryptoTable | any>;
-
 export const coinDescriptionDataThunk = (id: string | undefined, currency: string): ThunkType => async (dispatch) => {
     try {
         const response = await coinStatApi.coinDetails(id, currency);
-        dispatch(coinDescriptionActions.setCoinDetails([response.data]))
-        dispatch(coinDescriptionActions.isLoadingCoinDetailsAC(true))
+        if(response.status === 200) {
+            dispatch(coinDescriptionActions.setCoinDetails([response.data]))
+            dispatch(coinDescriptionActions.isLoadingCoinDetailsAC(true))
+        }
     } catch (error) {
-        console.log('Error:', error);
+        console.error(error)
+        // console.log('Error:', error);
     }
 }
 
@@ -111,7 +119,7 @@ export const coinChartDataThunk = (id: string | undefined, chartTimeFrame: strin
         const response = await coinStatApi.coinChart(id, chartTimeFrame);
         dispatch(coinDescriptionActions.setCryptoChartAC(response.data))
     } catch (error) {
-        console.log('Error:', error);
+        console.error(error)
+        // console.log('Error:', error);
     }
-
 }

@@ -10,7 +10,8 @@ import {CSSTransition, TransitionGroup} from "react-transition-group";
 import styles from "./css/transition/transition.module.css"
 import PrivateRoutes from "./Routes/PrivateRoutes";
 import {routesNavigation} from "./Routes/navigation";
-import {appInitializationThunkCreator} from "./components/redux/AppInitialization";
+import {appInitializationThunkCreator} from "./redux/AppInitialization";
+import ScrollToTop from "./Routes/ScrollToTop";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -73,13 +74,15 @@ export const StyledCard = styled(Card)(({theme: any}) => ({
     "&:hover": {transform: "scale3d(1.09, 1.09, 1)"},
 }))
 
-// Quick Description: App Component
-// This component serves as the entry point of the application.
-// It initializes the app, displaying a preloader while fetching initialization data.
-// Routes are set up for different components, with private routes displayed based on the user's authentication status.
-// Components are rendered based on whether the user is logged in or not.
+/**
+ * Description: App Component
+ * This component serves as the entry point of the application.
+ * It initializes the app, displaying a preloader while fetching initialization data.
+ * Routes are set up for different components, with private routes displayed based on the user's authentication status.
+ * Components are rendered based on whether the user is logged in or not.
+ */
 
-function App() {
+function App  () {
     const dispatch: any = useDispatch()
     const location = useLocation();
     const {authUser , isFetching} = useSelector((state : any) => state.appInitialization)
@@ -96,7 +99,8 @@ function App() {
     }
     return (
         <Box>
-            { authUser && <Header/> }
+            <ScrollToTop/>
+            { authUser && <Header/>}
             <TransitionGroup>
                 <CSSTransition
                     // By the location.pathname applying the transition effect
@@ -115,7 +119,7 @@ function App() {
                             {
                                 routesNavigation.map((routes: any) => (
                                     routes.isPrivate ? (
-                                        <Route element={<PrivateRoutes userLogged={authUser}/>}>
+                                        <Route element={<PrivateRoutes authUser={authUser}/>}>
                                             <Route path={routes.path} element={routes.element}/>
                                         </Route>
                                     ) : (
@@ -129,5 +133,6 @@ function App() {
         </Box>
     )
 }
-export default App;
+export default React.memo(App);
+
 

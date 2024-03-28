@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Paper, Button, Box, Typography, Avatar} from '@mui/material'
 import Carousel from "react-material-ui-carousel";
 import {useSelector} from "react-redux";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
 import fire from "../../assets/images/icons/fire.png"
 import redchart from "../../assets/images/icons/redchart.png"
 import rocket from "../../assets/images/icons/rocket.png"
@@ -11,8 +11,14 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {useNavigate} from "react-router-dom";
 import {ListSkeleton} from "./ListSkeleton";
 import styles from "../../css/dashboard/skeleton-dashboard.module.css"
-import {marketCapListArray} from "../redux/CryptoTableReducer";
+import {marketCapListArray} from "../../redux/CryptoTableReducer";
+import { memo } from 'react';
 
+/**
+ * CarouselMui Component displays a carousel of cryptocurrency performance statistics.
+ * It includes sliders for the trend of the hour, best performers in the last 24 hours, and worst performers in the last 24 hours.
+ * Each slider shows relevant cryptocurrency data such as name, symbol, and percentage change in price.
+ */
 
 export const CarouselMui = () => {
     const {marketCapList, fetching} = useSelector((state: RootState) => state.marketCoinList)
@@ -22,6 +28,7 @@ export const CarouselMui = () => {
 
     useEffect(() => {
         if (!fetching) {
+            //Sorting the performance by price change
             const sortByPriceRange = (data: any, key: any) => data.sort((a: any, b: any) => a[key] - b[key])
             //HOUR
             const trendOfHour = sortByPriceRange([...marketCapList], 'priceChange1h').slice(-5).reverse(); // -5 === trendOfHour.length-5
@@ -45,7 +52,8 @@ export const CarouselMui = () => {
         </Carousel>
     )
 };
-export default CarouselMui;
+export default React.memo(CarouselMui);
+
 
 
 type CoinStatSliderPropsType = {
@@ -55,7 +63,7 @@ type CoinStatSliderPropsType = {
     priceChangeKey:string,
 }
 
-export const CoinStatSlider = ({data, title, emojiIcon, priceChangeKey }: CoinStatSliderPropsType) => {
+export const CoinStatSlider = memo(({data, title, emojiIcon, priceChangeKey }: CoinStatSliderPropsType) => {
     const { fetching} = useSelector((state: RootState) => state.marketCoinList)
 
     const navigate = useNavigate()
@@ -111,7 +119,7 @@ export const CoinStatSlider = ({data, title, emojiIcon, priceChangeKey }: CoinSt
 
     )
 }
-
+)
 
 
 

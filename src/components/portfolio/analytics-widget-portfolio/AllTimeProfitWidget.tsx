@@ -34,7 +34,7 @@ export const AllTimeProfitWidget = ({totalProfit} : AllTimeProfitWidgetPropsType
                     fontSize: "20px",
                 }}
             >
-                {formatCurrency(totalProfit, "USD", "en")}$
+                {formatCurrency(totalProfit, "USD", "en")}
             </Box>
             <img
                 style={{

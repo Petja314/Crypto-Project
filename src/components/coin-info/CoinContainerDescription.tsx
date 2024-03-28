@@ -1,16 +1,23 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
-import {coinDescriptionDataThunk} from "../redux/CoinDescriptionReducer";
+import {coinDescriptionActions, coinDescriptionDataThunk} from "../../redux/CoinDescriptionReducer";
 import {Box, Button, Container,} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
-import {CryptoChart} from "./chart/CryptoChart";
-import {PriceChangesWidget} from "./coin-info-widgets/PriceChangesWidget";
-import {CoinTableInfo} from "./CoinTableInfo";
-import {CoinDataLinksWidget} from "./coin-info-widgets/CoinDataLinksWidget";
 import CryptoExplorers from "./CryptoExplorers";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
+import CoinTableInfo from "./CoinTableInfo";
+import CoinDataLinksWidget from "./coin-info-widgets/CoinDataLinksWidget";
+import CryptoChart from "./chart/CryptoChart";
+import PriceChangesWidget from "./coin-info-widgets/PriceChangesWidget";
+import Preloader from "../../commons/preloader/Preloader";
 
-export const CoinContainerDescription = () => {
+/**
+ * Description : CoinContainerDescription Component:
+ * This component facilitates the retrieval of selected coin and currency data via API calls,
+ * displaying various components required on the page.
+ */
+
+ const CoinContainerDescription = () => {
     const dispatch: any = useDispatch()
     const navigate = useNavigate()
     const {id} = useParams()
@@ -18,7 +25,11 @@ export const CoinContainerDescription = () => {
     const {currencyValue} = useSelector((state: RootState) => state.marketCoinList)
 
     useEffect(() => {
+        //Dispatching selected coin id , and currency $ | £ ...
         dispatch(coinDescriptionDataThunk(id, currencyValue.value))
+        return () => {
+            dispatch(coinDescriptionActions.isLoadingCoinDetailsAC(false))
+        }
     }, [id]);
 
     const navigateToPortfolioPage = () => {
@@ -30,10 +41,12 @@ export const CoinContainerDescription = () => {
                 <Box sx={{display: "flex", gap: 3}}>
 
                     <Box sx={{display: "flex", flexDirection: "column"}}>
+                        {/*INFORMATION ABOUT THE SELECTED CURRENCY IN TABLE*/}
                         <CoinTableInfo
                             currencyValue={currencyValue}
                             isLoading={isLoading}
                         />
+                        {/*LINK'S WIDGET OF SELECTED COIN*/}
                         <CoinDataLinksWidget
                             coinData={coinData}
                             isLoading={isLoading}
@@ -43,8 +56,9 @@ export const CoinContainerDescription = () => {
                     </Box>
 
                     <Box sx={{display: "flex", flexDirection: "column"}}>
-                        <CryptoChart
-                        />
+                        {/*CRYPTO CHART OF SELECTED COIN*/}
+                        <CryptoChart/>
+                        {/*PRICE WIDGET OF SELECTED COIN*/}
                         <PriceChangesWidget
                             coinData={coinData}
                             isLoading={isLoading}
@@ -61,3 +75,6 @@ export const CoinContainerDescription = () => {
 
     )
 }
+
+export default React.memo(CoinContainerDescription);
+

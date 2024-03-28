@@ -3,7 +3,7 @@ import Tooltip from "@mui/material/Tooltip";
 import {Avatar, Badge, IconButton, styled} from "@mui/material";
 import noAvatar from "../../assets/images/image/blankAvatar.jpg";
 import {useSelector} from "react-redux";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
 
 
 // Quick Description: UserAvatar Component

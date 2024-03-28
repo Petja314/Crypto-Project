@@ -4,16 +4,21 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
 import {ListSkeleton} from "../widgets/ListSkeleton";
 import styles from "../../css/coin-info/skeleton-coinInfo.module.css";
-import {coinDataArray} from "../redux/CoinDescriptionReducer";
+import {coinDataArray} from "../../redux/CoinDescriptionReducer";
 
 type CryptoExplorersPropsType = {
     coinData : coinDataArray[] ,
     isLoading: boolean
 }
 
-const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
-    const topExplorers = coinData[0]?.explorers
+/**
+ * CryptoExplorers Component:
+ * Provides an explanation of what crypto explorers are and displays the current crypto explorers of the selected coin.
+ */
 
+const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
+    //Explorers of selected coin
+    const topExplorers = coinData[0]?.explorers
 
     return (
         <Box mt={3} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -65,9 +70,11 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
     );
 };
 
-export default CryptoExplorers;
+export default React.memo(CryptoExplorers);
 
 
+
+//EXPLANATION WHAT CRYPTO EXPLORERS ARE
 const cryptoExplorersInfo = [
     {
         title: "",

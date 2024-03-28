@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {PortfolioTableHeader} from "./PortfolioTableHeader";
-import {PortfolioTableBody} from "./PortfolioTableBody";
-import {RootState} from "../../redux/ReduxStore";
+import {RootState} from "../../../redux/ReduxStore";
 import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
+import PortfolioTableHeader from "./PortfolioTableHeader";
+import PortfolioTableBody from "./PortfolioTableBody";
 
 const PortfolioTable = () => {
     const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
@@ -17,6 +17,7 @@ const PortfolioTable = () => {
         setSelectedKey(key)
         sortingFieldsHandler(myCurrentPortfolioDataFB, selectedKey, priceSort)
     }
+
     return (
         <Box sx={{marginTop: "20px", marginBottom: "20px"}}>
             <TableContainer component={Paper} sx={{borderRadius: '20px'}}>
@@ -41,7 +42,9 @@ const PortfolioTable = () => {
     );
 };
 
-export default PortfolioTable;
+export default React.memo(PortfolioTable);
+
+
 
 
 

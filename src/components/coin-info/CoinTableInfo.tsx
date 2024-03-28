@@ -1,10 +1,11 @@
 import {Avatar, Box, Paper, Skeleton, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
-import React from "react";
+import React, {memo} from "react";
 import {useSelector} from "react-redux";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
 import {ListSkeleton} from "../widgets/ListSkeleton";
 import styles from "../../css/coin-info/skeleton-coinInfo.module.css"
 import {formatCurrency} from "@coingecko/cryptoformat";
+import {formatPercent} from "../../commons/functions/percentFormatter";
 
 type tableBodyInfoType = {
     label: string
@@ -14,12 +15,20 @@ type CoinTableInfoPropsType = {
     currencyValue: any,
     isLoading : boolean
 }
-export const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) => {
-    const {coinData } = useSelector((state: RootState) => state.coinDetails)
 
+/**
+ * CoinTableInfo Component:
+ * Displays the selected Coin data in a table format
+ */
+
+
+const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) => {
+    // coinData - An array containing data of the selected coin including price, name, symbol, etc.
+    const {coinData } = useSelector((state: RootState) => state.coinDetails)
+    const symbol = currencyValue.value
     return (
         <Box>
-            {/*TABLE*/}
+            {/*TABLE - Renders a skeleton based on the loading state.*/}
             {!isLoading ? (
                 <ListSkeleton columns={1}
                               skeletonClass={styles.skeletonCoinTableDesc}
@@ -39,11 +48,11 @@ export const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsT
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formatCurrency(item.price, "USD", "en") + currencyValue.symbol} </Box>
+                                    <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formatCurrency(item.price, symbol ,"en")} </Box>
                                     <Box
                                         sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}
                                     >
-                                        {formatCurrency(item.priceChange1d, "USD", "en")}%(24h)
+                                        {formatPercent(item.priceChange1d)}
                                     </Box>
                                 </TableCell>
                             </TableRow>
@@ -66,19 +75,22 @@ export const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsT
     )
 }
 
+export default React.memo(CoinTableInfo);
 
-const TableBodyCoinInfo = ({item,currencyValue} : any) => {
+
+
+
+const TableBodyCoinInfo = memo(({item} : any) => {
     //tableBodyInfo was made to make JSX more clear
     const tableBodyInfo: tableBodyInfoType[] = [
-        {label: 'Market cap Rank', value: item.rank},
-        {label: 'Market Cap', value: formatCurrency(item.marketCap, "USD", "en") + currencyValue.symbol},
-        {label: 'Volume', value: formatCurrency(item.volume, "USD", "en")},
-        {label: 'Available Supply', value: `${item.availableSupply} ${item.symbol}`},
-        {label: 'Total supply', value: `${item.totalSupply} ${item.symbol}`},
-        {label: 'Price change 1d', value: formatCurrency(item.priceChange1d, "USD", "en") + "%"},
-        {label: 'Price change 1w', value: formatCurrency(item.priceChange1w, "USD", "en") + "%"},
+        {label: 'Market cap Rank',      value: item.rank},
+        {label: 'Market Cap',           value: formatCurrency(item.marketCap, "USD", "en")},
+        {label: 'Volume',               value: formatCurrency(item.volume, "USD", "en")},
+        {label: 'Available Supply',     value: `${item.availableSupply} ${item.symbol}`},
+        {label: 'Total supply',         value: `${item.totalSupply} ${item.symbol}`},
+        {label: 'Price change 1d',      value: formatPercent(item.priceChange1d)},
+        {label: 'Price change 1w',      value: formatPercent(item.priceChange1w)},
     ];
-
 
     return (
         <Box>
@@ -99,3 +111,4 @@ const TableBodyCoinInfo = ({item,currencyValue} : any) => {
         </Box>
     )
 }
+)

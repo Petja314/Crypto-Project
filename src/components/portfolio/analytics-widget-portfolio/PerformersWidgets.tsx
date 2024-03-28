@@ -1,6 +1,6 @@
 import {Avatar, Box, Grid, Paper, Typography} from "@mui/material";
 import React from "react";
-import {portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
 
 type PerformersWidgetsPropsType = {
@@ -54,7 +54,7 @@ export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {formatCurrency(item.profitLoss, "USD", "en")}$
+                                    {formatCurrency(item.profitLoss, "USD", "en")}
                                 </Box>
                             </Grid>
                         </Grid>

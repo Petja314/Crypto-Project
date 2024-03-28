@@ -4,7 +4,7 @@ import {
     calculateProfitLoss,
     calculateTotalHoldingCoinAmountCash,
     calculateTotalHoldingCoins,
-} from "../portfolio/portfolio-calculation-functions/PurchaseCoinsFunctions";
+} from "../components/portfolio/portfolio-calculation-functions/PurchaseCoinsFunctions";
 import {
     collection,
     getDocs,
@@ -15,7 +15,7 @@ import {
     doc,
     updateDoc,
 } from "firebase/firestore";
-import {auth, db, googleProvider, storage} from "../../config/firebase";
+import {auth, db, googleProvider, storage} from "../config/firebase";
 import {ActionsCryptoTable, actionsCryptoTable, marketCapListArray} from "./CryptoTableReducer";
 import {InferActionsTypes, RootState} from "./ReduxStore";
 import {ThunkAction} from "redux-thunk";
@@ -28,13 +28,13 @@ export type portfolioFirebaseDataType = {
     symbol: string,
     price: number,                               //Current coin price
     coinsBoughtAmountHistoryCash: number[],      //Coins Bought Amount in Cash History
-    coinsBoughtHistoryTokenQuantity: number [],   //Coins Bought Quantity History
+    coinsBoughtHistoryTokenQuantity: number [],  //Coins Bought Quantity History
     totalHoldingCoins: number,                   //Total Holding Coins in portfolio
     buyingPricesHistory: number[],               //Buying prices history in $
     averageBuyingPrice: number,                  //Average buying price
     profitLoss: number,                          //PROFIT - LOSS
     totalHoldingCoinAmountCash: number,          //Total amount of coins in portfolio
-    userId: string                             //Signed in user ID
+    userId: string                               //Signed in user ID
 }
 export type CurrentPortfolioType = {
     myCurrentPortfolioDataFB: portfolioFirebaseDataType[],
@@ -48,7 +48,20 @@ export type CurrentPortfolioType = {
     totalBuyingAmount: number,
     errorMessage: string,
 }
-// const myPortfolioLS = localStorage.getItem('myPortfolio')
+
+/**
+ * Initial State Portfolio -
+ * myCurrentPortfolioDataFB :   Array of current user portfolio data fetched from Firebase.
+ * isPortfolioDialogOpen    :   Flag indicating whether the portfolio dialog is open or closed.
+ * totalPageCount           :   Total number of pages for pagination.
+ * currentPage              :   Current page number for pagination.
+ * newCoinValue             :   Value for the search bar to filter coins in the portfolio.
+ * selectedCoinArrayData    :   Selected coin array data for purchase operations.
+ * coinQuantity             :   Quantity of the selected coin for purchase.
+ * totalBuyingAmount        :   Total buying amount of the selected coin for purchase.
+ * errorMessage             :   Error message displayed in case of portfolio-related errors.
+ */
+
 const initialState: CurrentPortfolioType = {
     //TablePanelCoin Search
     myCurrentPortfolioDataFB: [],
@@ -61,25 +74,6 @@ const initialState: CurrentPortfolioType = {
     coinQuantity: 0,
     totalBuyingAmount: 0,
     errorMessage: "",
-    // myCurrentPortfolioData: myPortfolioLS
-    //     ?JSON.parse(myPortfolioLS)
-    //     :[{
-    //         id: "",
-    //         icon: "",
-    //         rank: "",
-    //         name: "",
-    //         symbol: "",
-    //         price: 0,                                //Current coin price
-    //         coinsBoughtAmountHistoryCash: [],       //Coins Bought Amount in Cash History
-    //         coinsBoughtHistoryTokenQuantity: [],    //Coins Bought Quantity History
-    //         totalHoldingCoins: 0,                   //Total Holding Coins in portfolio
-    //         buyingPricesHistory: [],                //Buying prices history in $
-    //         averageBuyingPrice: 0,                  //Average buying price
-    //         profitLoss: 0,                          //PROFIT - LOSS
-    //         totalHoldingCoinAmountCash: 0,          //Total amount of coins in portfolio
-    //         userId :  auth.currentUser.uid          //Signed in user ID
-    //     }
-    // ]
 };
 
 export const PortfolioReducer = (state = initialState, action: ActionsPortfolioTypes) => {
@@ -114,20 +108,6 @@ export const PortfolioReducer = (state = initialState, action: ActionsPortfolioT
                 ...state,
                 myCurrentPortfolioDataFB: action.data,
             };
-        // const newPortfolioState = {
-        //     ...state,
-        // myCurrentPortfolioData: action.myCurrentPortfolioData
-        // myCurrentPortfolioDataFB: action.data.updatedPortfolioData
-        // }
-        // localStorage.setItem('myPortfolio', JSON.stringify(action.myCurrentPortfolioData))
-        // return newPortfolioState
-        // case "DELETE_SELECTED_COIN" :
-        //     const filteredArray = state.myCurrentPortfolioData.filter((item: any) => item.id !== action.id)
-        //     // localStorage.setItem('myPortfolio', JSON.stringify(filteredArray))
-        //     return {
-        //         ...state,
-        //         myCurrentPortfolioData: filteredArray
-        //     }
         case "PORTFOLIO_ERROR_MESSAGE":
             return {
                 ...state,
@@ -171,10 +151,6 @@ export const PortfolioActions = {
             type: "CREATE_MY_PORTFOLIO",
             data,
         }) as const,
-    // deleteSelectedCoinAC: (id: any) => ({
-    //     type: "DELETE_SELECTED_COIN",
-    //     id
-    // } as const),
     portfolioErrorWarningMessageAC: (errorMessage: string) =>
         ({
             type: "PORTFOLIO_ERROR_MESSAGE",
@@ -316,8 +292,5 @@ export const createNewCoinInPortfolioThunk = (id: string, icon: string, rank: nu
             myCurrentPortfolioDataFB[0].id === ""
                 ? [newCoinData] //Create the new data instead of initial empty object
                 : [...myCurrentPortfolioDataFB, newCoinData]; //Create the new object to the existing data ,bitcoin,zen,xrp...
-        //SET CREATED ARRAY [{...}]
-        // setMyCurrentPortfolioData(updatedPortfolioData);
-        // dispatch(PortfolioActions.createMyPortfolioAC(updatedPortfolioData))
         dispatch(createPortfolioApiFirebase(updatedPortfolioData)); // Dispatch data for the firebase thunk for an API call!
     };

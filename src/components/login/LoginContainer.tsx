@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Container, Grid,} from "@mui/material";
-import {LoginSection} from "./LoginSection";
-import {SignUpSection} from "./SignUpSection";
 import {LoginInfoSection} from "./LoginInfoSection";
 import {useSelector} from "react-redux";
 import {Navigate} from "react-router-dom";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
+import LoginSection from "./LoginSection";
+import SignUpSection from "./SignUpSection";
 
 
 // Quick Description: LoginContainer Component
@@ -66,4 +66,5 @@ export const commonButtonStyles = {
     },
 };
 
-export default LoginContainer;
+
+export default React.memo(LoginContainer);

@@ -6,9 +6,18 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {AllTimeProfitWidget} from "./AllTimeProfitWidget";
 import {PerformersWidgets} from "./PerformersWidgets";
-import {RootState} from "../../redux/ReduxStore";
-import {portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {RootState} from "../../../redux/ReduxStore";
+import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 
+
+/**
+ * PerformanceAnalyticsWidget Component:
+ * Analyzes the performance of the user's investment portfolio.
+ * Features:
+ * - Calculates and displays the total profit/loss of the portfolio over time.
+ * - Identifies the top-performing and bottom-performing assets within the portfolio.
+ * - Provides insights into the overall performance of the portfolio.
+ */
 const PerformanceAnalyticsWidget = () => {
     const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio,);
     const [performers, setPerformers] = useState<portfolioFirebaseDataType[]>([]);
@@ -54,7 +63,5 @@ const PerformanceAnalyticsWidget = () => {
     );
 };
 
+export default React.memo(PerformanceAnalyticsWidget);
 
-
-
-export default PerformanceAnalyticsWidget;

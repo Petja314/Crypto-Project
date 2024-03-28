@@ -9,8 +9,8 @@ import Avatar3 from "../../assets/images/profile_avatars/avatar-3.png"
 import Avatar4 from "../../assets/images/profile_avatars/avatar-4.png"
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {useDispatch, useSelector} from "react-redux";
-import {actionsProfile, handleSubmitThunk, ProfileStateTypes, saveProfileAvatarFirebaseThunk, UserAuthArrayDetailsType} from "../redux/ProfileReducer";
-import  {RootState} from "../redux/ReduxStore";
+import {actionsProfile, handleSubmitThunk, ProfileStateTypes, saveProfileAvatarFirebaseThunk, UserAuthArrayDetailsType} from "../../redux/ProfileReducer";
+import  {RootState} from "../../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
 
 const default_avatars: string[] = [Avatar1, Avatar2, Avatar3, Avatar4]
@@ -24,7 +24,8 @@ type ProfileAvatarUploadPropsType = {
 // Provides the user with the option to select from default avatars if they choose.
 // Submits the blob image to the database to update the user's avatar.
 
-export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
+
+const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
     const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
     const {urlDisplayImage , openAvatarPopUpWindow} = useSelector((state: RootState) => state.userProfile)
     //UPLOAD IMG
@@ -146,3 +147,6 @@ export const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
         </Box>
     )
 }
+
+export default React.memo(ProfileAvatarUpload);
+

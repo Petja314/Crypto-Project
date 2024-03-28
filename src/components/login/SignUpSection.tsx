@@ -4,16 +4,17 @@ import {Box, Button, TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {actionsAuth, signInThunkCreator} from "../redux/AuthReducer";
+import {actionsAuth, signInThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
 
 // Quick Description: SignUpSection Component
 // Creating a new username, email, and password and handling the login process.
 // Checking for password matching and handling errors.
 // Sending the data to the reducer for future API calls.
 
-export const SignUpSection = ({ setIsRegistered}: any) => {
+
+const SignUpSection = ({ setIsRegistered}: any) => {
     const dispatch : any = useDispatch()
     //Conformation password handler
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -98,3 +99,8 @@ export const SignUpSection = ({ setIsRegistered}: any) => {
         </Box>
     )
 }
+
+
+export default React.memo(SignUpSection);
+
+

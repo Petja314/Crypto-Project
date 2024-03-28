@@ -1,6 +1,6 @@
 import React from 'react';
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import tokenList from "../dex-exchange/tokenList.json";
+import tokenList from "../components/dex-exchange/tokenList.json";
 import axios from "axios";
 
 

@@ -7,11 +7,19 @@ import LeaderBoard from "../widgets/LeaderBoard";
 import FearGreedIndex from "../widgets/FearGreedIndex";
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 
+
+/**
+ * The Dashboard component represents the main dashboard view of the application.
+ * The dashboard includes:
+ *  - Leaderboard               :   Displays the top performers or leaders in the portfolio.
+ *  - FearGreedIndex            :   Shows the current market sentiment based on the Fear and Greed Index.
+ *  - Carousel                  :   Displays a carousel of trending , worst and best performers of the market.
+ *  - Portfolio Balance Widget  :   Provides an overview of the user's portfolio balance.
+ *  - Crypto Table              :   Presents a table of cryptocurrency data, such as prices, market cap, etc.
+ */
 const Dashboard = () => {
     return (
             <Container sx={{marginBottom: "50px", marginTop : "50px"}}>
-
-
                 <Typography  variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
 
                 <Grid container mb={2} >
@@ -26,10 +34,9 @@ const Dashboard = () => {
                 </Grid>
 
                 <CryptoTable/>
-
-
             </Container>
     );
 };
 
-export default Dashboard;
+export default React.memo(Dashboard);
+

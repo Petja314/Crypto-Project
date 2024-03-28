@@ -2,41 +2,45 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Box, Button, Grid, Paper, Skeleton, SkeletonClasses, Stack, Typography} from "@mui/material";
 import {ReactComponent as LeaderIcon} from "../../assets/images/icons/icon-cup-dark.svg"
 import {useSelector} from "react-redux";
-import {RootState} from "../redux/ReduxStore";
-import {marketCapListArray} from "../redux/CryptoTableReducer";
+import {RootState} from "../../redux/ReduxStore";
+import {marketCapListArray} from "../../redux/CryptoTableReducer";
 import {useNavigate} from "react-router-dom";
 import styles from "../../css/dashboard/skeleton-dashboard.module.css"
 import {ListSkeleton} from "./ListSkeleton";
 
 
+/**
+ * Description: Leaderboard Component
+ * The Leaderboard component displays the top performers or leaders in the cryptocurrency market for the week.
+ * It ranks cryptocurrencies based on their price change over the past week.
+ * Users can click on a leaderboard entry to view more details about the respective cryptocurrency.
+ */
 const LeaderBoard = () => {
     const navigate = useNavigate()
     const {marketCapList, fetching} = useSelector((state: RootState) => state.marketCoinList)
     const [leadersOfWeek, setLeadersOfWeek] = useState<marketCapListArray[]>([])
-    const [columns, setColumns] = useState([])
 
     useEffect(() => {
         if (!fetching) {
-            // console.log('in')
-            const sortedData = marketCapList.sort((a, b) => a.priceChange1w - b.priceChange1w)
+            //Sorting the data by price change of 1 week
+            const sortedData = [...marketCapList] //Making a copy of original array!
+            sortedData.sort((a, b) => a.priceChange1w - b.priceChange1w)
+            //Making the array of top 10 coins
             const top = sortedData.slice(sortedData.length - 10).reverse()
             setLeadersOfWeek(top)
         }
     }, [fetching, marketCapList])
 
     const navigateToCoinDescription = (id: any) => {
+        //Navigate to the coin info component
         navigate(`/coin_info/${id}`)
     }
-
-
-
     return (
         <Box>
             <Typography variant='h6' sx={{color: "white", marginBottom: "10px", display: "flex", alignItems: "center", gap: 1}}>
                 <LeaderIcon/>
                 Leaderboard of the week
             </Typography>
-
 
             { leadersOfWeek.length  <= 0 ? (
                 <ListSkeleton
@@ -95,4 +99,4 @@ const LeaderBoard = () => {
 }
 
 
-export default LeaderBoard
+export default React.memo(LeaderBoard);

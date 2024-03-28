@@ -4,15 +4,26 @@ import {Doughnut} from "react-chartjs-2";
 import {Chart, ArcElement} from 'chart.js'
 import {useSelector} from "react-redux";
 import {TypingEffects} from "../../../utils/TypingEffects";
-import {RootState} from "../../redux/ReduxStore";
-import {portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {RootState} from "../../../redux/ReduxStore";
+import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
+import {formatPercent} from "../../../commons/functions/percentFormatter";
 Chart.register(ArcElement);
 
 type AllocationType = {
             "coin": string,
             "allocation": number
 }
+/**
+ * AllocationPortfolioChart Component:
+ * Displays a doughnut chart illustrating the allocation of assets within the user's investment portfolio.
+ * Features:
+ * - Calculates the allocation percentage for each cryptocurrency based on its total holding amount.
+ * - Presents the data in a visually appealing doughnut chart.
+ * - Provides information on the distribution of investments across different cryptocurrencies.
+ */
+
+
 const AllocationPortfolioChart = () => {
     const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
     //Calculation total sum of current portfolio
@@ -25,7 +36,7 @@ const AllocationPortfolioChart = () => {
 
     const data = {
         labels: allocations.map((item: AllocationType) =>
-            `${item.coin} ${formatCurrency(item.allocation, "USD", "en")}%`),
+            `${item.coin} ${formatPercent(item.allocation)}`),
         datasets: [
             {
                 label: '% of Portfolio',
@@ -95,4 +106,4 @@ const AllocationPortfolioChart = () => {
     );
 };
 
-export default AllocationPortfolioChart;
+export default React.memo(AllocationPortfolioChart);

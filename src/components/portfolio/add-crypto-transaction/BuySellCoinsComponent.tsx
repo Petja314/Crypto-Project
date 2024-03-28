@@ -1,16 +1,27 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../redux/ReduxStore";
-import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType, updatePortfolioThunk,} from "../../redux/PortfolioReducer";
+import {AppDispatch, RootState} from "../../../redux/ReduxStore";
+import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType, updatePortfolioThunk,} from "../../../redux/PortfolioReducer";
 import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
-import {marketCapListArray} from "../../redux/CryptoTableReducer";
+import {marketCapListArray} from "../../../redux/CryptoTableReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
 
 type BuySellCoinsComponentPropsType = {
     tabValue : number
 }
+/**
+ * BuySellCoinsComponent:
+ * Manages the buying and selling of coins within the user portfolio.
+ * Features:
+ * - Displays selected coin details including name, symbol, quantity, and price per coin.
+ * - Allows users to input the quantity of coins they want to buy or sell.
+ * - Calculates the total spend or earnings based on the quantity and price per coin.
+ * - Provides options to buy or sell coins with corresponding actions.
+ * - Handles error messages related to transaction validation and execution.
+ */
 
-export const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsType) => {
+
+const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsType) => {
     const dispatch: AppDispatch = useDispatch()
     const {coinQuantity, totalBuyingAmount, errorMessage ,selectedCoinArrayData  , myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
     const {id, icon, rank, name, symbol, price, totalHoldingCoins} = selectedCoinArrayData[0] || {}; // Selected current coin in search bar
@@ -131,4 +142,8 @@ export const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsTy
         </Box>
     )
 };
+
+
+
+export default React.memo(BuySellCoinsComponent);
 

@@ -4,14 +4,24 @@ import fear_greed from "../../assets/images/image/FearandGreedChart.svg"
 import bitcoin from "../../assets/images/icons/bitcoinimg.png"
 import moment from 'moment'
 import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../redux/ReduxStore";
-import {fearAndGreedFetchingThunk, fearGreedArray} from "../redux/FearGreedIndexReducer";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
+import {fearAndGreedFetchingThunk, fearGreedArray} from "../../redux/FearGreedIndexReducer";
+import {CarouselMui} from "./CarouselMui";
+import { memo } from 'react';
 
+/**
+ * Description: Fear and Greed Index Component
+ * Displays the current fear and greed index in the cryptocurrency market,
+ * along with historical values for the past day, week, and month. It provides a visual representation
+ * of market sentiment using an index ranging from 0 to 100, where lower values indicate fear and higher
+ * values indicate greed. Additionally, it includes a chart showing the trend of fear and greed over time.
+ */
 const FearGreedIndex = () => {
     const dispatch: AppDispatch = useDispatch()
     const {fetching} = useSelector((state: RootState) => state.marketCoinList)
     const {fearGreedIndexData, greedIndex} = useSelector((state: RootState) => state.fearAndGreed)
 
+    // Dispatch to make an API call to fetch the latest fear and greed data from the market
     useEffect(() => {
         if (!fetching) {
             dispatch(fearAndGreedFetchingThunk())
@@ -28,7 +38,6 @@ const FearGreedIndex = () => {
         return normalizedAngle
     }
     const normalizedAngle: number = normalizeAngleHandler(greedIndex)
-
     return (
         <Box>
             <Paper sx={{borderRadius: "20px", marginBottom: "30px", height : "320px"}}>
@@ -42,7 +51,7 @@ const FearGreedIndex = () => {
                             <Box sx={{color: "#c2baba", fontSize: "12px"}}>Multifactorial Crypto Market Sentiment Analysis</Box>
                         </Box>
 
-                        <Box sx={{position: "relative",}}>
+                        <Box sx={{position: "relative"}}>
                             {
                                 fearGreedIndexData.slice(0, 1).map((item: fearGreedArray, index: number) => (
                                     <Box key={index}>
@@ -60,7 +69,7 @@ const FearGreedIndex = () => {
                                         }}/>
                                         <img src={fear_greed} alt=""/>
 
-                                        <Box sx={{textAlign: "center", position: "absolute", top: "45px", left: "30%"}}>
+                                        <Box sx={{textAlign: "center", position: "absolute", top: "30%", left: "20%"}}>
                                             <Box sx={{fontWeight: "bold", fontSize: "22px"}}>{item.value}</Box>
                                             {item.value_classification}
                                         </Box>
@@ -85,12 +94,14 @@ const FearGreedIndex = () => {
     );
 };
 
-export default FearGreedIndex;
+export default React.memo(FearGreedIndex);
+
+
 
 type HistoricalValuesPropsType = {
     fearGreedIndexData: fearGreedArray[]
 }
-const HistoricalValuesGreedIndex = ({fearGreedIndexData}: HistoricalValuesPropsType) => {
+const HistoricalValuesGreedIndex = memo(({fearGreedIndexData}: HistoricalValuesPropsType) => {
     // Checking fearGreedIndexData if the data was fetched before initializing
     if (!fearGreedIndexData || fearGreedIndexData.length === 0) {
         return null
@@ -143,4 +154,4 @@ const HistoricalValuesGreedIndex = ({fearGreedIndexData}: HistoricalValuesPropsT
             }
         </Box>
     )
-}
+})

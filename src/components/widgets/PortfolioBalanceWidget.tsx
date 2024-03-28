@@ -3,12 +3,21 @@ import {Box, Grid, IconButton, MenuItem, Paper, Select, SelectChangeEvent, TextF
 import walleticon from "../../assets/images/image/wallet.webp"
 import BackgroundBlock from "../../assets/images/image/block_bg.svg"
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCurrentBtcPriceThunk, fetchExchangeApiThunk, portfolioBalanceWidgetActions} from "../redux/PortfolioBalanceWidgetReducer";
-import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../redux/PortfolioReducer";
-import {RootState} from "../redux/ReduxStore";
+import {fetchCurrentBtcPriceThunk, fetchExchangeApiThunk, portfolioBalanceWidgetActions} from "../../redux/PortfolioBalanceWidgetReducer";
+import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {RootState} from "../../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
 import {formatCurrency} from "@coingecko/cryptoformat";
 
+/**
+ * PortfolioBalanceWidget Component:
+ * Displays the overall balance of the user's investment portfolio.
+ * Features:
+ *  - Fetches portfolio data from the database to calculate the total portfolio value.
+ *  - Allows users to select their preferred currency for displaying the portfolio balance.
+ *  - Retrieves and displays the current exchange rate for the selected currency.
+ *  - Calculates and displays the equivalent amount of Bitcoin (BTC) based on the portfolio balance.
+ */
 
 const PortfolioBalanceWidget = () => {
     const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
@@ -16,7 +25,6 @@ const PortfolioBalanceWidget = () => {
     const {currencyValueBalance, currency, exchangingRate, btcPrice} = useSelector((state: RootState) => state.portfolioBalanceWidget)
     //Getting the total sum of current user portfolio
     const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: number, value: portfolioFirebaseDataType) => accum + value.totalHoldingCoinAmountCash, 0)
-
     //Calculating the total amount in selected currency $ £ ...
     const portfolioBalanceCurrency: number = totalPortfolioValue * exchangingRate[0]
     //Calculating total amount of BTC in portfolio , based on selected currency
@@ -56,7 +64,7 @@ const PortfolioBalanceWidget = () => {
                     <Grid item>
                         <Box component='span' sx={{color: "#B8B8B8", fontSize: "15px"}}>Portfolio Balance</Box>
                         <Typography variant='h5'>
-                            {formatCurrency(portfolioBalanceCurrency, "USD", "en")}
+                            {formatCurrency(portfolioBalanceCurrency, "", "en")}
                             <Select
                                 sx={{marginLeft: "10px", color: "#B8B8B8", fontSize: "12px"}}
                                 onChange={currencyHandleChange}
@@ -83,4 +91,4 @@ const PortfolioBalanceWidget = () => {
     );
 };
 
-export default PortfolioBalanceWidget;
+export default React.memo(PortfolioBalanceWidget);

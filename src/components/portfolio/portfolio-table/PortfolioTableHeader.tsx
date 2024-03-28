@@ -13,7 +13,7 @@ type portfolioTableHeadType = {
     label: string
 }
 
-export const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedKey}: PortfolioTableHeaderPropsType) => {
+const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedKey}: PortfolioTableHeaderPropsType) => {
     const portfolioTableHead : portfolioTableHeadType[] = [
         {key: "rank", label: "rank"},
         {key: "name", label: "name"},
@@ -48,3 +48,6 @@ export const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedK
         </>
     )
 }
+
+
+export default React.memo(PortfolioTableHeader);

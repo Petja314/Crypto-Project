@@ -7,7 +7,7 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import ForgotPasswords from "./ForgotPasswords";
 import {useDispatch, useSelector} from "react-redux";
-import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../redux/AuthReducer";
+import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
 
 // Quick Description: LoginSection Component
@@ -16,7 +16,10 @@ import {commonButtonStyles} from "./LoginContainer";
 // Handling errors during the login process.
 // Sending the data to the reducer for future API calls.
 
-export const LoginSection = ({ setIsRegistered }: any) => {
+
+
+
+ const LoginSection = ({ setIsRegistered }: any) => {
     // loginError - Displays an error message if there is one during the login process
     const invalidLogin = useSelector((state : any) => state.auth.loginError)
     const dispatch : any = useDispatch()
@@ -88,3 +91,5 @@ export const LoginSection = ({ setIsRegistered }: any) => {
         </Box>
     )
 }
+
+export default React.memo(LoginSection);

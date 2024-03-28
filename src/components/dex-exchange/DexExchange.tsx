@@ -1,16 +1,15 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
-import {Avatar, Box, Button, Container, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import {Avatar, Box, Button, Container, Dialog, DialogTitle, IconButton, MenuItem, Paper, Typography} from "@mui/material";
 import tokenList from "./tokenList.json"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
 import CloseIcon from "@mui/icons-material/Close";
-import {BaseError, useAccount, useSendTransaction, useWaitForTransactionReceipt} from "wagmi";
-import {Alert} from "@mui/lab";
+import {useAccount, useSendTransaction} from "wagmi";
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 import titleBG from "../../assets/images/image/titleBackground.svg"
 import {DexUsageInstruction} from "./DexUsageInstruction";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/ReduxStore";
+import {RootState} from "../../redux/ReduxStore";
 import {
     dexApproveAllowance,
     fetchMoralisData,
@@ -20,29 +19,31 @@ import {
     setTokenOnePriceAC,
     setTokenTwoPriceAC,
     tokenListArrayType
-} from "../redux/DexExchangeReducer";
+} from "../../redux/DexExchangeReducer";
 import {DexWarnings} from "./DexWarnings";
-import styles from "../../css/transition/transition.module.css";
-import {CSSTransition, TransitionGroup} from "react-transition-group";
 import {useLocation} from "react-router-dom";
 
 
-// WAGMI: Facilitates the connection between our app and the chosen wallet for transactions, swaps, fetching information, etc.
-// Moralis: API that provides current prices from DEX exchanges on the selected ERC-20 network.
-// 1INCH: API enabling us to swap selected tokens.
-//Step 1 - Fetch current token prices using Moralis from DEX.
-//Step 2 - Utilize 1inch API to approve allowances; prior to executing swaps, approval is necessary.
-//Step 3 - Invoke 1inch API for transaction approval; if the allowance was denied, 1inch requests transaction approval to enable swaps.
-//Step 4 - Transmit transaction details to MetaMask using WAGMI's sendTransaction hook.
-//Step 5 - Execute token swaps by calling the 1inch API for selected tokens.
-
+/**
+ * DexExchange Component:
+ * WAGMI: Facilitates the connection between our app and the chosen wallet for transactions, swaps, fetching information, etc.
+ * Moralis: API that provides current prices from DEX exchanges on the selected ERC-20 network.
+ * 1INCH: API enabling us to swap selected tokens.
+ *      Step 1 - Fetch current token prices using Moralis from DEX.
+ *      Step 2 - Utilize 1inch API to approve allowances; prior to executing swaps, approval is necessary.
+ *      Step 3 - Invoke 1inch API for transaction approval; if the allowance was denied, 1inch requests transaction approval to enable swaps.
+ *      Step 4 - Transmit transaction details to MetaMask using WAGMI's sendTransaction hook.
+ *      Step 5 - Execute token swaps by calling the 1inch API for selected tokens.
+ */
 const DexExchange = () => {
     const location = useLocation();
     const dispatch: any = useDispatch()
     const {selectedTokenOne, selectedTokenTwo, tokenOnePrice, tokenTwoPrice, prices, txDetails} = useSelector((state: RootState) => state.dexReducer)
-    //local state
+
+    //Local state
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
     const [tabValue, setTabValue] = useState<number>(0)
+
     //Wagmi Hooks - wallet connection
     const {address} = useAccount()
     const {data: hash, sendTransaction} = useSendTransaction()
@@ -107,9 +108,6 @@ const DexExchange = () => {
         dispatch(fetchMoralisData({addressOne: selectedTokenOne.address, addressTwo: selectedTokenTwo.address}))
 
     }
-
-    console.log('location.pathname :', location.pathname)
-
     return (
             <Container sx={{marginTop: "50px", marginBottom: "50px", position: "relative"}}>
                 <ParticleBackgroundAnimation/>
@@ -272,6 +270,8 @@ const DexExchange = () => {
     );
 };
 
-export default DexExchange;
+
+export default React.memo(DexExchange);
+
 
 

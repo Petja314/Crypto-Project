@@ -7,12 +7,26 @@ import AllocationPortfolioChart from "./allocation-chart-portfolio/AllocationPor
 import {
     fetchPortfolioDataApiFirebase,
     PortfolioActions,
-} from "../redux/PortfolioReducer";
+} from "../../redux/PortfolioReducer";
 import {useDispatch, useSelector} from "react-redux";
 import AddTransactionContainer from "./add-crypto-transaction/AddTransactionContainer";
 import {ThunkDispatch} from "redux-thunk";
-import {AppDispatch, RootState} from "../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
+
+
+/**
+ * PortfolioManager Component:
+ * Manages and displays the user investment portfolio.
+ * Retrieves portfolio data from the Firebase database to ensure the latest information.
+ * Features:
+ *  - Display of current portfolio holdings.
+ *  - Addition of new transactions with the ability to open a dialog for transaction entry.
+ *  - Display of portfolio balance.
+ *  - Performance analytics widget for tracking portfolio performance.
+ *  - Allocation portfolio chart showing the distribution of assets in the portfolio.
+ *  - Portfolio table providing detailed information about each asset in the portfolio.
+ */
 
 const PortfolioManager = () => {
     const dispatch:  AppDispatch = useDispatch();
@@ -23,13 +37,10 @@ const PortfolioManager = () => {
     }, []);
     return (
         <Box>
-
             <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
                 <Grid container spacing={2} sx={{margin: "0 auto"}}>
                     <Grid item xs={6}>
-                        <Typography variant="h6" sx={{color: "#fff"}} mb={2}>
-                            🚀 Current Portfolio
-                        </Typography>
+                        <Typography variant="h6" sx={{color: "#fff"}} mb={2}>🚀 Current Portfolio</Typography>
                         <Box mb={2}>
                             <AddTransactionContainer/>
                             <Button
@@ -45,11 +56,11 @@ const PortfolioManager = () => {
                         <AllocationPortfolioChart/>
                     </Grid>
                 </Grid>
-
                 <PortfolioTable/>
             </Container>
         </Box>
     );
 };
 
-export default PortfolioManager;
+export default React.memo(PortfolioManager);
+

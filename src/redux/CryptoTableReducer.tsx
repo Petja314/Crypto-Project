@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {coinStatApi} from "../api/CoinStatApi";
 import _ from "lodash";
-import usd from "../../assets/images/icons/currency_icons/USD.svg";
+import usd from "../assets/images/icons/currency_icons/USD.svg";
 import {InferActionsTypes, RootState} from "./ReduxStore";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 
@@ -94,6 +94,11 @@ export const CryptoTableReducer = (state = initialState, action: ActionsCryptoTa
                 ...state,
                 fetching: action.isFetching
             }
+            case "SET_PAGE" :
+            return {
+                ...state,
+                page: action.page
+            }
         default :
             return state
     }
@@ -143,6 +148,7 @@ export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page
     } catch (error) {
         console.error(error)
     }
+
 }
 
 export const handlingTableByRowNumbersThunk = (isFetching: boolean, selectedRowValue: number, page: number) => (dispatch: ThunkDispatch<RootState, unknown, any>) => {

@@ -1,9 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
-import {PortfolioActions, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
+import {PortfolioActions, portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import {Avatar, Box, CircularProgress, Grid, MenuItem, Paper, TextField} from "@mui/material";
-import {AppDispatch, RootState} from "../../redux/ReduxStore";
-import {marketCapListArray} from "../../redux/CryptoTableReducer";
+import {AppDispatch, RootState} from "../../../redux/ReduxStore";
+import {marketCapListArray} from "../../../redux/CryptoTableReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
 
 type SearchCoinPropsType = {
@@ -11,12 +11,24 @@ type SearchCoinPropsType = {
     newCoinValue: string
 }
 
-export const SearchCoin = ({portfolioData, newCoinValue}: SearchCoinPropsType) => {
+/**
+ * SearchCoin Component:
+ * Facilitates searching for coins to add to transactions within the user's portfolio.
+ * Features:
+ *  - Displays a text field for entering the coin name to search.
+ *  - Filters the portfolio data based on the entered coin name for search functionality.
+ *  - Allows users to select a coin from the filtered list to add to the transaction.
+ */
+
+
+
+const SearchCoin = ({portfolioData, newCoinValue}: SearchCoinPropsType) => {
     const dispatch: AppDispatch = useDispatch();
     const {fetching} = useSelector((state: RootState) => state.marketCoinList);
     const [isTableClosed, setIsTableClosed] = useState(true);
+
+    //Dispatching the selected coin value
     const selectedCoinHandler = (value: marketCapListArray) => {
-        // console.log('[value] :' , [value])
         dispatch(PortfolioActions.setSelectedCoinArrayData([value]));
         setIsTableClosed(false);
     };
@@ -63,3 +75,5 @@ export const SearchCoin = ({portfolioData, newCoinValue}: SearchCoinPropsType) =
         </Paper>
     );
 };
+
+export default React.memo(SearchCoin);
