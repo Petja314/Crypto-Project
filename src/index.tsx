@@ -1,18 +1,16 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App, {theme} from './App';
-import {BrowserRouter, RouterProvider} from "react-router-dom";
-// import {store} from "./components/redux/ReduxStore";
+import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import store from "./redux/ReduxStore";
 import {createWeb3Modal} from '@web3modal/wagmi/react'
 import {defaultWagmiConfig} from '@web3modal/wagmi/react/config'
-import {useSendTransaction, WagmiProvider} from 'wagmi'
-import {arbitrum, mainnet, scrollSepolia, sepolia} from 'wagmi/chains'
+import {WagmiProvider} from 'wagmi'
+import {mainnet, sepolia} from 'wagmi/chains'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
-import Preloader from "./commons/preloader/Preloader";
 
 
 // WAGMI

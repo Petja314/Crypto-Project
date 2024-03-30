@@ -11,7 +11,7 @@ export const LoginInfoSection = () => {
                   backgroundSize: 'cover',
                   backgroundRepeat: 'no-repeat',
                   backgroundColor: "rgba(255, 255, 255, 0.09)",
-                  display: "flex",
+                  display: {lg : "flex", md : "none" ,sm : "none" , xs : "none" },
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",

@@ -2,24 +2,21 @@ import React, {useEffect, useState} from 'react';
 import {Box, CircularProgress, Paper, Table, TableContainer} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsCryptoTable, getAllCoinsListThunk, handlingTableByRowNumbersThunk, marketCapListArray} from "../../../redux/CryptoTableReducer";
-import {RootState} from "../../../redux/ReduxStore";
-import {ThunkDispatch} from "redux-thunk";
+import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {TableHeadComponent} from "./TableHeadComponent";
 import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
 import {TableBodyCoin} from "./TableBodyCoin";
 
 const CryptoTable = () => {
-    const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const {marketCapList, coinValue, currencyValue, rowsPerPage, fetching, page} = useSelector((state: RootState) => state.marketCoinList)
     const [priceSort, setPriceSort] = useState<boolean>(true)
     //Getting values from table head cells for filtration sortingFieldsHandler
     const [selectedKey, setSelectedKey] = useState<null | string>('rank')
 
-    console.log('page' ,page)
     useEffect(() => {
         //Fetching coin list data
         if (fetching) {
-            console.log('fetching data')
             dispatch(getAllCoinsListThunk(currencyValue.value, rowsPerPage, page))
             dispatch(actionsCryptoTable.setPageAC(page + 1))
             setTimeout(() => {
@@ -32,7 +29,6 @@ const CryptoTable = () => {
     //Function for filtering rows per page
     const rowNumberHandler = (event:  React.ChangeEvent<HTMLSelectElement>) => {
         const selectedRowValue = Number(event.target?.value)
-        // console.log('selectedRowValue' , selectedRowValue)
         dispatch(handlingTableByRowNumbersThunk(true, selectedRowValue,1))
     }
     const scrollHandler = (event: React.UIEvent<HTMLDivElement>) => {
@@ -45,7 +41,7 @@ const CryptoTable = () => {
     }
 
     // Function to sort table fields alphabetically or numerically
-    const handleSorting = (key : any) => {
+    const handleSorting = (key : string) => {
         setPriceSort(prevValue => !prevValue)
         setSelectedKey(key)
         sortingFieldsHandler(marketCapList, selectedKey, priceSort)

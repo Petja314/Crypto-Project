@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {coinStatApi} from "../api/CoinStatApi";
+import {coinStatAPI} from "../api/CoinStatAPI";
 import _ from "lodash";
 import usd from "../assets/images/icons/currency_icons/USD.svg";
 import {InferActionsTypes, RootState} from "./ReduxStore";
@@ -141,7 +141,7 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsCryptoTab
 
 export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page: number): ThunkType => async (dispatch) => {
     try {
-        const response = await coinStatApi.listOfCoinsApi(currency, rowsPerPage, page)
+        const response = await coinStatAPI.listOfCoinsApi(currency, rowsPerPage, page)
         if (response?.status === 200) {
             dispatch(actionsCryptoTable.setAllCoinsListAC(response.data.result))
         }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {coinStatApi} from "../api/CoinStatApi";
+import {coinStatAPI} from "../api/CoinStatAPI";
 import {InferActionsTypes, RootState} from "./ReduxStore";
 import {actionsCryptoTable} from "./CryptoTableReducer";
 import {ThunkAction} from "redux-thunk";
@@ -102,7 +102,7 @@ export const coinDescriptionActions = {
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsCryptoTable | any>;
 export const coinDescriptionDataThunk = (id: string | undefined, currency: string): ThunkType => async (dispatch) => {
     try {
-        const response = await coinStatApi.coinDetails(id, currency);
+        const response = await coinStatAPI.coinDetails(id, currency);
         if(response.status === 200) {
             dispatch(coinDescriptionActions.setCoinDetails([response.data]))
             dispatch(coinDescriptionActions.isLoadingCoinDetailsAC(true))
@@ -116,7 +116,7 @@ export const coinDescriptionDataThunk = (id: string | undefined, currency: strin
 
 export const coinChartDataThunk = (id: string | undefined, chartTimeFrame: string): ThunkType => async (dispatch) => {
     try {
-        const response = await coinStatApi.coinChart(id, chartTimeFrame);
+        const response = await coinStatAPI.coinChart(id, chartTimeFrame);
         dispatch(coinDescriptionActions.setCryptoChartAC(response.data))
     } catch (error) {
         console.error(error)

@@ -8,41 +8,58 @@ import LoginSection from "./LoginSection";
 import SignUpSection from "./SignUpSection";
 
 
-// Quick Description: LoginContainer Component
-// Displaying the login description.
-// Showing the login option or sign-up option based on whether the user is registered or not.
-// Navigating to the dashboard after successful login.
+/**
+ * Quick Description: LoginContainer Component
+ * Displaying the login description.
+ * Showing the login option or sign-up option based on whether the user is registered or not.
+ * Navigating to the dashboard after successful login.
+ */
 
 const LoginContainer = () => {
-    const {authUser} = useSelector((state : RootState) => state.appInitialization)
+    const {authUser} = useSelector((state: RootState) => state.appInitialization)
     // isRegistered - Determines whether to display the Sign In or Login component based on the user's registration status
-    const [isRegistered, setIsRegistered] = useState<any>(true)
+    const [isRegistered, setIsRegistered] = useState<boolean>(true)
     //Navigation to the dashboard after success login into the account
-    if(authUser)  {
-        return <Navigate to="/dashboard" />
+    if (authUser) {
+        return <Navigate to="/dashboard"/>
     }
 
     return (
         <Container
             disableGutters
             maxWidth={false}
-            sx={{height: '100vh', display: 'flex',}}>
+            sx={{
+                height: '100vh',
+                display: 'flex',
+                marginBottom : {xs :"40px" , xl : "0px"}
+            }}>
 
-            <Grid container sx={{flex: 1}}>
 
-                <LoginInfoSection/>
+            <Grid container sx={{
+                flex: 1 ,
+                width : {xl : "100%" , xs : "100vw !important"}
+            }}>
 
-                <Grid item  xs={6} sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
+                <LoginInfoSection
+
+                />
+
+                <Grid item
+                      xs={12}
+                      lg={6}
+                      sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin : {xs : "0 auto" ,},
+                    padding : "30px"
+                }}
                 >
                     {isRegistered ? (
-                       <LoginSection
-                           setIsRegistered={setIsRegistered}
-                       />
+                        <LoginSection
+                            setIsRegistered={setIsRegistered}
+                        />
                     ) : (
                         <SignUpSection
                             setIsRegistered={setIsRegistered}
@@ -54,7 +71,6 @@ const LoginContainer = () => {
         </Container>
     )
 };
-
 
 
 export const commonButtonStyles = {

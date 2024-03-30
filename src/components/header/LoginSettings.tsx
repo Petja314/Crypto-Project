@@ -1,20 +1,15 @@
 import Dashboard from "../dashboard/Dashboard";
-import dashboard from "../../assets/images/header-img/delicious.svg";
-import LoginContainer from "../login/LoginContainer";
 import React from "react";
-import {Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, MenuList, styled, Typography} from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import {Link, Navigate, NavLink, Outlet, useNavigate} from "react-router-dom";
-import {auth} from "../../config/firebase";
-import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
+import {Box, Menu, MenuItem, MenuList, Typography} from "@mui/material";
+import {NavLink, useNavigate} from "react-router-dom";
 import {logOuThunkCreator} from "../../redux/AuthReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {UserAvatar} from "./UserAvatar";
-import {actionsProfile} from "../../redux/ProfileReducer";
 import PortfolioManager from "../portfolio/PortfolioManager";
 import DexExchange from "../dex-exchange/DexExchange";
 import News from "../news/News";
 import Profile from "../profile/Profile";
+import {AppDispatch} from "../../redux/ReduxStore";
 
 
 const menu_options = [
@@ -25,11 +20,14 @@ const menu_options = [
     {path: '/news', element: <News/>, name: "News"},
 ];
 
-// Quick Description: LoginSettings Component
-// Displays the user avatar with a menu containing options such as logout and navigation routes.
+
+/**
+ * Quick Description: LoginSettings Component
+ * Displays the user avatar with a menu containing options such as logout and navigation routes.
+ */
 
 const LoginSettings = () => {
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
     // anchorElUser - handle to display the menu with app name and path's
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -42,7 +40,8 @@ const LoginSettings = () => {
     }
 
     return (
-        <Box sx={{
+        <Box
+            sx={{
             flexGrow: 0,
         }}>
             <UserAvatar
@@ -64,8 +63,6 @@ const LoginSettings = () => {
                 open={Boolean(anchorElUser)}
                 onClose={() => setAnchorElUser(null)}
             >
-
-
                 <MenuList>
                     <MenuItem onClick={() => setAnchorElUser(null)}>
                         <Box onClick={logOutHandler}>Logout</Box>
@@ -83,9 +80,6 @@ const LoginSettings = () => {
                         </Typography>
                     </MenuItem>
                 ))}
-
-
-
             </Menu>
         </Box>
     )

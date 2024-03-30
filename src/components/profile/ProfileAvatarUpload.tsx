@@ -73,7 +73,9 @@ const ProfileAvatarUpload = ({user}: ProfileAvatarUploadPropsType) => {
     // console.log('urlDisplayImage' , urlDisplayImage)
     return (
         <Box>
-            <Box onClick={() => dispatch(actionsProfile.openAvatarPopUpWindowAC(true))} sx={{position: "absolute", top: "-35px", left: "40%", cursor: "pointer"}}>
+            <Box onClick={() => dispatch(actionsProfile.openAvatarPopUpWindowAC(true))} sx={{position: "absolute", top: "-50px",
+                left: { xl : "40%", lg: "40%" , md : "40%" , sm : "40%" , xs: "35%" },
+                cursor: "pointer"}}>
                 <Box>
                     {/*Showing the current user avatar , if not existed - noAvatar */}
                     <Avatar sx={{width: "130px", height: "130px", border: "1px solid #fff"}} src={userImg ? userImg : noAvatar} alt='avatar'/>{/*userImg - img from the firebase server */}

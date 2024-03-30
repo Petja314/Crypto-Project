@@ -1,6 +1,6 @@
 import React from 'react';
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {coinStatApi} from "../api/CoinStatApi";
+import {coinStatAPI} from "../api/CoinStatAPI";
 
 export type newsDataType = {
     imgUrl: string,
@@ -20,7 +20,7 @@ export const fetchCryptoNewsThunk = createAsyncThunk(
     "news/fetchCryptoNewsThunk",
     async ({type, currentPage}: { type: string, currentPage: number }, thunkAPI) => {
         try {
-            const response = await coinStatApi.cryptoNews(type, currentPage, 20)
+            const response = await coinStatAPI.cryptoNews(type, currentPage, 20)
             // console.log('response', response)
             thunkAPI.dispatch(setCurrentPageAC(currentPage + 1))
             thunkAPI.dispatch(setIsLoadingAC(false))

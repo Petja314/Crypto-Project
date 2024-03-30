@@ -1,8 +1,9 @@
 import React from 'react';
-import {coinStatApi, exchangeCurrencyApi} from "../api/CoinStatApi";
+import {coinStatAPI} from "../api/CoinStatAPI";
 import {InferActionsTypes, RootState} from "./ReduxStore";
-import {actionsProfile, ActionsProfileTypes} from "./ProfileReducer";
 import {ThunkAction} from "redux-thunk";
+import {AxiosResponse} from "axios";
+import {exchangeCurrencyApi} from "../api/ExchangeCurrencyAPI";
 
 export type CurrencyListArrType = "USD" | "GBP" | "EUR" | "CAD" | "AUD"
 export type CurrentPortfolioBalanceWidgetTypes = {
@@ -62,7 +63,8 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsProfileBa
 
 export const fetchExchangeApiThunk = (currencyValueBalance: string[]) : ThunkType => async (dispatch )  => {
     try {
-        let response = await exchangeCurrencyApi.fetchCurrencyRate(currencyValueBalance)
+        let response: AxiosResponse  = await exchangeCurrencyApi.fetchCurrencyRate(currencyValueBalance)
+        console.log('response :' , response)
         const currentExchangeValue = Object.values(response.data.data) as number[]
         dispatch(portfolioBalanceWidgetActions.setExchangingRate(currentExchangeValue))
     }
@@ -74,7 +76,7 @@ export const fetchExchangeApiThunk = (currencyValueBalance: string[]) : ThunkTyp
 export const fetchCurrentBtcPriceThunk = ()  : ThunkType   => async (dispatch) => {
     try {
         //widget value is hardcoded to the bitcoin and initial currency USD
-        const response = await coinStatApi.coinDetails("bitcoin", "usd")
+        const response = await coinStatAPI.coinDetails("bitcoin", "usd")
         // console.log('response :' , response.data.price)
         dispatch(portfolioBalanceWidgetActions.setBtcPrice(response.data.price))
     } catch (error) {

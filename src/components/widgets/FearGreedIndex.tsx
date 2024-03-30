@@ -37,7 +37,7 @@ const FearGreedIndex = () => {
         const normalizedAngle = (value * (maxAngle - minAngle) / maxValue + minAngle)
         return normalizedAngle
     }
-    const normalizedAngle: number = normalizeAngleHandler(greedIndex)
+    const normalizedAngle = normalizeAngleHandler(greedIndex)
     return (
         <Box>
             <Paper sx={{borderRadius: "20px", marginBottom: "30px", height : "320px"}}>

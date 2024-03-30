@@ -1,22 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import {
     calculateAverageBuyingPrice,
     calculateProfitLoss,
     calculateTotalHoldingCoinAmountCash,
     calculateTotalHoldingCoins,
 } from "../components/portfolio/portfolio-calculation-functions/PurchaseCoinsFunctions";
-import {
-    collection,
-    getDocs,
-    getDoc,
-    addDoc,
-    setDoc,
-    deleteDoc,
-    doc,
-    updateDoc,
-} from "firebase/firestore";
-import {auth, db, googleProvider, storage} from "../config/firebase";
-import {ActionsCryptoTable, actionsCryptoTable, marketCapListArray} from "./CryptoTableReducer";
+import {collection, doc, getDoc, setDoc, updateDoc,} from "firebase/firestore";
+import {auth, db} from "../config/firebase";
+import {marketCapListArray} from "./CryptoTableReducer";
 import {InferActionsTypes, RootState} from "./ReduxStore";
 import {ThunkAction} from "redux-thunk";
 

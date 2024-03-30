@@ -1,12 +1,19 @@
 import React from 'react';
 import {auth} from "../config/firebase";
 import {profileThunkCreator} from "./ProfileReducer";
+import {InferActionsTypes, RootState} from "./ReduxStore";
+import {ThunkAction} from "redux-thunk";
 
-const initialState : any = {
+export type AppInitializationStateType = {
+    isFetching: boolean,
+    authUser : null
+}
+
+const initialState : AppInitializationStateType = {
     isFetching: false,
     authUser : null
 }
-export const AppInitialization = (state = initialState, action: any) => {
+export const AppInitialization = (state = initialState, action: ActionsInitializeApp) => {
     switch (action.type) {
         case "SET_USER_IS_AUTH" :
             return {
@@ -23,6 +30,8 @@ export const AppInitialization = (state = initialState, action: any) => {
     }
 };
 
+
+type ActionsInitializeApp = InferActionsTypes<typeof appInitActions>
 export const appInitActions = ({
     setUserAuth: (authUser: any) => ({
         type: "SET_USER_IS_AUTH",
@@ -34,7 +43,10 @@ export const appInitActions = ({
     } as const),
 })
 
-export const appInitializationThunkCreator = () =>  async (dispatch: any) => {
+
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsInitializeApp | any>;
+
+export const appInitializationThunkCreator = ()  =>  async (dispatch : any) => {
     //Calling the api to get authenticated user data
     const unsubscribe = await auth.onAuthStateChanged((user: any) => {
         if (user) {

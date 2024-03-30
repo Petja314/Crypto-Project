@@ -9,7 +9,7 @@ import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBa
 import titleBG from "../../assets/images/image/titleBackground.svg"
 import {DexUsageInstruction} from "./DexUsageInstruction";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {
     dexApproveAllowance,
     fetchMoralisData,
@@ -36,8 +36,7 @@ import {useLocation} from "react-router-dom";
  *      Step 5 - Execute token swaps by calling the 1inch API for selected tokens.
  */
 const DexExchange = () => {
-    const location = useLocation();
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const {selectedTokenOne, selectedTokenTwo, tokenOnePrice, tokenTwoPrice, prices, txDetails} = useSelector((state: RootState) => state.dexReducer)
 
     //Local state
@@ -69,7 +68,6 @@ const DexExchange = () => {
     const changeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
         //Change the selected token amount
         dispatch(setTokenOnePriceAC(event.target.value))
-        // setTokenOnePrice(event.target.value)
         if (event.target.value && prices) {
             const price: number = Number(event.target.value)
             const priceWithRatio = price * prices.ratio
@@ -86,7 +84,6 @@ const DexExchange = () => {
         if (tabValue === 0) {
             // console.log('selected one')
             dispatch(setSelectedTokenOneAC(selectedToken))
-            // setSelectedTokenOne(selectedToken)
         }
         if (tabValue === 1) {
             // console.log('selected two')
@@ -254,7 +251,7 @@ const DexExchange = () => {
                     >
                         <CloseIcon/>
                     </IconButton>
-                    {tokenList.map((item: any, index: any) => (
+                    {tokenList.map((item, index: number) => (
                         <MenuItem
                             key={index}
                             sx={{display: "flex", gap: 2, width: "400px", marginTop: "10px"}}

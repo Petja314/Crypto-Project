@@ -9,9 +9,11 @@ import Header from "./components/header/Header";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import styles from "./css/transition/transition.module.css"
 import PrivateRoutes from "./Routes/PrivateRoutes";
-import {routesNavigation} from "./Routes/navigation";
+import {routesNavigation, RoutesNavigationType} from "./Routes/navigation";
 import {appInitializationThunkCreator} from "./redux/AppInitialization";
 import ScrollToTop from "./Routes/ScrollToTop";
+import {AppDispatch, RootState} from "./redux/ReduxStore";
+import Test from "./TEST";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -83,9 +85,10 @@ export const StyledCard = styled(Card)(({theme: any}) => ({
  */
 
 function App  () {
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const location = useLocation();
-    const {authUser , isFetching} = useSelector((state : any) => state.appInitialization)
+    const {authUser , isFetching} = useSelector((state : RootState) => state.appInitialization)
+
 
     //Initializing the app
     useEffect( () => {
@@ -100,7 +103,9 @@ function App  () {
     return (
         <Box>
             <ScrollToTop/>
-            { authUser && <Header/>}
+            { authUser &&
+                <Header/>
+            }
             <TransitionGroup>
                 <CSSTransition
                     // By the location.pathname applying the transition effect
@@ -117,7 +122,7 @@ function App  () {
                     {/*Wrapping the components in Private Routes based on requirement*/}
                     <Routes location={location.pathname}>
                             {
-                                routesNavigation.map((routes: any) => (
+                                routesNavigation.map((routes : RoutesNavigationType) => (
                                     routes.isPrivate ? (
                                         <Route element={<PrivateRoutes authUser={authUser}/>}>
                                             <Route path={routes.path} element={routes.element}/>
@@ -127,6 +132,7 @@ function App  () {
                                     )
                                 ))
                             }
+                        <Route path={"/test"} element={ <Test/>}/>
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>

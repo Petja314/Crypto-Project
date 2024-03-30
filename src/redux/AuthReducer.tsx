@@ -1,16 +1,25 @@
 import React from 'react';
 import {auth, googleProvider} from "../config/firebase";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from "firebase/auth";
+import {InferActionsTypes, RootState} from "./ReduxStore";
+import {ThunkAction} from "redux-thunk";
+import {appInitActions} from "./AppInitialization";
 
 
-const initialState: any = {
+export type AuthInitialStateType = {
+    tempEmailValue: string,
+    password: string,
+    isRegistered: boolean,
+    loginError: string,
+    signInError: string,
+}
+
+const initialState: AuthInitialStateType = {
     tempEmailValue: "",
     password: "",
     isRegistered: true,
-    usersDb: [],
     loginError: '',
     signInError: '',
-    isLoggedIn : false
 }
 export const AuthReducer = (state = initialState, action: any) => {
     switch (action.type) {
@@ -34,41 +43,35 @@ export const AuthReducer = (state = initialState, action: any) => {
                 ...state,
                 signInError: action.error
             }
-        case "IS_LOGGED_IN" :
-            return {
-                ...state,
-                isLoggedIn : action.isLoggedIn
-            }
         default :
             return state
     }
 };
 
-// export type ActionsAuthType = InferActionsTypes<typeof actionsAuth>
+
+type ActionsAuthType = InferActionsTypes<typeof actionsAuth>
 
 export const actionsAuth = {
-    setEmailAC: (tempEmail: any) => ({
+    setEmailAC: (tempEmail: string) => ({
         type: "SET_EMAIL",
         email: tempEmail
     } as const),
-    setPasswordAC: (password: any) => ({
+    setPasswordAC: (password: string) => ({
         type: "SET_PASSWORD",
         password
     } as const),
-    setLoginErrorAC: (error: any) => ({
+    setLoginErrorAC: (error: string) => ({
         type: "SET_LOGIN_ERROR",
         error
     } as const),
-    setSignInErrorAC: (error: any) => ({
+    setSignInErrorAC: (error: string) => ({
         type: "SET_SIGN_IN_ERROR",
         error
     } as const),
-    setIsLoggedIn: (isLoggedIn: any) => ({
-        type: "IS_LOGGED_IN",
-        isLoggedIn
-    } as const),
 }
 
+
+// type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsInitializeApp | any>;
 
 export const loginThunkCreator = () => async (dispatch: any, getState: any) => {
     const {tempEmailValue, password} = getState().auth
@@ -109,7 +112,7 @@ export const logOuThunkCreator = () => async (dispatch: any) => {
 }
 
 
-export const signInThunkCreator = (userName: any) => async (dispatch: any, getState: any) => {
+export const signInThunkCreator = (userName: string) => async (dispatch: any, getState: any) => {
     //Creating the new account
     const {tempEmailValue, password} = getState().auth
     try {

@@ -9,7 +9,7 @@ import cad from "../../../assets/images/icons/currency_icons/CAD.svg";
 import aud from "../../../assets/images/icons/currency_icons/AUD.svg";
 import {actionsCryptoTable, changeCurrencyValue, getAllCoinsListThunk} from "../../../redux/CryptoTableReducer";
 import {ThunkDispatch} from "redux-thunk";
-import {RootState} from "../../../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {useDispatch, useSelector} from "react-redux";
 
 type TableHeadPropsType = {
@@ -65,7 +65,7 @@ type TableHeadFiltrationPropsType = {
 }
 const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) => {
     const {currencyValue, rowsPerPage, rows} = useSelector((state: RootState) => state.marketCoinList)
-    const dispatch: ThunkDispatch<RootState, void, any> = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const currency: changeCurrencyValue[] = [
         {value: 'USD', symbol: "$", icon: usd},
         {value: 'GBP', symbol: "£", icon: gbp},
@@ -92,7 +92,7 @@ const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) =
                     <Box component={'span'}>Search by name: </Box>
                     <TextField
                         sx={{maxWidth: "100%", width: "150px"}}
-                        onChange={(event: any) => dispatch(actionsCryptoTable.setCoinSearchValueAC(event.target.value))}
+                        onChange={(event: React.ChangeEvent<any>) => dispatch(actionsCryptoTable.setCoinSearchValueAC(event.target.value))}
                         type={"text"}
                     />
                     <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
@@ -102,7 +102,7 @@ const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) =
                                 value={currencyValue.value}
                         >
                             {
-                                currency.map((item: any, index: any) => (
+                                currency.map((item, index: number) => (
                                     <MenuItem value={item.value} key={index}>
                                         {item.value}
                                     </MenuItem>

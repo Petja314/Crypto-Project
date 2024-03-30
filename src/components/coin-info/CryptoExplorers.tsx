@@ -18,7 +18,7 @@ type CryptoExplorersPropsType = {
 
 const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
     //Explorers of selected coin
-    const topExplorers = coinData[0]?.explorers
+    const topExplorers: string[] = coinData[0]?.explorers
 
     return (
         <Box mt={3} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -53,7 +53,7 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
 
 
                     {topExplorers &&
-                        topExplorers.map((explorer: any, index: any) => (
+                        topExplorers.map((explorer : string, index: number) => (
                             <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
                                 <Box component={"li"}>
 

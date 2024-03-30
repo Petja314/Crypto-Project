@@ -1,4 +1,4 @@
-import {Avatar, Box, Paper, Skeleton, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {Avatar, Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import React, {memo} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
@@ -6,6 +6,7 @@ import {ListSkeleton} from "../widgets/ListSkeleton";
 import styles from "../../css/coin-info/skeleton-coinInfo.module.css"
 import {formatCurrency} from "@coingecko/cryptoformat";
 import {formatPercent} from "../../commons/functions/percentFormatter";
+import {coinDataArray} from "../../redux/CoinDescriptionReducer";
 
 type tableBodyInfoType = {
     label: string
@@ -59,7 +60,6 @@ const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) =>
                         </TableHead>
                         <TableBody>
                             <TableBodyCoinInfo
-                                currencyValue={currencyValue}
                                 item={item}
                             />
                         </TableBody>
@@ -79,8 +79,10 @@ export default React.memo(CoinTableInfo);
 
 
 
-
-const TableBodyCoinInfo = memo(({item} : any) => {
+type TableBodyCoinPropsType = {
+    item : coinDataArray
+}
+const TableBodyCoinInfo = memo(({item} : TableBodyCoinPropsType) => {
     //tableBodyInfo was made to make JSX more clear
     const tableBodyInfo: tableBodyInfoType[] = [
         {label: 'Market cap Rank',      value: item.rank},

@@ -4,12 +4,11 @@ import {coinDescriptionActions, coinDescriptionDataThunk} from "../../redux/Coin
 import {Box, Button, Container,} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import CryptoExplorers from "./CryptoExplorers";
-import {RootState} from "../../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import CoinTableInfo from "./CoinTableInfo";
 import CoinDataLinksWidget from "./coin-info-widgets/CoinDataLinksWidget";
 import CryptoChart from "./chart/CryptoChart";
 import PriceChangesWidget from "./coin-info-widgets/PriceChangesWidget";
-import Preloader from "../../commons/preloader/Preloader";
 
 /**
  * Description : CoinContainerDescription Component:
@@ -18,7 +17,7 @@ import Preloader from "../../commons/preloader/Preloader";
  */
 
  const CoinContainerDescription = () => {
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
     const {id} = useParams()
     const {coinData, isLoading} = useSelector((state: RootState) => state.coinDetails)

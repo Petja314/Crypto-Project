@@ -22,9 +22,9 @@ import { memo } from 'react';
 
 export const CarouselMui = () => {
     const {marketCapList, fetching} = useSelector((state: RootState) => state.marketCoinList)
-    const [trendOfHour, setTrendOfHour] = useState<any>([])
-    const [bestPerformanceDay, setBestPerformanceDay] = useState<any>([])
-    const [worstPerformanceDay, setWorstPerformanceDay] = useState<any>([])
+    const [trendOfHour, setTrendOfHour] = useState<marketCapListArray[]>([])
+    const [bestPerformanceDay, setBestPerformanceDay] = useState<marketCapListArray[]>([])
+    const [worstPerformanceDay, setWorstPerformanceDay] = useState<marketCapListArray[]>([])
 
     useEffect(() => {
         if (!fetching) {
@@ -45,16 +45,14 @@ export const CarouselMui = () => {
     }, [fetching, marketCapList])
 
     return (
-        <Carousel sx={{border: "2px solid #333", borderRadius: "12px" , marginBottom : "20px"}}>
+        <Carousel           sx={{border: "2px solid #333", borderRadius: "12px" , marginBottom : "20px"}}>
             <CoinStatSlider data={trendOfHour} title="Trend of Hour" emojiIcon={fire} priceChangeKey="priceChange1h"/>
             <CoinStatSlider data={bestPerformanceDay} title="Best Performers 24h" emojiIcon={rocket} priceChangeKey="priceChange1d"/>
             <CoinStatSlider data={worstPerformanceDay} title="Worst Performers 24h" emojiIcon={redchart} priceChangeKey="priceChange1d"/>
         </Carousel>
     )
-};
+}
 export default React.memo(CarouselMui);
-
-
 
 type CoinStatSliderPropsType = {
     data: marketCapListArray[],
@@ -67,7 +65,7 @@ export const CoinStatSlider = memo(({data, title, emojiIcon, priceChangeKey }: C
     const { fetching} = useSelector((state: RootState) => state.marketCoinList)
 
     const navigate = useNavigate()
-    const navigateToCoinDescription = (id : any) => {
+    const navigateToCoinDescription = (id : string) => {
         navigate(`/coin_info/${id}`)
     }
 
@@ -85,7 +83,7 @@ export const CoinStatSlider = memo(({data, title, emojiIcon, priceChangeKey }: C
                     <Typography mb={1} variant={'h6'}>
                         <img style={{width: "30px", height: "30px"}} src={emojiIcon} alt="fire"/> {title}
                     </Typography>
-                    {data.map((item: any, index: number) => (
+                    {data.map((item, index: number) => (
                         <Box
                             key={index}
                             sx={{display: "flex", justifyContent: "space-between",cursor : "pointer"}}
@@ -115,8 +113,6 @@ export const CoinStatSlider = memo(({data, title, emojiIcon, priceChangeKey }: C
             )
             }
         </Box>
-
-
     )
 }
 )

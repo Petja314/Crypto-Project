@@ -16,7 +16,7 @@ import {
 } from 'chart.js';
 import {Line} from "react-chartjs-2";
 import moment from "moment";
-import {RootState} from "../../../redux/ReduxStore";
+import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {ListSkeleton} from "../../widgets/ListSkeleton";
 import styles from "../../../css/coin-info/skeleton-coinInfo.module.css"
 
@@ -38,6 +38,18 @@ ChartJS.register(
  * Sends the selected coin data to generate a chart, specifying the time frame, currency, and compiling it into the chart by making API calls.
  * Utilizes the ChartJS library for chart creation using selected data from the API.
  */
+type chartDataSets = {
+    backgroundColor : string
+    borderColor : string
+    data : string[]
+    fill : boolean
+    label : string
+}
+
+type ChartData = {
+    datasets : chartDataSets[]
+    labels : string[]
+}
 
 
  const CryptoChart = () => {
@@ -47,7 +59,7 @@ ChartJS.register(
 
     // CryptoChartData - selected coin data for a chart
     const {cryptoChartData, chartTimeFrame} = useSelector((state: RootState) => state.coinDetails)
-    const dispatch: any = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
 
     useEffect(() => {
         // Dispatching the coin id from URL params & selected time frame (as a first render by default is 1 month)
@@ -55,7 +67,7 @@ ChartJS.register(
     }, [id, chartTimeFrame]);
 
     //GETTING THE VALUE X and Y to Display chart by the current price
-    const coinCharData = cryptoChartData.map((value: any) => ({
+    const coinCharData = cryptoChartData.map((value : any ) : {x : string, y : string} => ({
         x: value[0], y: value[1].toFixed(2)
     }))
 
@@ -63,8 +75,8 @@ ChartJS.register(
         responsive: true
     }
     //Creating the relevant data for a crypto chart with , selected coin , currency , date and etc.
-    const data: any = {
-        labels: coinCharData.map((value: any) => moment(value.x * 1000).format('MMM D')),
+    const data : ChartData = {
+        labels: coinCharData.map((value : any) => moment(value.x * 1000).format('MMM D')),
         datasets: [
             {
                 fill: true,
@@ -75,7 +87,6 @@ ChartJS.register(
             }
         ]
     }
-
     return (
         <Box mt={5}>
 
@@ -88,7 +99,7 @@ ChartJS.register(
                 <Paper sx={{borderRadius: '20px', marginBottom: "10px", height: "100px"}}>
                     <Typography sx={{textAlign: "center"}}>Chart time frame</Typography>
                     <List sx={{display: "flex", justifyContent: "space-evenly"}}>
-                        {timeframe.map((item: any, index: number) => (
+                        {timeframe.map((item : string, index: number) => (
                             <ListItem
                                 value={chartTimeFrame}
                                 onClick={() => dispatch(coinDescriptionActions.setChartTimeFrameAC(item))}

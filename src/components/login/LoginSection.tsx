@@ -9,20 +9,24 @@ import ForgotPasswords from "./ForgotPasswords";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
-
-// Quick Description: LoginSection Component
-// Logging in with existing credentials: username, password.
-// Providing options for login/sign-in with Google based on whether the user is registered or new.
-// Handling errors during the login process.
-// Sending the data to the reducer for future API calls.
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 
 
+/**
+ * Quick Description: LoginSection Component
+ * Logging in with existing credentials: username, password.
+ * Providing options for login/sign-in with Google based on whether the user is registered or new.
+ * Handling errors during the login process.
+ * Sending the data to the reducer for future API calls.
+ */
 
-
- const LoginSection = ({ setIsRegistered }: any) => {
+type LoginSectionPropsType = {
+    setIsRegistered : any
+}
+ const LoginSection = ({ setIsRegistered }: LoginSectionPropsType) => {
     // loginError - Displays an error message if there is one during the login process
-    const invalidLogin = useSelector((state : any) => state.auth.loginError)
-    const dispatch : any = useDispatch()
+    const invalidLogin = useSelector((state : RootState) => state.auth.loginError)
+    const dispatch : AppDispatch = useDispatch()
 
 
     const logIn = async () => {
@@ -54,14 +58,14 @@ import {commonButtonStyles} from "./LoginContainer";
                 <TextField
                     label='Email'
                     type='text'
-                    onChange={(event) => {
+                    onChange={(event : React.ChangeEvent<HTMLInputElement>) => {
                         dispatch(actionsAuth.setEmailAC(event.target.value))
                     }}
                 />
                 <TextField
                     label='Password'
                     type='password'
-                    onChange={(event) => {
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         dispatch(actionsAuth.setPasswordAC(event.target.value))
 
                     }}
@@ -69,7 +73,7 @@ import {commonButtonStyles} from "./LoginContainer";
                 <Box sx={{color: "red", textAlign: "center"}}>{invalidLogin}</Box>
                 <Button onClick={logIn}>Login</Button>
                 <Button onClick={logOutHandler} sx={{...commonButtonStyles}}>Log out</Button>
-                <Button onClick={signInWithGoogle} startIcon={<img src={googleIcon} alt=""/>} sx={{...commonButtonStyles, marginBottom: "100px"}}>
+                <Button onClick={signInWithGoogle} startIcon={<img src={googleIcon} alt=""/>} sx={{...commonButtonStyles, marginBottom: "20px"}}>
                     Continue with Google
                 </Button>
 

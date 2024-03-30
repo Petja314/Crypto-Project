@@ -1,7 +1,7 @@
 import React from 'react';
-import {alternativeApi} from "../api/CoinStatApi";
 import {InferActionsTypes, RootState} from "./ReduxStore";
 import {ThunkAction} from "redux-thunk";
+import {alternativeApi} from "../api/AlternativeAPI";
 
 export type fearGreedArray = {
     "value": number,
@@ -56,9 +56,11 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsFearGreed
 export const fearAndGreedFetchingThunk = () : ThunkType => async (dispatch) => {
     try {
         const response = await alternativeApi.fetchFearGreedIndex()
+        console.log('response fear :'  , response)
         const greedIndex = response.data.data[0].value
         const fearAndGreedData = response.data.data
-        dispatch(fearGreedActions.setGreedIndexAC(greedIndex))
+        // console.log('greedIndex' , Number(greedIndex))
+        dispatch(fearGreedActions.setGreedIndexAC(Number(greedIndex)))
         dispatch(fearGreedActions.setFearAndGreedDataAC(fearAndGreedData))
     } catch (error) {
         console.error(error)

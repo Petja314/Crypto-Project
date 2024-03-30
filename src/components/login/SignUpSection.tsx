@@ -6,16 +6,23 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, signInThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
-import {RootState} from "../../redux/ReduxStore";
-
-// Quick Description: SignUpSection Component
-// Creating a new username, email, and password and handling the login process.
-// Checking for password matching and handling errors.
-// Sending the data to the reducer for future API calls.
+import {AppDispatch, RootState} from "../../redux/ReduxStore";
 
 
-const SignUpSection = ({ setIsRegistered}: any) => {
-    const dispatch : any = useDispatch()
+
+/**
+ * Quick Description: SignUpSection Component
+ * Creating a new username, email, and password and handling the login process.
+ * Checking for password matching and handling errors.
+ * Sending the data to the reducer for future API calls.
+ */
+
+type SignUpSectionPropsType = {
+    setIsRegistered : any
+}
+
+const SignUpSection = ({ setIsRegistered}: SignUpSectionPropsType) => {
+    const dispatch : AppDispatch = useDispatch()
     //Conformation password handler
     const [confirmPassword, setConfirmPassword] = useState("")
     //Setting the new username

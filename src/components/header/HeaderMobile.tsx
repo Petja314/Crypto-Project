@@ -4,13 +4,13 @@ import logo from "../../assets/images/logo/logo-dark.svg";
 import SearchIcon from "@mui/icons-material/Search";
 import {Link} from "react-router-dom";
 import LoginSettings from "./LoginSettings";
-import {routesNavigation} from "../../Routes/navigation";
+import {routesNavigation, RoutesNavigationType} from "../../Routes/navigation";
 
 export const MobileHeader = () => {
-    const [selectedMenu, setSelectedMenu] = useState<any>(0)
+    const [selectedMenu, setSelectedMenu] = useState<number>(0)
 
     return (
-        <>
+        < >
             <AppBar position="static">
                 <Container
                     maxWidth={"xl"}
@@ -19,7 +19,6 @@ export const MobileHeader = () => {
                              sx={{
                                  display: {xs: "flex"},
                                  justifyContent: {xs: "space-between"}
-                                 // display : {xs : "none", md : "flex"}
                              }}
                     >
 
@@ -84,8 +83,12 @@ export const MobileHeader = () => {
             {/*BOTTOM NAVIGATION SECTION*/}
             <Box
                 sx={{
-                    border: "1px solid red",
                     display: {xs: 'flex', md: 'flex'},
+                    position : "fixed",
+                    bottom : 0,
+                    left: 0,
+                    right: 0,
+                    zIndex : 999,
                 }}
             >
                 <BottomNavigation
@@ -96,18 +99,13 @@ export const MobileHeader = () => {
                     showLabels
                     sx={{
                         width: "100%",
-                        position: "absolute",
-                        bottom: 0,
-                        marginBottom: "20px",
-                        borderTop: "2px solid #333",
-                        paddingTop: "50px",
-                        paddingBottom: "30px",
+                        height : "100px"
                     }}
                 >
 
 
                     {routesNavigation &&
-                        routesNavigation.map((item: any) => (
+                        routesNavigation.map((item: RoutesNavigationType) => (
                             <>
                                 {item.isMenu &&
                                     <BottomNavigationAction
@@ -116,9 +114,11 @@ export const MobileHeader = () => {
                                         icon={
                                             <Box
                                                 sx={{
-                                                    marginBottom: "10px",
+                                                    color : "#fff",
+                                                    textAlign : "center"
                                                 }}>
-                                                < item.icon style={{fill: "white"}}/>
+                                                < item.icon style={{fill: "#fff" }}/>
+                                                <Box >{item.name}</Box>
                                             </Box>
                                         }
                                         component={Link}
@@ -126,6 +126,7 @@ export const MobileHeader = () => {
                                         sx={{}}
                                     />
                                 }
+
                             </>
                         ))
                     }

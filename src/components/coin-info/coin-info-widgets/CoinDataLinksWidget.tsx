@@ -55,7 +55,7 @@ const CoinDataLinksWidget = ({coinData,isLoading}: CoinDataLinksWidgetPropsType)
                     </Box>
                     <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: "space-evenly", marginTop: "10px"}}>
 
-                        {coinDataWidget.map((item , index : number) => (
+                        {coinDataWidget.map((item : coinDataWidgetType , index : number) => (
                             <Box key={index}>
                                 <Link to={item.value}>
                                     <IconButton sx={{color: "#E0F64B"}}>

@@ -11,14 +11,13 @@ import News from "../components/news/News";
 import Profile from "../components/profile/Profile";
 import LoginContainer from "../components/login/LoginContainer";
 import CoinContainerDescription from "../components/coin-info/CoinContainerDescription";
+import {ReactElement} from "react";
 
-/**
- * Route navigation map
- */
-export const routesNavigation = [
+/** Route navigation map */
+export const routesNavigation : RoutesNavigationType[] = [
     {path: '/dashboard',      element: <Dashboard/>,                  name: "Dashboard",         icon: DashboardIcon ,   isMenu : true ,     isPrivate : true},
     {path: '/portfolio',      element: <PortfolioManager/>,           name: "Portfolio",         icon: PortfolioIcon ,   isMenu : true ,     isPrivate : true},
-    {path: '/dex-exchange',   element: <DexExchange/>,                name: "DEX Exchange",      icon: PurchaseIcon ,    isMenu : true ,     isPrivate : true},
+    {path: '/dex-exchange',   element: <DexExchange/>,                name: "Exchange",      icon: PurchaseIcon ,    isMenu : true ,     isPrivate : true},
     {path: '/news',           element: <News/>,                       name: "News",              icon: NewsIcon ,        isMenu : true ,     isPrivate : true},
     {path: '/profile',        element: <Profile/>,                    name: "Profile",           icon: "" ,              isMenu : false ,    isPrivate : true},
     {path: '/coin_info/:id?', element: <CoinContainerDescription/>,   name: "Coin Info",         icon: "" ,              isMenu : false ,    isPrivate : true},
@@ -35,3 +34,15 @@ export const routesNavigation = [
  * - Coin_info    :     Offers detailed information about a specific cryptocurrency, including price, charts, and other relevant data.
  * - Login        :     Provides a login page for users to authenticate and access secured features of the application.
  */
+
+
+export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+export type RoutesNavigationType = {
+    path : string,
+    element : ReactElement,
+    name : string,
+    icon : IconComponent | string,
+    isMenu : boolean
+    isPrivate : boolean
+}
