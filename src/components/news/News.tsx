@@ -11,6 +11,7 @@ import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {clearNewsDataAC, fetchCryptoNewsThunk, newsDataType, setCurrentPageAC, setIsLoadingAC, setTypeAC} from "../../redux/NewsReducer";
 import {ListSkeleton, ListSkeletonNews} from "../widgets/ListSkeleton";
 import styles from "../../css/news/skeleton-news.module.css"
+import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 
 
 type NewsType = {
@@ -74,7 +75,7 @@ const News = () => {
     const titleMock: string = 'Title is coming soon...'
     return (
         <Box>
-            {/*<ParticleBackgroundAnimation/>*/}
+            <ParticleBackgroundAnimation/>
             <Container
                 sx={{marginBottom: "50px"}}
             >

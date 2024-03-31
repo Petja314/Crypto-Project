@@ -106,10 +106,10 @@ const DexExchange = () => {
 
     }
     return (
-            <Container sx={{marginTop: "50px", marginBottom: "50px", position: "relative"}}>
+            <Container sx={{marginTop: "50px", marginBottom: "100px", position: "relative"}}>
                 <ParticleBackgroundAnimation/>
 
-                <Box sx={{float: "right"}}>
+                <Box  sx={{marginBottom : "20px"}}>
                     <w3m-button/>
                 </Box>
 
@@ -119,10 +119,10 @@ const DexExchange = () => {
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     borderRadius: "20px",
-                    width: "25%",
-                    margin: "0 auto"
+                    width: {lg : "30%" , sm : "50%" , xs : "80%"},
+                    margin: "0 auto",
                 }}>
-                    <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold", textAlign: "center",}}>
+                    <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold", textAlign: "center",fontSize : {lg : "48px" , md : "30px" , xs : "25px" } }}>
                         Swap anytime anywhere
                     </Typography>
                 </Box>
@@ -141,7 +141,7 @@ const DexExchange = () => {
                     <DexWarnings/>
                 </Box>
 
-                <Paper sx={{borderRadius: "24px", width: "600px", margin: "0 auto", paddingBottom: "30px"}}>
+                <Paper sx={{borderRadius: "24px", width: "600px", margin: "0 auto", paddingBottom: "30px" , maxWidth : "100%"}}>
                     <Typography variant='h5' sx={{padding: "20px"}}>Dex Exchange</Typography>
 
 

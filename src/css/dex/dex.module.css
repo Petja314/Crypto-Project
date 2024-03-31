@@ -1,0 +1,37 @@
+.dexImage {
+    width: 450px;
+}
+.metamaskImage{
+    width: 200px;
+    max-width: 100%;
+}
+.walletImage{
+    width: 200px;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+.swapImage{
+    width: 250px;
+    border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+    .dexImage {
+        width: 250px;
+    }
+    .metamaskImage{
+        width: 100px;
+    }
+    .swapImage{
+        width: 200px;
+    }
+    .walletImage{
+        width: 150px;
+        max-width: 100%;
+        border-radius: 20px;
+    }
+}
+
+
+
