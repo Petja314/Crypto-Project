@@ -3,18 +3,19 @@ import backgroundTransparent from "../../../assets/images/image/bgTransparent.sv
 import coinsBtc from "../../../assets/images/image/coinsBtc.webp";
 import React from "react";
 import {formatCurrency} from "@coingecko/cryptoformat";
+import styles from "../../../css/portfolio/portfolio.module.css"
 
 type AllTimeProfitWidgetPropsType = {
-    totalProfit : number
+    totalProfit: number
 }
 
-export const AllTimeProfitWidget = ({totalProfit} : AllTimeProfitWidgetPropsType) => {
+export const AllTimeProfitWidget = ({totalProfit}: AllTimeProfitWidgetPropsType) => {
 
     return (
         <Paper
             sx={{
                 borderRadius: "20px",
-                width: "270px",
+                width: {lg : "270px" , xs: "100%"},
                 height: "150px",
                 backgroundImage: `url(${backgroundTransparent})`,
                 backgroundSize: "cover",
@@ -23,29 +24,40 @@ export const AllTimeProfitWidget = ({totalProfit} : AllTimeProfitWidgetPropsType
                 position: "relative",
             }}
         >
-            <Typography variant={"h6"} sx={{fontWeight: "bold"}}>
-                ALL TIME PROFIT
-            </Typography>
-            <Box
-                sx={{
-                    color: totalProfit >= 0 ? "#1ABC7B" : "#F13005",
-                    fontWeight: "bold",
-                    marginTop: "20px",
-                    fontSize: "20px",
-                }}
-            >
-                {formatCurrency(totalProfit, "USD", "en")}
-            </Box>
-            <img
-                style={{
-                    position: "absolute",
-                    width: "100px",
-                    bottom: "10px",
-                    right: "20px",
-                }}
-                src={coinsBtc}
-                alt="crypto-coin-image"
-            />
+
+                    <Typography variant={"h6"} sx={{fontWeight: "bold"}}>
+                        All time profit
+                    </Typography>
+
+                    <Box
+                        sx={{
+                            color: totalProfit >= 0 ? "#1ABC7B" : "#F13005",
+                            fontWeight: "bold",
+                            marginTop: "20px",
+                            fontSize: "20px",
+                        }}
+                    >
+                        {formatCurrency(totalProfit, "USD", "en")}
+                    </Box>
+
+
+
+
+                <img
+                    className={styles.profitImage}
+                    style={{
+                        position: "absolute",
+                        width: "70px",
+                        bottom: "10px",
+                        right: "20px",
+                    }}
+                    src={coinsBtc}
+                    alt="crypto-coin-image"
+                />
+
+
+
+
         </Paper>
     )
 }

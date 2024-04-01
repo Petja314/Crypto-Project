@@ -1,4 +1,4 @@
-import {Avatar, Box, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {Avatar, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import React, {memo} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
@@ -7,6 +7,7 @@ import styles from "../../css/coin-info/skeleton-coinInfo.module.css"
 import {formatCurrency} from "@coingecko/cryptoformat";
 import {formatPercent} from "../../commons/functions/percentFormatter";
 import {coinDataArray} from "../../redux/CoinDescriptionReducer";
+import css from "../../css/coin-info/coin-info.module.css"
 
 type tableBodyInfoType = {
     label: string
@@ -36,11 +37,25 @@ const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) =>
                               variant={"rectangle"}
                 />
             ) : (
-                <Paper sx={{width: "450px", borderRadius: '20px', height: "550px"}}>
+                    <TableContainer component={Paper}
+                                    sx={{width: {md : "450px" , xs : "100%"},
+                                        borderRadius: '20px',
+                                        height: "550px",
+                                        maxWidth : "100%" ,
+                                    }}  >
                 {coinData.map((item: any , index : any) => (
-                    <Table key={index}>
-                        <TableHead>
-                            <TableRow>
+                    <Table key={index}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                    >
+                        <TableHead
+
+                        >
+                            <TableRow >
                                 <TableCell>
                                     <Box sx={{display: "flex", alignItems: "center", gap: 1.5}}>
                                         <Avatar sx={{width: "60px", height: "60px"}} src={item.icon}/>
@@ -48,24 +63,28 @@ const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) =>
                                         <Box sx={{textTransform: "uppercase"}}>{item.symbol}</Box>
                                     </Box>
                                 </TableCell>
+
                                 <TableCell>
                                     <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formatCurrency(item.price, symbol ,"en")} </Box>
-                                    <Box
-                                        sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}
-                                    >
+                                    <Box sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}>
                                         {formatPercent(item.priceChange1d)}
                                     </Box>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody
+                            sx={{
+                                display : "flex",
+                                justifyContent : "center"
+                        }}
+                        >
                             <TableBodyCoinInfo
                                 item={item}
                             />
                         </TableBody>
                     </Table>
                     ))}
-                </Paper>
+                    </TableContainer>
 
             )
             }

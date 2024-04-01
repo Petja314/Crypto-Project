@@ -1,0 +1,15 @@
+@media (max-width: 600px ){
+    .profitImage{
+        display : none
+    }
+}
+
+@media (max-width: 400px ){
+    .profitWidget{
+        display: flex;
+        flex-direction: column;
+    }
+    .profitImage{
+        display : flex
+    }
+}

@@ -44,16 +44,17 @@ const CoinDataLinksWidget = ({coinData,isLoading}: CoinDataLinksWidgetPropsType)
                 />
             ) : (
                 <Paper sx={{
-                    marginTop: "20px", width: "450px", borderRadius: '20px', height : "120px",
+                    marginTop: "20px", width: {lg : "450px" , xs : "100%"}, borderRadius: '20px', height : "120px",
                     backgroundImage: `url(${BackgroundBlock})`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
-                    backgroundColor: "rgba(255, 255, 255, 0.09)"
+                    backgroundColor: "rgba(255, 255, 255, 0.09)",
+                    maxWidth : "100%"
                 }}>
                     <Box sx={{fontWeight: "bold", fontSize: "20px", textAlign: "center"}}>
                         Official links
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: "space-evenly", marginTop: "10px"}}>
+                    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: "space-evenly", marginTop: "10px" , maxWidth : "100%"}}>
 
                         {coinDataWidget.map((item : coinDataWidgetType , index : number) => (
                             <Box key={index}>

@@ -84,11 +84,11 @@ export const MobileHeader = () => {
             <Box
                 sx={{
                     display: {xs: 'flex', md: 'flex'},
-                    position : "fixed",
-                    bottom : 0,
+                    position: "fixed",
+                    bottom: 0,
                     left: 0,
                     right: 0,
-                    zIndex : 999,
+                    zIndex: 999,
                 }}
             >
                 <BottomNavigation
@@ -99,7 +99,7 @@ export const MobileHeader = () => {
                     showLabels
                     sx={{
                         width: "100%",
-                        height : "100px"
+                        height: "100px"
                     }}
                 >
 
@@ -114,11 +114,11 @@ export const MobileHeader = () => {
                                         icon={
                                             <Box
                                                 sx={{
-                                                    color : "#fff",
-                                                    textAlign : "center"
+                                                    color: "#fff",
+                                                    textAlign: "center"
                                                 }}>
-                                                < item.icon style={{fill: "#fff" }}/>
-                                                <Box >{item.name}</Box>
+                                                < item.icon style={{fill: "#fff" ,height : "20px", width : "20px" }}/>
+                                                <Box sx={{fontSize : "15px"}} >  {item.name}</Box>
                                             </Box>
                                         }
                                         component={Link}

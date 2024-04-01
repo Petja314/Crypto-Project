@@ -6,6 +6,7 @@ import {memo} from "react"
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {formatPercent} from "../../../commons/functions/percentFormatter";
+import styles from "../../../css/dashboard/table.module.css"
 
 type TableBodyCoinPropsType = {
     filteredDataByName : marketCapListArray[]
@@ -23,8 +24,8 @@ export const TableBodyCoin = memo(({ filteredDataByName, currencyValue}: TableBo
                 filteredDataByName.map((item, index: number) => (
                     <TableRow key={index} onClick={() => navigateToCoinPageHandler(item.id)}>
                         <TableCell>{item.rank}</TableCell>
-                        <TableCell>
-                            <Box sx={{display: "flex", gap: 1, alignItems: "center"}}>
+                        <TableCell className={styles.tableStickyCoin}>
+                            <Box sx={{display: "flex", flexWrap : "wrap", gap: 1, alignItems: "center"}}>
                                 <Avatar src={item.icon}/>
                                 <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
                                 <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>

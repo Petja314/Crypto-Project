@@ -8,6 +8,7 @@ import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../../re
 import {RootState} from "../../redux/ReduxStore";
 import {ThunkDispatch} from "redux-thunk";
 import {formatCurrency} from "@coingecko/cryptoformat";
+import styles from "../../css/widgets/balance-widget.module.css"
 
 /**
  * PortfolioBalanceWidget Component:
@@ -59,6 +60,7 @@ const PortfolioBalanceWidget = () => {
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: "rgba(255, 255, 255, 0.09)"
+                , maxWidth : "100%"
             }}>
                 <Grid container sx={{position: "relative"}}>
                     <Grid item>
@@ -81,7 +83,7 @@ const PortfolioBalanceWidget = () => {
                     </Grid>
 
 
-                    <Box component='span' sx={{position: "absolute", bottom: -20, right: 0, maxWidth: "140px", width: "100%", height: "auto",}}>
+                    <Box className={styles.walletImage} component='span' sx={{position: "absolute", bottom: -20, right: 0, maxWidth: "140px", width: "100%", height: "auto",}}>
                         <img src={walleticon} alt="WebP Image" style={{width: "100%", height: "auto"}}/>
                     </Box>
 

@@ -37,9 +37,9 @@ const PortfolioManager = () => {
     }, []);
     return (
         <Box>
-            <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
-                <Grid container spacing={2} sx={{margin: "0 auto"}}>
-                    <Grid item xs={6}>
+            <Container sx={{marginBottom: "100px", marginTop: "50px"}}>
+                <Grid container spacing={2} >
+                    <Grid item xs={12} md={6} >
                         <Typography variant="h6" sx={{color: "#fff"}} mb={2}>🚀 Current Portfolio</Typography>
                         <Box mb={2}>
                             <AddTransactionContainer/>
@@ -52,7 +52,7 @@ const PortfolioManager = () => {
                         <PerformanceAnalyticsWidget/>
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <AllocationPortfolioChart/>
                     </Grid>
                 </Grid>

@@ -79,7 +79,8 @@ export const CoinStatSlider = memo(({data, title, emojiIcon, priceChangeKey }: C
                     variant={"rectangular"}
                 />
             ) : (
-                <Paper sx={{height: '250px', paddingLeft: "50px", paddingRight: "50px"}}>
+                // <Paper sx={{height: '250px', paddingLeft: "50px", paddingRight: "50px"  , maxWidth : "100%"}}>
+                <Paper sx={{height: '250px', maxWidth : "100%"}}>
                     <Typography mb={1} variant={'h6'}>
                         <img style={{width: "30px", height: "30px"}} src={emojiIcon} alt="fire"/> {title}
                     </Typography>

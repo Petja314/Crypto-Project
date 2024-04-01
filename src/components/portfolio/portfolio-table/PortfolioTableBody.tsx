@@ -6,40 +6,41 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import {AppDispatch} from "../../../redux/ReduxStore";
 import {useNavigate} from "react-router-dom";
-import { formatCurrency } from "@coingecko/cryptoformat";
+import {formatCurrency} from "@coingecko/cryptoformat";
+import styles from "../../../css/dashboard/table.module.css";
 
 type PortfolioTableBodyPropsType = {
-    myCurrentPortfolioDataFB : portfolioFirebaseDataType[]
+    myCurrentPortfolioDataFB: portfolioFirebaseDataType[]
 }
 
 const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsType) => {
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
-    const navigateToCoinPageHandler = (id : string) => {
+    const navigateToCoinPageHandler = (id: string) => {
         navigate(`/coin_info/${id}?`)
     }
     return (
         <>
             {/*TABLE BODY*/}
-            {myCurrentPortfolioDataFB.map((item: portfolioFirebaseDataType , index: number) => (
-                <TableRow key={index} sx={{textAlign: "center" , cursor : "pointer"}} >
+            {myCurrentPortfolioDataFB.map((item: portfolioFirebaseDataType, index: number) => (
+                <TableRow key={index} sx={{textAlign: "center", cursor: "pointer" }}>
 
                     <TableCell>{item.rank}</TableCell>
-                    <TableCell  onClick={() => navigateToCoinPageHandler(item.id)}>
-                        <Box sx={{display: "flex", gap: 1, alignItems: "center",}}>
+                    <TableCell className={styles.tableStickyCoin} onClick={() => navigateToCoinPageHandler(item.id)}>
+                        <Box sx={{display: "flex", gap: 1, alignItems: "center",flexWrap : "wrap"}}>
                             <Avatar src={item.icon}/>
                             <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
                             <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>
                         </Box>
                     </TableCell>
                     <TableCell>{formatCurrency(item.price, "USD", "en")}</TableCell>
-                    <TableCell><Box>{formatCurrency(item.totalHoldingCoinAmountCash ,  "USD", "en")}</Box> </TableCell>
+                    <TableCell><Box>{formatCurrency(item.totalHoldingCoinAmountCash, "USD", "en")}</Box> </TableCell>
                     <TableCell>{item.totalHoldingCoins} {item.symbol} </TableCell>
-                    <TableCell>{formatCurrency(item.averageBuyingPrice ,  "USD", "en")}</TableCell>
-                    <TableCell>{formatCurrency(item.profitLoss ,  "USD", "en" )}</TableCell>
+                    <TableCell>{formatCurrency(item.averageBuyingPrice, "USD", "en")}</TableCell>
+                    <TableCell>{formatCurrency(item.profitLoss, "USD", "en")}</TableCell>
 
-                    <TableCell sx={{display: "flex", justifyContent: "center"}}>
-                        <IconButton style={{backgroundColor: 'transparent'}}>
+                    <TableCell >
+                        {/*<IconButton style={{backgroundColor: 'transparent'}}>*/}
                             {/*BUY AND SELL CRYPTO*/}
                             <Box sx={{display: "flex", gap: 2}}>
                                 <Button sx={{padding: 0}} onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}>
@@ -53,7 +54,7 @@ const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsT
                                     <DeleteIcon/>
                                 </Button>
                             </Box>
-                        </IconButton>
+                        {/*</IconButton>*/}
                     </TableCell>
                 </TableRow>
             ))

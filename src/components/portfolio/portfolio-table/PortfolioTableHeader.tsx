@@ -2,6 +2,8 @@ import React from "react";
 import {TableCell} from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import styles from "../../../css/dashboard/table.module.css"
+
 
 type PortfolioTableHeaderPropsType = {
     sortingFieldsHandler : any,
@@ -24,7 +26,6 @@ const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedKey}: Po
         {key: "profitLoss", label: "Profit/Loss"},
         {key: "Actions", label: "Actions"},
     ]
-
     return (
         <>
             {/*TABLE HEADER*/}

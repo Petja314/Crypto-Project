@@ -20,10 +20,14 @@ export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
                 filteredUniquePerformers.map((item, index: number) => (
                     <Paper
                         key={index}
-                        sx={{borderRadius: "20px", width: "200px", height: "150px"}}
+                        sx={{borderRadius: "20px",
+                            width: {lg : "200px" , xs : "100%"},
+                            height: "150px" ,
+                            maxWidth : "100%"
+                    }}
                     >
-                        <Grid container sx={{display: "flex", alignItems: "center", justifyContent: "center",}}>
-                            <Grid item>
+                        <Box  sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                            <Box>
                                 <Box component="span" sx={{color: "#B8B8B8", fontSize: "15px", fontWeight: "bold",}}>
                                     {item.profitLoss <= 0 ? (
                                         <Box>Worst Performer</Box>
@@ -33,7 +37,7 @@ export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
                                 </Box>
 
                                 <Box sx={{display: "flex", alignItems: "center", gap: 1, marginBottom: "10px", marginTop: "5px",}}>
-                                    <Avatar src={item.icon}/>
+                                    <Avatar sx={{width : "30px", height : "30px"}} src={item.icon}/>
                                     <Box>
                                         <Typography variant="h6"> {item.symbol} </Typography>
                                     </Box>
@@ -56,8 +60,8 @@ export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
                                 >
                                     {formatCurrency(item.profitLoss, "USD", "en")}
                                 </Box>
-                            </Grid>
-                        </Grid>
+                            </Box>
+                        </Box>
                     </Paper>
                 ))}
         </>

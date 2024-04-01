@@ -6,7 +6,6 @@ import {useSelector} from "react-redux";
 import {TypingEffects} from "../../../utils/TypingEffects";
 import {RootState} from "../../../redux/ReduxStore";
 import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
-import {formatCurrency} from "@coingecko/cryptoformat";
 import {formatPercent} from "../../../commons/functions/percentFormatter";
 Chart.register(ArcElement);
 
@@ -74,7 +73,7 @@ const AllocationPortfolioChart = () => {
     return (
         <Box>
             <Paper
-                sx={{width: "550px", height: "400px", borderRadius: "20px", position: "relative",}}
+                sx={{width: {lg : "550px", xs : "100%"}, height: "400px", borderRadius: "20px", position: "relative"}}
             >
                 <Typography
                     sx={{position: "absolute", top: "40px", left: "20px"}}
@@ -83,9 +82,12 @@ const AllocationPortfolioChart = () => {
                     Allocation
                 </Typography>
 
-                <Box sx={{margin: "0 auto", width: "370px", height: "370px"}}>
+                <Box sx={{margin: "0 auto", width: "370px", height: "370px" ,maxWidth : "100%"}}>
                     {allocations.length > 0 ? (
-                        <Doughnut data={data} options={options}/>
+                        <Doughnut
+                            data={data}
+                            options={options}
+                        />
                     ) : (
                         <Box sx={{ marginTop : "30%", display : "flex", justifyContent : "center",}}>
                             <CircularProgress sx={{width: "130px !important", height: "130px !important",}} />
@@ -98,9 +100,9 @@ const AllocationPortfolioChart = () => {
                     <TypingEffects
                         speed={20}
                         text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals."}
-                        // while managing the risk associated with the volatile nature of the crypto market
                     />
                 </Typography>
+
             </Paper>
         </Box>
     );

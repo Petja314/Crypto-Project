@@ -27,7 +27,9 @@ type priceWidgetDataType = {
         {price: coinData[0]?.priceChange1w, name: "Price changed 1w"},
     ]
     return (
-        <Box mt={5} sx={{display: "flex", justifyContent: "space-evenly", gap: 5}}>
+        // <Box mt={5} sx={{display: {lg : "flex" , xs : "none"}, justifyContent: "space-evenly",  gap: 5, maxWidth : "100%"}}>
+        <Box mt={5} sx={{display: {lg : "flex" , xs : "none"}, justifyContent: "space-evenly", flexWrap : { lg : "nowrap" , xs : "wrap"}, gap: 5, maxWidth : "100%"}}>
+
             {!isLoading ? (
                 <ListSkeleton columns={3}
                               skeletonClass={styles.skeletonPriceWidgetData}
@@ -37,9 +39,10 @@ type priceWidgetDataType = {
                 <>
                     {
                         priceChangesWidgetData.map((item: priceWidgetDataType, index: number) => (
-                            <Paper key={index} sx={{borderRadius: '20px', padding: "30px", height: "150px", width: "200px"}}>
+                            <Paper key={index} sx={{borderRadius: '20px', padding: "30px", height: "100", width: "150", maxWidth : "100%"}}>
+                            {/*<Paper key={index} sx={{borderRadius: '20px', padding: "30px", height: "150px", width: "200px", maxWidth : "100%"}}>*/}
                                 <Typography sx={{textAlign: "center"}}>{item.name}</Typography>
-                                <Box sx={{background: item.price < 0 ? "#F13005" : "#1ABC7B", borderRadius: "5px", padding: "5px", textAlign: "center", marginTop: "30px"}}>
+                                <Box sx={{background: item.price < 0 ? "#F13005" : "#1ABC7B", borderRadius: "5px", padding: "5px", textAlign: "center", marginTop: "30px",}}>
                                     {formatPercent(item.price)}
                                 </Box>
                             </Paper>
@@ -49,6 +52,7 @@ type priceWidgetDataType = {
                 </>
             )
             }
+
         </Box>
     )
 }

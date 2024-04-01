@@ -17,7 +17,7 @@ import {ReactElement} from "react";
 export const routesNavigation : RoutesNavigationType[] = [
     {path: '/dashboard',      element: <Dashboard/>,                  name: "Dashboard",         icon: DashboardIcon ,   isMenu : true ,     isPrivate : true},
     {path: '/portfolio',      element: <PortfolioManager/>,           name: "Portfolio",         icon: PortfolioIcon ,   isMenu : true ,     isPrivate : true},
-    {path: '/dex-exchange',   element: <DexExchange/>,                name: "Exchange",      icon: PurchaseIcon ,    isMenu : true ,     isPrivate : true},
+    {path: '/dex-exchange',   element: <DexExchange/>,                name: "Exchange",          icon: PurchaseIcon ,    isMenu : true ,     isPrivate : true},
     {path: '/news',           element: <News/>,                       name: "News",              icon: NewsIcon ,        isMenu : true ,     isPrivate : true},
     {path: '/profile',        element: <Profile/>,                    name: "Profile",           icon: "" ,              isMenu : false ,    isPrivate : true},
     {path: '/coin_info/:id?', element: <CoinContainerDescription/>,   name: "Coin Info",         icon: "" ,              isMenu : false ,    isPrivate : true},

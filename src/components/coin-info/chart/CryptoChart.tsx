@@ -71,9 +71,17 @@ type ChartData = {
         x: value[0], y: value[1].toFixed(2)
     }))
 
-    const options: { responsive: boolean } = {
-        responsive: true
-    }
+      const options = {
+         responsive: true,
+         plugins: {
+             legend: {
+                 position: 'top' as const,
+             },
+
+         },
+     };
+
+
     //Creating the relevant data for a crypto chart with , selected coin , currency , date and etc.
     const data : ChartData = {
         labels: coinCharData.map((value : any) => moment(value.x * 1000).format('MMM D')),
@@ -88,7 +96,7 @@ type ChartData = {
         ]
     }
     return (
-        <Box mt={5}>
+        <Box mt={5} >
 
             {timeframe.length <= 0 ? (
                 <ListSkeleton columns={1}
@@ -96,9 +104,9 @@ type ChartData = {
                               variant={"rectangle"}
                 />
             ) : (
-                <Paper sx={{borderRadius: '20px', marginBottom: "10px", height: "100px"}}>
+                <Paper sx={{borderRadius: '20px', marginBottom: "10px", height: "100px",maxWidth : "100%" }}>
                     <Typography sx={{textAlign: "center"}}>Chart time frame</Typography>
-                    <List sx={{display: "flex", justifyContent: "space-evenly"}}>
+                    <List sx={{display: "flex", justifyContent: "space-evenly" ,maxWidth : "100%"}}>
                         {timeframe.map((item : string, index: number) => (
                             <ListItem
                                 value={chartTimeFrame}
@@ -130,13 +138,16 @@ type ChartData = {
             }
 
 
+
+
             {data.labels.length <= 0 ? (
                 <ListSkeleton columns={1}
                               skeletonClass={styles.skeletonChart}
                               variant={"rectangle"}
                 />
             ) : (
-                <Paper sx={{borderRadius: '20px', padding: "30px", height: "350px"}}>
+                // <Paper sx={{borderRadius: '20px', padding: "30px", height: "350px" , maxHeight : "100%",}}>
+                <Paper sx={{borderRadius: '20px', padding: "30px", height: {md : "350px" , xs : "auto"} , maxHeight : "100%",}}>
                     <Line options={options} data={data}/>
                 </Paper>
             )

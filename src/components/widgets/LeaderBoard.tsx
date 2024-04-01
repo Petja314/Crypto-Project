@@ -7,6 +7,7 @@ import {marketCapListArray} from "../../redux/CryptoTableReducer";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import styles from "../../css/dashboard/skeleton-dashboard.module.css"
 import {ListSkeleton} from "./ListSkeleton";
+import board from "../../css/dashboard/leader-boards.module.css"
 
 
 /**
@@ -16,7 +17,7 @@ import {ListSkeleton} from "./ListSkeleton";
  * Users can click on a leaderboard entry to view more details about the respective cryptocurrency.
  */
 const LeaderBoard = () => {
-    const navigate : NavigateFunction = useNavigate()
+    const navigate: NavigateFunction = useNavigate()
     const {marketCapList, fetching} = useSelector((state: RootState) => state.marketCoinList)
     const [leadersOfWeek, setLeadersOfWeek] = useState<marketCapListArray[]>([])
 
@@ -42,7 +43,7 @@ const LeaderBoard = () => {
                 Leaderboard of the week
             </Typography>
 
-            { leadersOfWeek.length  <= 0 ? (
+            {leadersOfWeek.length <= 0 ? (
                 <ListSkeleton
                     columns={10}
                     skeletonClass={styles.skeletonLists}
@@ -52,40 +53,51 @@ const LeaderBoard = () => {
                 leadersOfWeek.map((item, index: number) => (
                     <Box>
                         <Paper key={index} sx={{
-                            borderRadius: '20px', marginBottom: "10px", width: "500px", height: "60px", maxWidth: "100%", maxHeight: "100%",
-                            backgroundColor: index === 0 ? "#1230c9" : "transparent",
+                            borderRadius: '20px', marginBottom: "10px", width: {lg: "500px", xs: "100%"}, height: "60px", maxWidth: "100%", maxHeight: "100%",
+                            backgroundColor: index === 0 ? "#1230c9" : "transparent"
                         }}>
-                            <Grid container sx={{alignItems: 'center', cursor: "pointer"}} onClick={() => navigateToCoinDescription(item.id)}>
-                                <Grid item xs={6}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            gap: 1,
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <Skeleton component='span' animation='wave' variant="circular" width={30} height={30} sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center', backgroundColor: '#e0f64b', color: "black",
-                                        }}>
-                                            {index + 1}
-                                        </Skeleton>
-                                        <Box>{item.name}</Box>
-                                    </Box>
-                                </Grid>
 
-                                <Grid item xs={6}>
-                                    <Box> Price increase
-                                        :<Box component='span' sx={{
-                                            borderRadius: '5px', marginLeft: "5px", padding: "5px",
+
+                            <Box sx={{alignItems: 'center', cursor: "pointer", display: "flex", justifyContent: "space-between"}} onClick={() => navigateToCoinDescription(item.id)}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        gap: 1,
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Skeleton component='span' animation='wave' variant="circular" width={30} height={30} sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center', backgroundColor: '#e0f64b', color: "black",
+                                    }}>
+                                        {index + 1}
+                                    </Skeleton>
+                                    <Box>{item.name}</Box>
+                                </Box>
+
+
+                                <Box sx={{display: "flex", gap: 2}}>
+                                    <span className={board.priceIncrease}> Price increase:</span>
+                                    <span
+                                        style={{
+                                            borderRadius: '5px',
+                                            height: "24px",
+                                            width: "68px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            margin: "0 auto",
+                                            padding: "5px",
                                             backgroundColor: item.priceChange1w > 0 ? "#1ABC7B" : "#F13005",
                                         }}>
-                                            {item.priceChange1w}%
-                                        </Box>
-                                    </Box>
-                                </Grid>
-                            </Grid>
+                                        {item.priceChange1w}%
+                                    </span>
+                                </Box>
+
+
+                            </Box>
+
 
                         </Paper>
                     </Box>

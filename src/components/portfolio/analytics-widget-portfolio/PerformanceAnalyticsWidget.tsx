@@ -8,6 +8,7 @@ import {AllTimeProfitWidget} from "./AllTimeProfitWidget";
 import {PerformersWidgets} from "./PerformersWidgets";
 import {RootState} from "../../../redux/ReduxStore";
 import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
+import styles from "../../../css/portfolio/portfolio.module.css"
 
 
 /**
@@ -48,7 +49,7 @@ const PerformanceAnalyticsWidget = () => {
 
     return (
         <Box>
-            <Box sx={{display: "flex", gap: 2}}>
+            <Box className={styles.profitWidget} sx={{display: "flex", gap: 2, justifyContent : "space-between" }}>
 
                 <AllTimeProfitWidget
                     totalProfit={totalProfit}

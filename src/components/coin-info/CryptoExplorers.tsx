@@ -7,7 +7,7 @@ import styles from "../../css/coin-info/skeleton-coinInfo.module.css";
 import {coinDataArray} from "../../redux/CoinDescriptionReducer";
 
 type CryptoExplorersPropsType = {
-    coinData : coinDataArray[] ,
+    coinData: coinDataArray[],
     isLoading: boolean
 }
 
@@ -30,11 +30,13 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
             ) : (
                 <Paper sx={{
                     borderRadius: '20px', padding: "30px",
-                    height: "1000px",
+                    height: "1200px",
                     backgroundImage: `url(${BackgroundBlock})`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
-                    backgroundColor: "rgba(255, 255, 255, 0.09)"
+                    backgroundColor: "rgba(255, 255, 255, 0.09)",
+                    maxHeight: "100%",
+                    maxWidth: "100%"
                 }}>
                     <Typography variant={'h5'} mb={2}>What is Crypto Explorers? <QueryStatsIcon sx={{color: "#E0F64B"}}/> </Typography>
 
@@ -51,19 +53,32 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
                         Top Explorers 🔥
                     </Typography>
 
+                        {topExplorers &&
+                            topExplorers.map((explorer: string, index: number) => (
+                                // <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
+                                <Box key={index} component="ul" sx={{ padding: "0 0", listStyle: "none", border : "1px solid red"}}>
+                                    <Box component={"li"} >
 
-                    {topExplorers &&
-                        topExplorers.map((explorer : string, index: number) => (
-                            <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
-                                <Box component={"li"}>
 
-                                    <a style={{color: "white", textDecoration: 'none'}} href={explorer}>
-                                        🚀 {explorer}
-                                    </a>
+                                        <a
+                                            style={{
+                                                color: "white",
+                                                textDecoration: 'none',
+                                                display: 'inline-block',
+                                                maxWidth: '100%',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis'
+                                            }}
+                                            href={explorer}
+                                        >
+                                            🚀 {explorer}
+                                        </a>
+
+                                    </Box>
                                 </Box>
-                            </Box>
-                        ))
-                    }
+                            ))
+                        }
+
                 </Paper>
             )}
         </Box>
@@ -71,7 +86,6 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
 };
 
 export default React.memo(CryptoExplorers);
-
 
 
 //EXPLANATION WHAT CRYPTO EXPLORERS ARE

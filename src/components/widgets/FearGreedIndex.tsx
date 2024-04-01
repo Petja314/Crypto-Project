@@ -7,7 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {fearAndGreedFetchingThunk, fearGreedArray} from "../../redux/FearGreedIndexReducer";
 import {CarouselMui} from "./CarouselMui";
-import { memo } from 'react';
+import {memo} from 'react';
+import styles from "../../css/dashboard/fear-greed.module.css"
 
 /**
  * Description: Fear and Greed Index Component
@@ -40,8 +41,9 @@ const FearGreedIndex = () => {
     const normalizedAngle = normalizeAngleHandler(greedIndex)
     return (
         <Box>
-            <Paper sx={{borderRadius: "20px", marginBottom: "30px", height : "320px"}}>
-                <Box sx={{display: "flex", justifyContent: "space-around"}}>
+            {/*height : "320px"*/}
+            <Paper  sx={{borderRadius: "20px", marginBottom: "30px", height: "auto", maxWidth: "100%"}}>
+                <Box sx={{display: "flex", justifyContent: {sm: "space-around", xs: "center"}}}>
                     <Box p={2}>
                         <Box mb={2}>
                             <Box sx={{display: "flex", gap: 1, itemAlign: "center"}}>
@@ -51,38 +53,41 @@ const FearGreedIndex = () => {
                             <Box sx={{color: "#c2baba", fontSize: "12px"}}>Multifactorial Crypto Market Sentiment Analysis</Box>
                         </Box>
 
-                        <Box sx={{position: "relative"}}>
-                            {
-                                fearGreedIndexData.slice(0, 1).map((item: fearGreedArray, index: number) => (
-                                    <Box key={index}>
-                                        <Box sx={{
-                                            height: "16px",
-                                            width: "16px",
-                                            borderRadius: "50%",
-                                            border: "2px solid #FFFFFF",
-                                            backgroundColor: "#0D1421",
-                                            position: "absolute",
-                                            top: "81px",
-                                            left: "-5px",
-                                            transform: `rotate(${normalizedAngle}deg)`,
-                                            transformOrigin: "93.5px 8px"
-                                        }}/>
-                                        <img src={fear_greed} alt=""/>
+                        <Box sx={{display: "flex", justifyContent: "center"}}>
+                            <Box sx={{position: "relative",}}>
+                                {
+                                    fearGreedIndexData.slice(0, 1).map((item: fearGreedArray, index: number) => (
+                                        <Box key={index}>
+                                            <Box sx={{
+                                                height: "16px",
+                                                width: "16px",
+                                                borderRadius: "50%",
+                                                border: "2px solid #FFFFFF",
+                                                backgroundColor: "#0D1421",
+                                                position: "absolute",
+                                                // top: "61px",
+                                                top: "81px",
+                                                left: "-5px",
+                                                transform: `rotate(${normalizedAngle}deg)`,
+                                                transformOrigin: "93.5px 8px"
+                                            }}/>
+                                            <img src={fear_greed} alt=""/>
 
-                                        <Box sx={{textAlign: "center", position: "absolute", top: "30%", left: "20%"}}>
-                                            <Box sx={{fontWeight: "bold", fontSize: "22px"}}>{item.value}</Box>
-                                            {item.value_classification}
+                                            <Box sx={{textAlign: "center", position: "absolute", top: "30%", left: "20%"}}>
+                                                <Box sx={{fontWeight: "bold", fontSize: "22px"}}>{item.value}</Box>
+                                                {item.value_classification}
+                                            </Box>
+
+                                            <Box mt={9} sx={{color: "#c2baba", fontSize: "13px"}}>
+                                                Last updated :{moment(item.timestamp * 1000).format('MMM DD YYYY h:mm A')}
+                                            </Box>
                                         </Box>
-
-                                        <Box mt={9} sx={{color: "#c2baba", fontSize: "13px"}}>
-                                            Last updated :{moment(item.timestamp * 1000).format('MMM DD YYYY h:mm A')}
-                                        </Box>
-
-
-                                    </Box>
-                                ))
-                            }
+                                    ))
+                                }
+                            </Box>
                         </Box>
+
+
                     </Box>
                     {/*HISTORICAL VALUES*/}
                     <HistoricalValuesGreedIndex
@@ -95,7 +100,6 @@ const FearGreedIndex = () => {
 };
 
 export default React.memo(FearGreedIndex);
-
 
 
 type HistoricalValuesPropsType = {
@@ -120,7 +124,7 @@ const HistoricalValuesGreedIndex = memo(({fearGreedIndexData}: HistoricalValuesP
         return "";
     }
     return (
-        <Box p={2}>
+        <Box p={2} className={styles.fearGreedValues} sx={{}}>
             <Typography variant={'h6'} sx={{fontWeight: "bold", marginBottom: "10px"}}>Historical Values</Typography>
             {
                 filteredData.map((item: fearGreedArray, index: number) => (

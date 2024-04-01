@@ -16,7 +16,7 @@ import PriceChangesWidget from "./coin-info-widgets/PriceChangesWidget";
  * displaying various components required on the page.
  */
 
- const CoinContainerDescription = () => {
+const CoinContainerDescription = () => {
     const dispatch: AppDispatch = useDispatch()
     const navigate = useNavigate()
     const {id} = useParams()
@@ -35,41 +35,51 @@ import PriceChangesWidget from "./coin-info-widgets/PriceChangesWidget";
         navigate(`/portfolio`)
     }
     return (
-        <Container>
-            <Box sx={{marginTop: "50px", marginBottom: "50px"}}>
-                <Box sx={{display: "flex", gap: 3}}>
+        <Container sx={{marginTop: "50px", marginBottom: "100px" }}>
 
-                    <Box sx={{display: "flex", flexDirection: "column"}}>
-                        {/*INFORMATION ABOUT THE SELECTED CURRENCY IN TABLE*/}
-                        <CoinTableInfo
-                            currencyValue={currencyValue}
-                            isLoading={isLoading}
-                        />
-                        {/*LINK'S WIDGET OF SELECTED COIN*/}
-                        <CoinDataLinksWidget
-                            coinData={coinData}
-                            isLoading={isLoading}
-                        />
-                        <Button onClick={navigateToPortfolioPage} sx={{marginTop: "20px"}}>Add to portfolio</Button>
+            <Box sx={{display: "flex", flexDirection: {xs: 'column', md: 'row'}, gap: 3}}>
 
-                    </Box>
-
-                    <Box sx={{display: "flex", flexDirection: "column"}}>
-                        {/*CRYPTO CHART OF SELECTED COIN*/}
-                        <CryptoChart/>
-                        {/*PRICE WIDGET OF SELECTED COIN*/}
-                        <PriceChangesWidget
-                            coinData={coinData}
-                            isLoading={isLoading}
-                        />
-                    </Box>
+                <Box sx={{display: "flex", flexDirection: "column", flex: '1'}}>
+                    {/*INFORMATION ABOUT THE SELECTED CURRENCY IN TABLE*/}
+                    <CoinTableInfo
+                        currencyValue={currencyValue}
+                        isLoading={isLoading}
+                    />
+                    {/*LINK'S WIDGET OF SELECTED COIN*/}
+                    <CoinDataLinksWidget
+                        coinData={coinData}
+                        isLoading={isLoading}
+                    />
+                    <Button
+                        onClick={navigateToPortfolioPage}
+                        sx={{
+                            marginTop: {xs: "20px", sm: "20px"},
+                            width: {lg : "450px" , xs : "100%"},
+                            maxWidth: "100%"
+                        }}>
+                        Add to portfolio
+                    </Button>
                 </Box>
 
-                <CryptoExplorers
-                    coinData={coinData}
-                    isLoading={isLoading}
-                />
+                <Box sx={{display: "flex", flexDirection: "column", flex: '1'}}>
+                    {/*CRYPTO CHART OF SELECTED COIN*/}
+                    <CryptoChart/>
+                    {/*PRICE WIDGET OF SELECTED COIN*/}
+                    <PriceChangesWidget
+                        coinData={coinData}
+                        isLoading={isLoading}
+                    />
+                </Box>
+
+
             </Box>
+
+
+            <CryptoExplorers
+                coinData={coinData}
+                isLoading={isLoading}
+            />
+
         </Container>
 
     )

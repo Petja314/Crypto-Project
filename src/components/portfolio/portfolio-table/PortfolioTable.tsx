@@ -32,6 +32,7 @@ const PortfolioTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+
                         <PortfolioTableBody
                             myCurrentPortfolioDataFB={myCurrentPortfolioDataFB}
                         />
