@@ -148,7 +148,6 @@ export const getAllCoinsListThunk = (currency: string, rowsPerPage: number, page
     } catch (error) {
         console.error(error)
     }
-
 }
 
 export const handlingTableByRowNumbersThunk = (isFetching: boolean, selectedRowValue: number, page: number) => (dispatch: ThunkDispatch<RootState, unknown, any>) => {

@@ -13,7 +13,7 @@ import {routesNavigation, RoutesNavigationType} from "./Routes/navigation";
 import {appInitializationThunkCreator} from "./redux/AppInitialization";
 import ScrollToTop from "./Routes/ScrollToTop";
 import {AppDispatch, RootState} from "./redux/ReduxStore";
-import Test from "./TEST";
+import MobileCoinSearch from "./components/header/MobileCoinSearch";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -132,7 +132,6 @@ function App  () {
                                     )
                                 ))
                             }
-                        <Route path={"/test"} element={ <Test/>}/>
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>

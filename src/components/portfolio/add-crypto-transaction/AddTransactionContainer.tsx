@@ -28,6 +28,8 @@ const AddTransactionContainer = () => {
     //Current selected tab
     const [tabValue, setTabValue] = useState<number>(0)
 
+
+
     useEffect(() => {
         //Fetching coin list data
         if (fetching) {

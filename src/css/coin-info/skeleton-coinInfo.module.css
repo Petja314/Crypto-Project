@@ -17,6 +17,7 @@
 .skeletonCoinTableDesc {
     border-radius: 20px ;
     width : 450px !important;
+    max-width: 100%;
     height : 550px !important;
     padding: 30px;
     background-color: rgba(255, 255, 255, 0.05) !important;
@@ -26,6 +27,7 @@
     border-radius: 20px ;
     margin-top: 20px;
     width : 450px !important;
+    max-width: 100%;
     height : 120px !important;
     background-color: rgba(255, 255, 255, 0.05) !important;
 }
@@ -37,6 +39,7 @@
     /*padding: 30px;*/
     height:  150px !important;
     width: 200px;
+    max-width: 100%;
 }
 
 .skeletonCryptoExplorers {
@@ -45,4 +48,5 @@
     padding: 30px;
     height:  1200px !important;
     width: 100%;
+    max-width: 100%;
 }

@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {Link} from "react-router-dom";
 import LoginSettings from "./LoginSettings";
 import {routesNavigation, RoutesNavigationType} from "../../Routes/navigation";
+import MobileCoinSearch from "./MobileCoinSearch";
 
 export const MobileHeader = () => {
     const [selectedMenu, setSelectedMenu] = useState<number>(0)
@@ -46,34 +47,7 @@ export const MobileHeader = () => {
                             </Typography>
                         </Box>
 
-
-                        {/*TEXT AREA FIND SECTION*/}
-                        <Box
-                            sx={{
-                                width: "100%"
-                            }}
-                        >
-                            <TextField
-                                size="small"
-                                label='search'
-                                type='text'
-                                sx={{
-                                    display: {xs: "flex", md: "none"},
-                                    cursor: "pointer",
-                                    [`& fieldset`]: {
-                                        borderRadius: 30,
-
-                                    }
-                                }}
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <SearchIcon/>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Box>
+                        <MobileCoinSearch/>
 
                         <LoginSettings/>
                     </Toolbar>

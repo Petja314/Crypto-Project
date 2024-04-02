@@ -27,6 +27,8 @@ const SearchCoin = ({portfolioData, newCoinValue}: SearchCoinPropsType) => {
     const {fetching} = useSelector((state: RootState) => state.marketCoinList);
     const [isTableClosed, setIsTableClosed] = useState(true);
 
+
+
     //Dispatching the selected coin value
     const selectedCoinHandler = (value: marketCapListArray) => {
         dispatch(PortfolioActions.setSelectedCoinArrayData([value]));

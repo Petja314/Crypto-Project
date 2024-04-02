@@ -55,8 +55,7 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
 
                         {topExplorers &&
                             topExplorers.map((explorer: string, index: number) => (
-                                // <Box key={index} component="ul" sx={{gap: "30px", display: "grid", padding: "0 0", listStyle: "none",}}>
-                                <Box key={index} component="ul" sx={{ padding: "0 0", listStyle: "none", border : "1px solid red"}}>
+                                <Box key={index} component="ul" sx={{ padding: "0 0", listStyle: "none"}}>
                                     <Box component={"li"} >
 
 
