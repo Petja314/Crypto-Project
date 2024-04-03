@@ -2,12 +2,12 @@ import React from "react";
 import {TableCell} from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import styles from "../../../css/dashboard/table.module.css"
+import styles from "../../../css/portfolio/portfolio.module.css"
 
 
 type PortfolioTableHeaderPropsType = {
-    sortingFieldsHandler : any,
-    priceSort : boolean,
+    sortingFieldsHandler: any,
+    priceSort: boolean,
     selectedKey: null | string
 }
 type portfolioTableHeadType = {
@@ -15,8 +15,8 @@ type portfolioTableHeadType = {
     label: string
 }
 
-const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedKey}: PortfolioTableHeaderPropsType) => {
-    const portfolioTableHead : portfolioTableHeadType[] = [
+const PortfolioTableHeader = ({sortingFieldsHandler, priceSort, selectedKey}: PortfolioTableHeaderPropsType) => {
+    const portfolioTableHead: portfolioTableHeadType[] = [
         {key: "rank", label: "rank"},
         {key: "name", label: "name"},
         {key: "price", label: "Price"},
@@ -30,13 +30,12 @@ const PortfolioTableHeader = ({  sortingFieldsHandler,priceSort,selectedKey}: Po
         <>
             {/*TABLE HEADER*/}
             {
-                portfolioTableHead.map((item : portfolioTableHeadType, index: number) => (
-                    <TableCell
-                        sx={{textAlign: "center", cursor: "pointer"}}
-                        key={index}
-                        onClick={() => {
-                            sortingFieldsHandler(item.key)
-                        }}>
+                portfolioTableHead.map((item: portfolioTableHeadType, index: number) => (
+                    <TableCell className={styles.portfolioTableHead} key={index}
+                               onClick={() => {
+                                   sortingFieldsHandler(item.key)
+                               }}
+                    >
                         {item.label}
                         {selectedKey === item.key && priceSort ?
                             <ArrowDropUpIcon/>

@@ -1,10 +1,8 @@
 import {Avatar, Box, TableBody, TableCell, TableRow} from "@mui/material";
-import React from "react";
-import {actionsCryptoTable, changeCurrencyValue, marketCapListArray} from "../../../redux/CryptoTableReducer";
+import React, {memo} from "react";
+import {changeCurrencyValue, marketCapListArray} from "../../../redux/CryptoTableReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
-import {memo} from "react"
 import {NavigateFunction, useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {formatPercent} from "../../../commons/functions/percentFormatter";
 import styles from "../../../css/dashboard/table.module.css"
 
@@ -25,10 +23,14 @@ export const TableBodyCoin = memo(({ filteredDataByName, currencyValue}: TableBo
                     <TableRow key={index} onClick={() => navigateToCoinPageHandler(item.id)}>
                         <TableCell>{item.rank}</TableCell>
                         <TableCell className={styles.tableStickyCoin}>
-                            <Box sx={{display: "flex", flexWrap : "wrap", gap: 1, alignItems: "center"}}>
+                            <Box className={styles.tableBodyContentBox}>
                                 <Avatar src={item.icon}/>
-                                <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
-                                <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>
+                                <Box className={styles.coinName}>
+                                    {item.name}
+                                </Box>
+                                <Box component='span' className={styles.coinSymbol}>
+                                    {item.symbol}
+                                </Box>
                             </Box>
                         </TableCell>
                         <TableCell>{formatCurrency(item.price, symbol, "en")}</TableCell>

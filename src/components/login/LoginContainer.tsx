@@ -6,6 +6,7 @@ import {Navigate} from "react-router-dom";
 import {RootState} from "../../redux/ReduxStore";
 import LoginSection from "./LoginSection";
 import SignUpSection from "./SignUpSection";
+import styles from "../../css/login/login-container.module.css"
 
 
 /**
@@ -25,37 +26,11 @@ const LoginContainer = () => {
     }
 
     return (
-        <Container
-            disableGutters
-            maxWidth={false}
-            sx={{
-                height: '100vh',
-                display: 'flex',
-                marginBottom : {xs :"40px" , xl : "0px"}
-            }}>
+        <Container disableGutters maxWidth={false} className={styles.container}>
+            <Grid container className={styles.gridContainer}>
+                <LoginInfoSection/>
+                <Grid item xs={12} lg={6} className={styles.gridItem}>
 
-
-            <Grid container sx={{
-                flex: 1 ,
-                width : {xl : "100%" , xs : "100vw !important"}
-            }}>
-
-                <LoginInfoSection
-
-                />
-
-                <Grid item
-                      xs={12}
-                      lg={6}
-                      sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin : {xs : "0 auto" ,},
-                    padding : "30px"
-                }}
-                >
                     {isRegistered ? (
                         <LoginSection
                             setIsRegistered={setIsRegistered}

@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Box, Button, Grid, Paper, Skeleton, SkeletonClasses, Stack, Typography} from "@mui/material";
+import {Box, Paper, Skeleton, Typography} from "@mui/material";
 import {ReactComponent as LeaderIcon} from "../../assets/images/icons/icon-cup-dark.svg"
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
 import {marketCapListArray} from "../../redux/CryptoTableReducer";
 import {NavigateFunction, useNavigate} from "react-router-dom";
-import styles from "../../css/dashboard/skeleton-dashboard.module.css"
+import skeletonStyles from "../../css/dashboard/skeleton-dashboard.module.css"
 import {ListSkeleton} from "./ListSkeleton";
-import board from "../../css/dashboard/leader-boards.module.css"
+import styles from "../../css/dashboard/leader-boards.module.css"
 
 
 /**
@@ -38,70 +38,35 @@ const LeaderBoard = () => {
     }
     return (
         <Box>
-            <Typography variant='h6' sx={{color: "white", marginBottom: "10px", display: "flex", alignItems: "center", gap: 1}}>
-                <LeaderIcon/>
-                Leaderboard of the week
-            </Typography>
+            <Typography variant='h6' className={styles.leaderBoardTitle}><LeaderIcon/>Leaderboard of the week</Typography>
 
             {leadersOfWeek.length <= 0 ? (
                 <ListSkeleton
                     columns={10}
-                    skeletonClass={styles.skeletonLists}
+                    skeletonClass={skeletonStyles.skeletonLists}
                     variant={"rectangular"}
                 />
             ) : (
                 leadersOfWeek.map((item, index: number) => (
                     <Box>
-                        <Paper key={index} sx={{
-                            borderRadius: '20px', marginBottom: "10px", width: {lg: "500px", xs: "100%"}, height: "60px", maxWidth: "100%", maxHeight: "100%",
-                            backgroundColor: index === 0 ? "#1230c9" : "transparent"
-                        }}>
-
-
-                            <Box sx={{alignItems: 'center', cursor: "pointer", display: "flex", justifyContent: "space-between"}} onClick={() => navigateToCoinDescription(item.id)}>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        gap: 1,
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Skeleton component='span' animation='wave' variant="circular" width={30} height={30} sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center', backgroundColor: '#e0f64b', color: "black",
-                                    }}>
+                        <Paper key={index} className={styles.paperLeaderBoard} sx={{backgroundColor: index === 0 ? "#1230c9" : "transparent"}}>
+                            <Box className={styles.leaderBoardBoxContent} onClick={() => navigateToCoinDescription(item.id)}>
+                                <Box className={styles.leaderBoardCryptoInfo}>
+                                    <Skeleton component='span' animation='wave' variant="circular" width={30} height={30} className={skeletonStyles.skeletonBoardIcon}>
                                         {index + 1}
                                     </Skeleton>
                                     <Box>{item.name}</Box>
                                 </Box>
 
-
-                                <Box sx={{display: "flex", gap: 2}}>
-                                    <span className={board.priceIncrease}> Price increase:</span>
-                                    <span
-                                        style={{
-                                            borderRadius: '5px',
-                                            height: "24px",
-                                            width: "68px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            margin: "0 auto",
-                                            padding: "5px",
-                                            backgroundColor: item.priceChange1w > 0 ? "#1ABC7B" : "#F13005",
-                                        }}>
+                                <Box className={styles.leaderBoardPriceContentBox}>
+                                    <span className={styles.priceIncrease}> Price increase:</span>
+                                    <span className={styles.leaderBoardPriceChange} style={{backgroundColor: item.priceChange1w > 0 ? "#1ABC7B" : "#F13005",}}>
                                         {item.priceChange1w}%
                                     </span>
                                 </Box>
-
-
                             </Box>
-
-
                         </Paper>
                     </Box>
-
                 ))
             )
             }

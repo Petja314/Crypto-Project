@@ -10,6 +10,8 @@ import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {actionsCryptoTable, getAllCoinsListThunk} from "../../../redux/CryptoTableReducer";
 import SearchCoin from "./SearchCoin";
 import BuySellCoinsComponent from "./BuySellCoinsComponent";
+import styles from "../../../css/portfolio/add-transaction.module.css"
+
 
 /**
  * AddTransactionContainer Component:
@@ -51,7 +53,7 @@ const AddTransactionContainer = () => {
                 <DialogTitle>Add transaction</DialogTitle>
                 <IconButton aria-label="close"
                             onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(false))}
-                            sx={{position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500],}}
+                            className={styles.dialogCloseIcon}
                 >
                     <CloseIcon/>
                 </IconButton>

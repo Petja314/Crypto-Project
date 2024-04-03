@@ -1,7 +1,74 @@
+.leaderBoardTitle {
+    color: white;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 
-@media (max-width: 420px){
-    .priceIncrease {
-        display: none;
+.paperLeaderBoard {
+    border-radius: 20px;
+    margin-bottom: 10px;
+    height: 60px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.leaderBoardBoxContent{
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaderBoardCryptoInfo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.leaderBoardPriceContentBox {
+    display: flex;
+    gap: 2px;
+}
+
+.leaderBoardPriceChange {
+    border-radius: 5px;
+    height: 24px;
+    width: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+
+/*XS*/
+@media (min-width: 0px) {
+    .paperLeaderBoard {
+        width: 100%;
     }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+
+}
+
+/*MD*/
+@media (min-width: 900px) {
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+    .paperLeaderBoard {
+        width: 500px;
+    }
+}
+
+/*XL*/
+@media (min-width: 1536px) {
 }

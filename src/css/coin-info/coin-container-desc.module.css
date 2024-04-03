@@ -1,0 +1,59 @@
+.container{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.coinBoxContent{
+    display: flex;
+    gap : 20px;
+}
+.coinInfoSection{
+    display: flex;
+    flex-direction: column;
+    flex: 1
+}
+.addToPortfolioBtn{
+    max-width: 100%;
+}
+.coinChartPriceSection{
+    display: flex;
+    flex-direction: column;
+    flex: 1
+}
+
+
+
+/*XS*/
+@media (min-width: 0px) {
+    .coinBoxContent {
+        flex-direction: column;
+    }
+    .addToPortfolioBtn {
+        margin-top: 20px !important;
+    }
+    .addToPortfolioBtn {
+        width: 100%;
+    }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+
+}
+
+/*MD*/
+@media (min-width: 900px) {
+    .coinBoxContent {
+        flex-direction: row;
+    }
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+    .addToPortfolioBtn {
+        width: 450px;
+    }
+}
+
+/*XL*/
+@media (min-width: 1536px) {
+}

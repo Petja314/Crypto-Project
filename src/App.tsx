@@ -7,13 +7,12 @@ import {useDispatch, useSelector} from "react-redux";
 import Preloader from "./commons/preloader/Preloader";
 import Header from "./components/header/Header";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-import styles from "./css/transition/transition.module.css"
+import TransitionCss from "./css/transition/transition.module.css"
 import PrivateRoutes from "./Routes/PrivateRoutes";
 import {routesNavigation, RoutesNavigationType} from "./Routes/navigation";
 import {appInitializationThunkCreator} from "./redux/AppInitialization";
 import ScrollToTop from "./Routes/ScrollToTop";
 import {AppDispatch, RootState} from "./redux/ReduxStore";
-import MobileCoinSearch from "./components/header/MobileCoinSearch";
 
 // @ts-ignore
 export const theme = createTheme({
@@ -50,6 +49,7 @@ export const theme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
+                    borderRadius : "20px",
                     padding: "16px",
                 },
             },
@@ -75,6 +75,17 @@ export const StyledCard = styled(Card)(({theme: any}) => ({
     transition: "transform 0.15s ease-in-out",
     "&:hover": {transform: "scale3d(1.09, 1.09, 1)"},
 }))
+
+
+// export const commonButtonStyles = {
+//     border: "1px solid #333",
+//     background: "#171717",
+//     color: "#fff",
+//     '&:hover': {
+//         border: "1px solid #e0f64b",
+//     },
+// };
+
 
 /**
  * Description: App Component
@@ -112,10 +123,10 @@ function App  () {
                     key={location.pathname}
                     timeout={1000}
                     classNames={{
-                        enter: styles.page_enter,
-                        enterActive: styles.page_enter_active,
-                        exit: styles.page_exit,
-                        exitActive: styles.page_exit_activeT
+                        enter:        TransitionCss.page_enter,
+                        enterActive:  TransitionCss.page_enter_active,
+                        exit:         TransitionCss.page_exit,
+                        exitActive:   TransitionCss.page_exit_activeT,
                     }}
                     unmountOnExit
                 >

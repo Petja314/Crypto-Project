@@ -8,9 +8,10 @@ import eur from "../../../assets/images/icons/currency_icons/EUR.svg";
 import cad from "../../../assets/images/icons/currency_icons/CAD.svg";
 import aud from "../../../assets/images/icons/currency_icons/AUD.svg";
 import {actionsCryptoTable, changeCurrencyValue, getAllCoinsListThunk} from "../../../redux/CryptoTableReducer";
-import {ThunkDispatch} from "redux-thunk";
 import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {useDispatch, useSelector} from "react-redux";
+import styles from "../../../css/dashboard/table.module.css"
+
 
 type TableHeadPropsType = {
     rowNumberHandler: (event: any) => void
@@ -34,10 +35,8 @@ export const TableHeadComponent = ({rowNumberHandler, sortingFieldsHandler, pric
     ]
     return (
         <TableHead>
-            <TableHeadFiltration
-                rowNumberHandler={rowNumberHandler}
-            />
-            <TableRow sx={{paddingTop: "120px"}}>
+            <TableHeadFiltration rowNumberHandler={rowNumberHandler}/>
+            <TableRow className={styles.tableHeadRow}>
                 {
                     tableHeaderColumns.map((item, index: number) => (
                         <TableCell key={index}
@@ -85,22 +84,21 @@ const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) =
     }
 
     return (
-        <TableRow sx={{borderBottom: "none"}}>
+        <TableRow
+            // sx={{borderBottom: "none"}}
+        >
             {/*FILTRATION*/}
-            <TableCell align="center" colSpan={5} sx={{background: "none", borderBottom: "none"}}>
-                <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
+            <TableCell align="center" colSpan={5} className={styles.tableFiltrationCell}>
+                <Box className={styles.filtrationBoxContent}>
                     <Box component={'span'}>Search by name: </Box>
                     <TextField
-                        sx={{maxWidth: "100%", width: "150px"}}
+                        className={styles.filterByNameInput}
                         onChange={(event: React.ChangeEvent<any>) => dispatch(actionsCryptoTable.setCoinSearchValueAC(event.target.value))}
                         type={"text"}
                     />
-                    <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
-                        <Avatar sx={{width: "30px", height: "30px"}} src={currencyValue.icon}/>
-                        <Select onChange={changeCurrencyHandler}
-                                sx={{height: "40px"}}
-                                value={currencyValue.value}
-                        >
+                    <Box className={styles.searchFilterWrapper}>
+                        <Avatar className={styles.currencyIcon} src={currencyValue.icon}/>
+                        <Select onChange={changeCurrencyHandler} className={styles.filterCurrencySelector} value={currencyValue.value}>
                             {
                                 currency.map((item, index: number) => (
                                     <MenuItem value={item.value} key={index}>
@@ -114,10 +112,10 @@ const TableHeadFiltration = ({rowNumberHandler}: TableHeadFiltrationPropsType) =
             </TableCell>
 
             {/*ROWS*/}
-            <TableCell align="center" colSpan={2} sx={{background: "none", borderBottom: "none"}}>
+            <TableCell align="center" colSpan={2} className={styles.filterRowsCell}>
                 <Box component={'span'}>Rows per page: </Box>
                 <Select
-                    sx={{height: "40px"}}
+                    className={styles.filterRowSelector}
                     value={rowsPerPage || rows[0]}
                     onChange={rowNumberHandler}
                 >

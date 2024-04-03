@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Avatar, Box, CircularProgress, Container, Grid, Paper, Skeleton, Typography} from "@mui/material";
+import {Avatar, Box, CircularProgress, Container, Grid, Paper, Typography} from "@mui/material";
 import bear from "../../assets/images/news/bearish.jpg"
 import bull from "../../assets/images/news/bullish.jpg"
 import trend from "../../assets/images/news/trending.jpg"
@@ -9,10 +9,10 @@ import {StyledCard} from "../../App";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {clearNewsDataAC, fetchCryptoNewsThunk, newsDataType, setCurrentPageAC, setIsLoadingAC, setTypeAC} from "../../redux/NewsReducer";
-import {ListSkeleton, ListSkeletonNews} from "../widgets/ListSkeleton";
-import styles from "../../css/news/skeleton-news.module.css"
+import {ListSkeletonNews} from "../widgets/ListSkeleton";
+import stylesSkeleton from "../../css/news/skeleton-news.module.css"
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
-
+import styles from "../../css/news/news.module.css"
 
 type NewsType = {
     type: string,
@@ -76,59 +76,43 @@ const News = () => {
     return (
         <Box>
             <ParticleBackgroundAnimation/>
-            <Container
-                sx={{marginBottom: "50px"}}
-            >
-                <Typography variant='h3' sx={{marginTop: "50px", marginBottom: "20px", color: "#fff", textAlign: "center"}}>News</Typography>
-
-                <Box sx={{display: "flex", justifyContent: "space-between",flexWrap : "wrap" , gap : 3 ,marginBottom: "40px"}}>
+            <Container className={styles.container}>
+                <Typography variant='h3' className={styles.newsMainTitle}>News</Typography>
+                <Box className={styles.newsTypeBox}>
                     {newsType.map((item) => (
-                        <Box
-                            onClick={() => {
-                                newsTypeHandler(item.value)
-                            }}
-                            sx={{
-                                cursor: "pointer",
-                                border: item.value === type ? "2px solid #e0f64b" : ""
-                            }}>
+                        <Box onClick={() => {
+                            newsTypeHandler(item.value)
+                        }}
+                             sx={{cursor: "pointer", border: item.value === type ? "2px solid #e0f64b" : "" , borderRadius : "20px"}}
+                        >
                             <StyledCard>
-                                <Typography variant={'h5'} sx={{textAlign: "center", marginBottom: "10px"}}>{item.type}</Typography>
-                                <Avatar sx={{width: "100px", height: "100px"}} src={item.image}/>
+                                <Typography variant={'h5'} className={styles.newsTypeTitle}>{item.type}</Typography>
+                                <Avatar className={styles.newsTypeAvatar} src={item.image}/>
                             </StyledCard>
                         </Box>
                     ))}
                 </Box>
 
                 {isLoading ? (
-                            <ListSkeletonNews columns={20} skeletonClass={styles.skeletonNews} variant={"rectangle"}/>
+                    <ListSkeletonNews columns={20} skeletonClass={stylesSkeleton.skeletonNews} variant={"rectangle"}/>
                 ) : (
                     <>
                         <Grid container spacing={2}>
                             {
                                 newsData.map((item: newsDataType, index: number) => (
-                                    <Grid item xs={12} md={6}> {/* Assuming you want this item to span the full width */}
-                                        <Paper sx={{borderRadius: '20px', marginBottom: "30px", height: {md : "650px" , xs : "auto"}, position: "relative"}} key={index}>
-                                            <Box sx={{display: "flex", flexDirection: "column", gap: 3,}}>
-                                                <a href={item.shareURL} style={{textDecoration: "none", color: "black"}}>
-                                                    <Typography variant='h5'
-                                                                sx={{
-                                                                    fontWeight: "bold",
-                                                                    backgroundColor: "#e0f64b",
-                                                                    color: "black",
-                                                                    padding: "3px",
-                                                                    borderRadius: "5px",
-                                                                    textAlign: "center",
-                                                                }}>
+                                    <Grid item xs={12} md={6}>
+                                        <Paper className={styles.paperNewsSection} key={index}>
+                                            <Box className={styles.newsContentSection}>
+                                                <a href={item.shareURL}>
+                                                    <Typography variant='h5' className={styles.newsContentTitle}>
                                                         {item.title !== '' ? item.title : titleMock}
                                                     </Typography>
                                                 </a>
-                                                <Box sx={{overflow: 'hidden', width: '100%', borderRadius: '10px', border: "2px solid #e0f64b", margin: "0 auto"}}>
-                                                    <img src={item.imgUrl.includes("undefined") ? imgComingSoon : item.imgUrl} alt=""
-                                                         style={{width: "100%", height: "250px", objectFit: "cover", borderRadius: '10px'}}/>
+                                                <Box className={styles.newsImageBox}>
+                                                    <img src={item.imgUrl.includes("undefined") ? imgComingSoon : item.imgUrl} alt="news_image"/>
                                                 </Box>
-                                                <Box sx={{marginBottom : "40px"}} >{item.description !== '' ? item.description : descriptionMock}</Box>
-
-                                                <Box sx={{position: "absolute", bottom: "20px"}}>Source: {item.source}</Box>
+                                                <Box className={styles.newsDescription}>{item.description !== '' ? item.description : descriptionMock}</Box>
+                                                <Box className={styles.newsSource}>Source: {item.source}</Box>
                                             </Box>
                                         </Paper>
                                     </Grid>
@@ -136,9 +120,8 @@ const News = () => {
                             }
                         </Grid>
 
-
-                        <Box sx={{display: "flex", justifyContent: "center"}}>
-                            {isLoading && <CircularProgress sx={{width: "80px !important", height: "80px  !important"}}/>}
+                        <Box className={styles.preLoaderBox}>
+                            {!isLoading && <CircularProgress className={styles.preloaderIcon}/>}
                         </Box>
                     </>
                 )
@@ -150,48 +133,5 @@ const News = () => {
 };
 
 export default React.memo(News);
-
-
-// <Grid container>
-//     {/*<Grid item sx={{display: "flex", justifyContent: "space-between", gap: 10}}>*/}
-//     <Grid item sx={{display: "flex", justifyContent: "space-between", gap: 10}}>
-//         <Box sx={{
-//             // position: 'relative',
-//             overflow: 'hidden',
-//             width: '400px',
-//             maxWidth: '100%',
-//             height: '250px',
-//             borderRadius: '10px',
-//             border: "2px solid #e0f64b",
-//             marginTop : "30px"
-//         }}>
-//             <img
-//                 src={item.imgUrl.includes("undefined") ? imgComingSoon : item.imgUrl}
-//                 alt=""
-//                 style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}}
-//             />
-//         </Box>
-//         {/*width : "50%"*/}
-//         <Box sx={{width: "50%", position: "relative" , marginBottom : "20px" }}>
-//             <a href={item.shareURL} style={{textDecoration: "none", color: "black"}}>
-//                 <Typography variant='h5'
-//                             sx={{
-//                                 marginBottom: "20px", fontWeight: "bold",
-//                                 backgroundColor: "#e0f64b", color: "black", padding: "3px", borderRadius: "5px", textAlign: "center"
-//                             }}>
-//                     {item.title !== '' ? item.title : titleMock}
-//                 </Typography>
-//             </a>
-//
-//             <Box>{item.description !== '' ? item.description : descriptionMock}</Box>
-//
-//             <Box sx={{position: "absolute", bottom: "5px", right: "20px"}}>
-//                 Source: {item.source}
-//             </Box>
-//         </Box>
-//
-//
-//     </Grid>
-// </Grid>
 
 

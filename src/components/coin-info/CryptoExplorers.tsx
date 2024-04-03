@@ -1,9 +1,9 @@
 import React from 'react';
 import {Box, Paper, Typography} from "@mui/material";
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import BackgroundBlock from "../../assets/images/image/block_bg.svg"
 import {ListSkeleton} from "../widgets/ListSkeleton";
-import styles from "../../css/coin-info/skeleton-coinInfo.module.css";
+import SkeletonStyles from "../../css/coin-info/skeleton-coinInfo.module.css";
+import styles from "../../css/coin-info/crypto-explorers.module.css"
 import {coinDataArray} from "../../redux/CoinDescriptionReducer";
 
 type CryptoExplorersPropsType = {
@@ -21,24 +21,19 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
     const topExplorers: string[] = coinData[0]?.explorers
 
     return (
-        <Box mt={3} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <Box className={styles.explorersBoxContent}>
             {!isLoading ? (
-                <ListSkeleton columns={1}
-                              skeletonClass={styles.skeletonCryptoExplorers}
-                              variant={"rectangle"}
+                <ListSkeleton
+                    columns={1}
+                    skeletonClass={SkeletonStyles.skeletonCryptoExplorers}
+                    variant={"rectangle"}
                 />
             ) : (
-                <Paper sx={{
-                    borderRadius: '20px', padding: "30px",
-                    height: "1200px",
-                    backgroundImage: `url(${BackgroundBlock})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundColor: "rgba(255, 255, 255, 0.09)",
-                    maxHeight: "100%",
-                    maxWidth: "100%"
-                }}>
-                    <Typography variant={'h5'} mb={2}>What is Crypto Explorers? <QueryStatsIcon sx={{color: "#E0F64B"}}/> </Typography>
+                <Paper className={styles.paperExplorers}>
+                    <Typography variant={'h5'} mb={2}>
+                        What is Crypto Explorers?
+                        <QueryStatsIcon className={styles.exploreIcon}/>
+                    </Typography>
 
                     {
                         cryptoExplorersInfo.map(explorersInfo => (
@@ -53,30 +48,17 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
                         Top Explorers 🔥
                     </Typography>
 
-                        {topExplorers &&
-                            topExplorers.map((explorer: string, index: number) => (
-                                <Box key={index} component="ul" sx={{ padding: "0 0", listStyle: "none"}}>
-                                    <Box component={"li"} >
-
-
-                                        <a
-                                            style={{
-                                                color: "white",
-                                                textDecoration: 'none',
-                                                display: 'inline-block',
-                                                maxWidth: '100%',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis'
-                                            }}
-                                            href={explorer}
-                                        >
-                                            🚀 {explorer}
-                                        </a>
-
-                                    </Box>
+                    {topExplorers &&
+                        topExplorers.map((explorer: string, index: number) => (
+                            <Box key={index} component="ul" className={styles.topExplorersSection}>
+                                <Box component={"li"}>
+                                    <a className={styles.explorersLinks} href={explorer}>
+                                        🚀 {explorer}
+                                    </a>
                                 </Box>
-                            ))
-                        }
+                            </Box>
+                        ))
+                    }
 
                 </Paper>
             )}

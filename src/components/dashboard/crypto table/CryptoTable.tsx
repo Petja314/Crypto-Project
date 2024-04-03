@@ -6,6 +6,7 @@ import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {TableHeadComponent} from "./TableHeadComponent";
 import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
 import {TableBodyCoin} from "./TableBodyCoin";
+import styles from "../../../css/dashboard/table.module.css"
 
 const CryptoTable = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -57,11 +58,7 @@ const CryptoTable = () => {
     const filteredDataByName: marketCapListArray[] = findCoinHandler()
 
     return (
-        <TableContainer
-            component={Paper}
-            sx={{borderRadius: '20px', height: "1000px", overflowY: "auto", cursor: "pointer"}}
-            onScroll={scrollHandler}
-        >
+        <TableContainer component={Paper} className={styles.tableContainer} onScroll={scrollHandler}>
             <Table stickyHeader>
                 {/*TABLE HEAD*/}
                 <TableHeadComponent
@@ -78,7 +75,7 @@ const CryptoTable = () => {
             </Table>
 
             {/*PRELOADER && NOTIFICATIONS */}
-            <Box sx={{display: "flex", justifyContent: "center", marginTop: "100px"}}>
+            <Box className={styles.preloader}>
                 {fetching ? (
                     <CircularProgress/>
                 ) : (

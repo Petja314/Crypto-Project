@@ -1,10 +1,11 @@
-import {AppBar, Avatar, Box, Container, Toolbar, Typography} from "@mui/material";
-import logo from "../../assets/images/logo/logo-dark.svg";
-import {NavigateFunction, NavLink, useNavigate} from "react-router-dom";
+import {AppBar, Box, Container} from "@mui/material";
+import {NavLink} from "react-router-dom";
 import React from "react";
 import LoginSettings from "./LoginSettings";
 import {routesNavigation, RoutesNavigationType} from "../../Routes/navigation";
-
+import styles from "../../css/header/header.module.css"
+import classNames from 'classnames';
+import HeaderLogoSection from "./HeaderLogoSection";
 
 /**
  * Quick Description: HeaderDesktop Component
@@ -14,50 +15,16 @@ import {routesNavigation, RoutesNavigationType} from "../../Routes/navigation";
  */
 
 
+
+// containerDesktop
+
 const HeaderDesktop = () => {
-    const navigate : NavigateFunction = useNavigate()
     return (
-        <AppBar position="static">
-            <Container
-                maxWidth={"xl"}
-            >
-                <Toolbar disableGutters
-                         sx={{
-                             display: {xs: "flex"},
-                             justifyContent: {xs: "space-between"}
-                         }}
-                >
-
-                    {/*LOGO SECTION*/}
-                    <Box
-                        onClick={() => navigate("/dashboard")}
-                        sx={{
-                            display: {md: "flex"},
-                            alignItems: {md: "center"}
-                        }}>
-                        <Avatar sx={{marginRight: "10px", width: 50, height: 50}} src={logo}></Avatar>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            sx={{
-                                mr: 10,
-                                display: {xs: 'none', md: 'flex'},
-                                fontWeight: 600,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                        >
-                            MiCrypto
-                        </Typography>
-                    </Box>
-
+        <AppBar className={styles.appBar}>
+            <Container className={classNames(styles.container,styles.containerDesktop)}>
+                <HeaderLogoSection/>
                     {/*ROUTES SECTION*/}
-                    <Box sx={{
-                        flexGrow: 1,
-                        display: {xs: 'none', md: 'flex', justifyContent: "space-between"}
-                    }}>
+                    <Box className={styles.desktopHeaderRoutesContainer}>
                         {routesNavigation &&
                             routesNavigation.map((page: RoutesNavigationType) => (
                                 <NavLink
@@ -71,12 +38,8 @@ const HeaderDesktop = () => {
                                     }}
                                 >
                                     {page.isMenu &&
-                                        <Box sx={{
-                                            display: "flex",
-                                            gap: 1,
-                                            alignItems: "center",
-                                        }}>
-                                            < page.icon style={{fill: "white", width: 20, height: 20,}}/>
+                                        <Box className={styles.desktopMenuRoutes}>
+                                            <page.icon  className={styles.bottomNavIcon}/>
                                             {page.name}
                                         </Box>
                                     }
@@ -85,8 +48,6 @@ const HeaderDesktop = () => {
                             ))}
                     </Box>
                     <LoginSettings />
-
-                </Toolbar>
             </Container>
         </AppBar>
     );

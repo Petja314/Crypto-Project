@@ -9,6 +9,8 @@ import CoinTableInfo from "./CoinTableInfo";
 import CoinDataLinksWidget from "./coin-info-widgets/CoinDataLinksWidget";
 import CryptoChart from "./chart/CryptoChart";
 import PriceChangesWidget from "./coin-info-widgets/PriceChangesWidget";
+import styles from "../../css/coin-info/coin-container-desc.module.css"
+
 
 /**
  * Description : CoinContainerDescription Component:
@@ -35,11 +37,10 @@ const CoinContainerDescription = () => {
         navigate(`/portfolio`)
     }
     return (
-        <Container sx={{marginTop: "50px", marginBottom: "100px" }}>
+        <Container className={styles.container}>
+            <Box className={styles.coinBoxContent}>
+                <Box className={styles.coinInfoSection}>
 
-            <Box sx={{display: "flex", flexDirection: {xs: 'column', md: 'row'}, gap: 3}}>
-
-                <Box sx={{display: "flex", flexDirection: "column", flex: '1'}}>
                     {/*INFORMATION ABOUT THE SELECTED CURRENCY IN TABLE*/}
                     <CoinTableInfo
                         currencyValue={currencyValue}
@@ -50,20 +51,16 @@ const CoinContainerDescription = () => {
                         coinData={coinData}
                         isLoading={isLoading}
                     />
-                    <Button
-                        onClick={navigateToPortfolioPage}
-                        sx={{
-                            marginTop: {xs: "20px", sm: "20px"},
-                            width: {lg : "450px" , xs : "100%"},
-                            maxWidth: "100%"
-                        }}>
+                    <Button className={styles.addToPortfolioBtn} onClick={navigateToPortfolioPage}>
                         Add to portfolio
                     </Button>
                 </Box>
 
-                <Box sx={{display: "flex", flexDirection: "column", flex: '1'}}>
+                <Box className={styles.coinChartPriceSection}>
+
                     {/*CRYPTO CHART OF SELECTED COIN*/}
                     <CryptoChart/>
+
                     {/*PRICE WIDGET OF SELECTED COIN*/}
                     <PriceChangesWidget
                         coinData={coinData}

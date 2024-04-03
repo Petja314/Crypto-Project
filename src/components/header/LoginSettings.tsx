@@ -10,6 +10,7 @@ import DexExchange from "../dex-exchange/DexExchange";
 import News from "../news/News";
 import Profile from "../profile/Profile";
 import {AppDispatch} from "../../redux/ReduxStore";
+import styles from "../../css/header/header.module.css"
 
 
 const menu_options = [
@@ -40,41 +41,26 @@ const LoginSettings = () => {
     }
 
     return (
-        <Box
-            sx={{
-            flexGrow: 0,
-        }}>
-            <UserAvatar
-                setAnchorElUser={setAnchorElUser}
-            />
+        <Box>
+            <UserAvatar setAnchorElUser={setAnchorElUser}/>
             <Menu
-                sx={{mt: '60px'}}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
+                sx={{mt: '60px'}} id="menu-appbar" anchorEl={anchorElUser} keepMounted
+                anchorOrigin={{vertical: 'top', horizontal: 'right',}}
+                transformOrigin={{vertical: 'top', horizontal: 'right',}}
                 open={Boolean(anchorElUser)}
                 onClose={() => setAnchorElUser(null)}
             >
                 <MenuList>
                     <MenuItem onClick={() => setAnchorElUser(null)}>
-                        <Box onClick={logOutHandler}>Logout</Box>
+                        <Box onClick={logOutHandler}>
+                            Logout
+                        </Box>
                     </MenuItem>
                 </MenuList>
                 {menu_options.map((menu) => (
                     <MenuItem key={menu.name} onClick={() => setAnchorElUser(null)}>
                         <Typography textAlign="center">
-                            <NavLink
-                                style={{textDecoration: 'none', listStyleType: "none", color: "white", cursor: "pointer"}}
-                                to={menu.path}
-                            >
+                            <NavLink className={styles.menuNavLink} to={menu.path}>
                                 {menu.name}
                             </NavLink>
                         </Typography>

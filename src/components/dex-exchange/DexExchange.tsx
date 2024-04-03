@@ -21,7 +21,7 @@ import {
     tokenListArrayType
 } from "../../redux/DexExchangeReducer";
 import {DexWarnings} from "./DexWarnings";
-import {useLocation} from "react-router-dom";
+import styles from "../../css/dex/dex.module.css"
 
 
 /**
@@ -106,169 +106,113 @@ const DexExchange = () => {
 
     }
     return (
-            <Container sx={{marginTop: "50px", marginBottom: "100px", position: "relative"}}>
-                <ParticleBackgroundAnimation/>
+        <Container className={styles.container}>
+            <ParticleBackgroundAnimation/>
 
-                <Box  sx={{marginBottom : "20px"}}>
-                    <w3m-button/>
-                </Box>
+            <Box className={styles.walletBtn}>
+                <w3m-button/>
+            </Box>
 
-                <Box sx={{
-                    padding: "20px",
-                    backgroundImage: `url(${titleBG})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    borderRadius: "20px",
-                    width: {lg : "30%" , sm : "50%" , xs : "80%"},
-                    margin: "0 auto",
-                }}>
-                    <Typography variant='h3' sx={{color: "#e0f64b", fontWeight: "bold", textAlign: "center",fontSize : {lg : "48px" , md : "30px" , xs : "25px" } }}>
-                        Swap anytime anywhere
-                    </Typography>
-                </Box>
+            <Box className={styles.titleMainBox}>
+                <Typography variant='h3'>Swap anytime anywhere</Typography>
+            </Box>
 
-                {/*STATUS OF SWAP*/}
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItem: "center",
-                        marginBottom: "30px",
-                        marginTop: "20px",
-                        height: "50px",
-                        maxHeight: "100%"
-                    }}>
-                    <DexWarnings/>
-                </Box>
+            {/*STATUS OF SWAP*/}
+            <Box className={styles.swapStatus}>
+                <DexWarnings/>
+            </Box>
 
-                <Paper sx={{borderRadius: "24px", width: "600px", margin: "0 auto", paddingBottom: "30px" , maxWidth : "100%"}}>
-                    <Typography variant='h5' sx={{padding: "20px"}}>Dex Exchange</Typography>
+            <Paper className={styles.paperSwap}>
+                <Typography variant='h5'>Dex Exchange</Typography>
+                <Box className={styles.mainExchangeBox}>
 
+                    <Box className={styles.paymentBox}>
+                        <Box component='span'>You pay</Box>
 
-                    <Box sx={{position: "relative",}}>
-                        <Box sx={{borderRadius: "24px", padding: "20px", backgroundColor: "rgb(42,40,40)"}}>
-                            <Box component='span' sx={{color: "#9d9191"}}>You pay</Box>
-
-                            {/*YOU PAY*/}
-                            <Box sx={{display: "flex",}}>
-                                <input
-                                    onChange={changeAmount}
-                                    value={tokenOnePrice === null ? 0 : tokenOnePrice}
-                                    style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
-                                    type={'number'}/>
-
-                                <Box
-                                    sx={{
-                                        backgroundColor: "rgb(81,82,89)",
-                                        height: "50px",
-                                        borderRadius: "24px",
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        padding: "4px 8px 4px 4px"
-                                    }}
-                                    onClick={() => {
-                                        setIsDialogOpen(true)
-                                        setTabValue(0)
-                                    }
-                                    }
-                                    defaultValue={0}
-                                >
-                                    <Avatar src={selectedTokenOne.img}/>
-                                    <Box sx={{fontWeight: "bold", marginLeft: "5px"}}>{selectedTokenOne.ticker}</Box>
-                                    <KeyboardArrowDownIcon/>
-                                </Box>
+                        {/*YOU PAY*/}
+                        <Box className={styles.clientPaymentSection}>
+                            <input onChange={changeAmount} value={tokenOnePrice === null ? 0 : tokenOnePrice} type={'number'}/>
+                            <Box className={styles.clientPaymentContent}
+                                 onClick={() => {
+                                     setIsDialogOpen(true)
+                                     setTabValue(0)
+                                 }}
+                                 defaultValue={0}
+                            >
+                                <Avatar src={selectedTokenOne.img}/>
+                                <Box className={styles.paymentSelectedToken}>{selectedTokenOne.ticker}</Box>
+                                <KeyboardArrowDownIcon/>
                             </Box>
                         </Box>
-
-
-                        {/*SWAP BUTTON*/}
-                        <IconButton
-                            sx={{color: "#e0f64b", position: "absolute", left: "45%", top: "30%"}}
-                            onClick={swapDialogsAround}
-                        >
-                            <SwapVerticalCircleIcon sx={{width: "50px", height: "50px",}}/>
-                        </IconButton>
-                        {/*SWAP BUTTON*/}
-
-
-                        {/*YOU RECEIVE*/}
-                        <Box sx={{borderRadius: "24px", padding: "20px", backgroundColor: "rgb(42,40,40)", marginTop: "10px"}}>
-                            <Box component='span' sx={{color: "#9d9191"}}>You receive</Box>
-
-                            <Box sx={{display: "flex",}}>
-                                <input
-                                    disabled
-                                    value={tokenTwoPrice === null ? 0 : tokenTwoPrice}
-                                    style={{width: "100%", backgroundColor: "transparent", border: "none", outline: "none", fontSize: "30px", color: "#fff"}}
-                                    type={'number'}/>
-
-
-                                <Box sx={{
-                                    backgroundColor: "rgb(81,82,89)",
-                                    height: "50px",
-                                    borderRadius: "24px",
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    padding: "4px 8px 4px 4px"
-                                }}
-                                     onClick={() => {
-                                         setIsDialogOpen(true)
-                                         setTabValue(1)
-                                     }
-                                     }
-                                     defaultValue={1}
-                                >
-                                    <Avatar src={selectedTokenTwo.img}/>
-                                    <Box sx={{fontWeight: "bold", marginLeft: "5px"}}>{selectedTokenTwo.ticker}</Box>
-                                    <KeyboardArrowDownIcon/>
-                                </Box>
-                            </Box>
-                        </Box>
-                        {/*SWAP BUTTON */}
-                        <Button
-                            disabled={!address || !tokenOnePrice || tokenOnePrice == 0}
-                            sx={{width: "100%", marginTop: "10px", fontWeight: "bold", paddingTop: "10px", paddingBottom: "10px", fontSize: "22px"}}
-                            onClick={() => dispatch(dexApproveAllowance({selectedTokenOne: selectedTokenOne, address: address}))}
-                        >
-                            Swap
-                        </Button>
-
                     </Box>
-                </Paper>
 
-                <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} sx={{height: "700px", marginTop: "100px"}}>
-                    <DialogTitle>Select a token</DialogTitle>
-                    <IconButton
-                        aria-label="close"
-                        onClick={() => setIsDialogOpen(false)}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                        }}
-                    >
-                        <CloseIcon/>
+
+                    {/*SWAP BUTTON*/}
+                    <IconButton className={styles.swapIconBtn} onClick={swapDialogsAround}>
+                        <SwapVerticalCircleIcon sx={{width: "50px", height: "50px"}}/>
                     </IconButton>
-                    {tokenList.map((item, index: number) => (
-                        <MenuItem
-                            key={index}
-                            sx={{display: "flex", gap: 2, width: "400px", marginTop: "10px"}}
-                            onClick={() => handleTokenChange(item)}
-                        >
-                            <Avatar src={item.img}/>
-                            <Box> {item.ticker}</Box>
-                        </MenuItem>
-                    ))}
-                </Dialog>
-                <DexUsageInstruction/>
-            </Container>
+                    {/*SWAP BUTTON*/}
+
+
+                    {/*YOU RECEIVE*/}
+                    <Box className={styles.paymentReceiveBox}>
+                        <Box component='span'>You receive</Box>
+                        <Box className={styles.receivePaymentSection}>
+                            <input disabled value={tokenTwoPrice === null ? 0 : tokenTwoPrice} type={'number'}/>
+                            <Box
+                                className={styles.receiveContentSection}
+                                onClick={() => {
+                                     setIsDialogOpen(true)
+                                     setTabValue(1)
+                                 }}
+                                 defaultValue={1}
+                            >
+                                <Avatar src={selectedTokenTwo.img}/>
+                                <Box  className={styles.receiveSelectedToken}>{selectedTokenTwo.ticker}</Box>
+                                <KeyboardArrowDownIcon/>
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    {/*SWAP BUTTON */}
+                    <Button
+                        disabled={!address || !tokenOnePrice || tokenOnePrice == 0}
+                        className={styles.swapBtn}
+                        onClick={() => dispatch(dexApproveAllowance({selectedTokenOne: selectedTokenOne, address: address}))}
+                    >
+                        Swap
+                    </Button>
+                </Box>
+            </Paper>
+
+            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} className={styles.swapDialogBox}>
+                <DialogTitle>Select a token</DialogTitle>
+                <IconButton
+                    className={styles.dialogCloseBtn}
+                    aria-label="close"
+                    onClick={() => setIsDialogOpen(false)}
+                >
+                    <CloseIcon/>
+                </IconButton>
+
+
+                {tokenList.map((item, index: number) => (
+                    <MenuItem
+                        key={index}
+                        className={styles.tokenList}
+                        onClick={() => handleTokenChange(item)}
+                    >
+                        <Avatar src={item.img}/>
+                        <Box> {item.ticker}</Box>
+                    </MenuItem>
+                ))}
+            </Dialog>
+            <DexUsageInstruction/>
+        </Container>
     );
 };
-
-
 export default React.memo(DexExchange);
+
 
 
 

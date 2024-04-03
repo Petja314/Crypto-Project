@@ -7,7 +7,7 @@ import React from "react";
 import {AppDispatch} from "../../../redux/ReduxStore";
 import {useNavigate} from "react-router-dom";
 import {formatCurrency} from "@coingecko/cryptoformat";
-import styles from "../../../css/dashboard/table.module.css";
+import styles from "../../../css/portfolio/portfolio.module.css";
 
 type PortfolioTableBodyPropsType = {
     myCurrentPortfolioDataFB: portfolioFirebaseDataType[]
@@ -23,14 +23,15 @@ const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsT
         <>
             {/*TABLE BODY*/}
             {myCurrentPortfolioDataFB.map((item: portfolioFirebaseDataType, index: number) => (
-                <TableRow key={index} sx={{textAlign: "center", cursor: "pointer" }}>
-
+                <TableRow key={index} className={styles.portfolioTableBodyRow}>
                     <TableCell>{item.rank}</TableCell>
                     <TableCell className={styles.tableStickyCoin} onClick={() => navigateToCoinPageHandler(item.id)}>
-                        <Box sx={{display: "flex", gap: 1, alignItems: "center",flexWrap : "wrap"}}>
+                        <Box className={styles.tableNameTableCell}>
                             <Avatar src={item.icon}/>
-                            <Box sx={{fontWeight: "bold"}}> {item.name}</Box>
-                            <Box component='span' sx={{textTransform: "uppercase",}}> {item.symbol}</Box>
+                            <Box className={styles.coinName}>
+                                {item.name}
+                            </Box>
+                            <Box component='span'> {item.symbol}</Box>
                         </Box>
                     </TableCell>
                     <TableCell>{formatCurrency(item.price, "USD", "en")}</TableCell>
@@ -42,19 +43,16 @@ const PortfolioTableBody = ({myCurrentPortfolioDataFB}: PortfolioTableBodyPropsT
                     <TableCell >
                         {/*<IconButton style={{backgroundColor: 'transparent'}}>*/}
                             {/*BUY AND SELL CRYPTO*/}
-                            <Box sx={{display: "flex", gap: 2}}>
-                                <Button sx={{padding: 0}} onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}>
+                            <Box className={styles.purchaseActions}>
+                                <Button onClick={() => dispatch(PortfolioActions.isPortfolioDialogOpenAC(true))}>
                                     {/*/!*<AddTransactionContainer/>*!/ - OPENTS AFTER isPortfolioDialogOpenAC become true*/}
                                     <AddCircleOutlineIcon/>
                                 </Button>
 
-                                <Button
-                                    onClick={() => dispatch(deleteCoinFromPortfolioApiFirebase(item.id))}
-                                    sx={{padding: 0}}>
+                                <Button onClick={() => dispatch(deleteCoinFromPortfolioApiFirebase(item.id))}>
                                     <DeleteIcon/>
                                 </Button>
                             </Box>
-                        {/*</IconButton>*/}
                     </TableCell>
                 </TableRow>
             ))

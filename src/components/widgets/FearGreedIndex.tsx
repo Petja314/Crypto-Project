@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {memo, useEffect} from 'react';
 import {Avatar, Box, Paper, Typography} from "@mui/material";
 import fear_greed from "../../assets/images/image/FearandGreedChart.svg"
 import bitcoin from "../../assets/images/icons/bitcoinimg.png"
@@ -6,8 +6,6 @@ import moment from 'moment'
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {fearAndGreedFetchingThunk, fearGreedArray} from "../../redux/FearGreedIndexReducer";
-import {CarouselMui} from "./CarouselMui";
-import {memo} from 'react';
 import styles from "../../css/dashboard/fear-greed.module.css"
 
 /**
@@ -41,44 +39,35 @@ const FearGreedIndex = () => {
     const normalizedAngle = normalizeAngleHandler(greedIndex)
     return (
         <Box>
-            {/*height : "320px"*/}
-            <Paper  sx={{borderRadius: "20px", marginBottom: "30px", height: "auto", maxWidth: "100%"}}>
-                <Box sx={{display: "flex", justifyContent: {sm: "space-around", xs: "center"}}}>
+            <Paper className={styles.paperFearGreed}>
+                <Box className={styles.featGreedBoxContent}>
                     <Box p={2}>
                         <Box mb={2}>
-                            <Box sx={{display: "flex", gap: 1, itemAlign: "center"}}>
-                                <Avatar sx={{width: "30px", height: "30px"}} src={bitcoin}/>
-                                <Typography variant={'h6'} sx={{fontWeight: "bold"}}> Fear & Greed Index</Typography>
+
+                            <Box className={styles.fearGreedBoxInfo}>
+                                <Avatar className={styles.fearGreedAvatar} src={bitcoin}/>
+                                <Typography variant={'h6'}> Fear & Greed Index</Typography>
                             </Box>
-                            <Box sx={{color: "#c2baba", fontSize: "12px"}}>Multifactorial Crypto Market Sentiment Analysis</Box>
+
+                            <Box className={styles.fearGreenDefinition}>Multifactorial Crypto Market Sentiment Analysis</Box>
                         </Box>
 
-                        <Box sx={{display: "flex", justifyContent: "center"}}>
-                            <Box sx={{position: "relative",}}>
+                        <Box className={styles.fearGreenDataContent}>
+                            <Box className={styles.fearGreenDataWrapper}>
                                 {
                                     fearGreedIndexData.slice(0, 1).map((item: fearGreedArray, index: number) => (
                                         <Box key={index}>
-                                            <Box sx={{
-                                                height: "16px",
-                                                width: "16px",
-                                                borderRadius: "50%",
-                                                border: "2px solid #FFFFFF",
-                                                backgroundColor: "#0D1421",
-                                                position: "absolute",
-                                                // top: "61px",
-                                                top: "81px",
-                                                left: "-5px",
-                                                transform: `rotate(${normalizedAngle}deg)`,
-                                                transformOrigin: "93.5px 8px"
-                                            }}/>
-                                            <img src={fear_greed} alt=""/>
+                                            <Box className={styles.fearGreenChart} sx={{transform: `rotate(${normalizedAngle}deg)`, transformOrigin: "93.5px 8px"}}/>
+                                            <img src={fear_greed} alt="feat_greed_image"/>
 
-                                            <Box sx={{textAlign: "center", position: "absolute", top: "30%", left: "20%"}}>
-                                                <Box sx={{fontWeight: "bold", fontSize: "22px"}}>{item.value}</Box>
+                                            <Box className={styles.fearGreedBoxValue}>
+                                                <Box className={styles.fearGreedValue}>
+                                                    {item.value}
+                                                </Box>
                                                 {item.value_classification}
                                             </Box>
 
-                                            <Box mt={9} sx={{color: "#c2baba", fontSize: "13px"}}>
+                                            <Box mt={9} className={styles.lastUpdate}>
                                                 Last updated :{moment(item.timestamp * 1000).format('MMM DD YYYY h:mm A')}
                                             </Box>
                                         </Box>
@@ -86,8 +75,6 @@ const FearGreedIndex = () => {
                                 }
                             </Box>
                         </Box>
-
-
                     </Box>
                     {/*HISTORICAL VALUES*/}
                     <HistoricalValuesGreedIndex
@@ -124,35 +111,25 @@ const HistoricalValuesGreedIndex = memo(({fearGreedIndexData}: HistoricalValuesP
         return "";
     }
     return (
-        <Box p={2} className={styles.fearGreedValues} sx={{}}>
-            <Typography variant={'h6'} sx={{fontWeight: "bold", marginBottom: "10px"}}>Historical Values</Typography>
+        <Box p={2} className={styles.fearGreedValues}>
+            <Typography variant={'h6'}>Historical Values</Typography>
             {
                 filteredData.map((item: fearGreedArray, index: number) => (
-                    <Box key={index} sx={{display: "flex", justifyContent: "space-between", gap: 5, borderBottom: "1px solid #ccc", marginBottom: "5px", paddingBottom: "5px"}}>
+                    <Box className={styles.historicalValuesWrapper} key={index}>
                         <Box>
-                            <Box sx={{color: "#ccc", fontSize: "14px"}}> {moment(item.timestamp * 1000).subtract('days').calendar()} </Box>
-                            <Box sx={{
-                                color: getColorByValue(item.value),
-                                fontWeight: "bold"
-                            }}>
+                            <Box className={styles.historicalDate}>
+                                {moment(item.timestamp * 1000).subtract('days').calendar()}
+                            </Box>
+                            <Box
+                                className={styles.historicalClassValue}
+                                sx={{color: getColorByValue(item.value)}}
+                            >
                                 {item.value_classification}
                             </Box>
                         </Box>
-                        <Box
-                            sx={{
-                                backgroundColor: getColorByValue(item.value),
-                                padding: "10px",
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "50%",
-                                fontWeight: "bold",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}>
+                        <Box className={styles.currentGreedValue} sx={{backgroundColor: getColorByValue(item.value),}}>
                             {item.value}
                         </Box>
-
                     </Box>
                 ))
             }

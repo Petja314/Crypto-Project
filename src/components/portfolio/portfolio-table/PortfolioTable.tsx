@@ -5,6 +5,7 @@ import {RootState} from "../../../redux/ReduxStore";
 import {sortingFieldsHandler} from "../../../commons/functions/sortingTableFields";
 import PortfolioTableHeader from "./PortfolioTableHeader";
 import PortfolioTableBody from "./PortfolioTableBody";
+import styles from "../../../css/portfolio/portfolio.module.css"
 
 const PortfolioTable = () => {
     const {myCurrentPortfolioDataFB} = useSelector((state: RootState) => state.myPortfolio)
@@ -19,11 +20,20 @@ const PortfolioTable = () => {
     }
 
     return (
-        <Box sx={{marginTop: "20px", marginBottom: "20px"}}>
-            <TableContainer component={Paper} sx={{borderRadius: '20px'}}>
+        <Box
+            className={styles.portfolioTableContainer}
+            // sx={{marginTop: "20px", marginBottom: "20px"}}
+        >
+            <TableContainer
+                component={Paper}
+                // className={styles.tableContainer}
+                // sx={{borderRadius: '20px'}}
+            >
                 <Table stickyHeader>
                     <TableHead>
-                        <TableRow sx={{background: "red", paddingTop: "120px"}}>
+                        <TableRow
+                            // sx={{background: "red", paddingTop: "120px", border : "1px solid red"}}
+                        >
                             <PortfolioTableHeader
                                 priceSort={priceSort}
                                 sortingFieldsHandler={handleSorting}

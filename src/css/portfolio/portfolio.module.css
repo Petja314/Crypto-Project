@@ -1,15 +1,52 @@
-@media (max-width: 600px ){
-    .profitImage{
-        display : none
-    }
+.containerManager {
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
 
-@media (max-width: 400px ){
-    .profitWidget{
-        display: flex;
-        flex-direction: column;
-    }
-    .profitImage{
-        display : flex
-    }
+.portfolioTableContainer{
+    margin-top: 20px;
+    margin-bottom: 20px
 }
+
+.portfolioTableHead{
+    text-align: center;
+    cursor: pointer
+}
+
+.tableStickyCoin {
+    position: sticky;
+    left: 0;
+    width: 200px;
+    background-color: rgb(31, 31, 31);
+    borderRadius: 5px;
+}
+.portfolioTableBodyRow{
+    text-align: center;
+    cursor: pointer
+}
+
+.tableNameTableCell{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap : wrap;
+}
+
+.coinName{
+    font-weight: bold;
+}
+
+.tableNameTableCell span {
+    text-transform: uppercase;
+}
+
+.purchaseActions{
+    display: flex;
+    gap : 20px;
+}
+.purchaseActions button {
+    padding: 0px;
+}
+
+
+

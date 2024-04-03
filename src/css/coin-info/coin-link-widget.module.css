@@ -1,0 +1,55 @@
+.paperCoinLinks {
+    margin-top: 20px;
+    height: 120px;
+    background-image: url("../../assets/images/image/block_bg.svg") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.09) !important;
+    max-width: 100%
+}
+
+.officialLinks {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center
+}
+
+.coinLinksWidgetBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 10px;
+    max-width: 100%
+}
+
+.linksIcon {
+    color: #E0F64B !important;
+}
+
+
+/*XS*/
+@media (min-width: 0px) {
+    .paperCoinLinks {
+        width: 100%;
+    }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+
+}
+
+/*MD*/
+@media (min-width: 900px) {
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+    .paperCoinLinks {
+        width: 450px;
+    }
+}
+
+/*XL*/
+@media (min-width: 1536px) {
+}

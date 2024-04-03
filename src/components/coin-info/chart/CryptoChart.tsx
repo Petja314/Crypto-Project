@@ -18,7 +18,9 @@ import {Line} from "react-chartjs-2";
 import moment from "moment";
 import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {ListSkeleton} from "../../widgets/ListSkeleton";
-import styles from "../../../css/coin-info/skeleton-coinInfo.module.css"
+import skeletonStyles from "../../../css/coin-info/skeleton-coinInfo.module.css"
+import styles from "../../../css/coin-info/coin-chart.module.css"
+
 
 ChartJS.register(
     CategoryScale,
@@ -32,27 +34,26 @@ ChartJS.register(
 );
 
 
-
 /**
  * CryptoChart Component:
  * Sends the selected coin data to generate a chart, specifying the time frame, currency, and compiling it into the chart by making API calls.
  * Utilizes the ChartJS library for chart creation using selected data from the API.
  */
 type chartDataSets = {
-    backgroundColor : string
-    borderColor : string
-    data : string[]
-    fill : boolean
-    label : string
+    backgroundColor: string
+    borderColor: string
+    data: string[]
+    fill: boolean
+    label: string
 }
 
 type ChartData = {
-    datasets : chartDataSets[]
-    labels : string[]
+    datasets: chartDataSets[]
+    labels: string[]
 }
 
 
- const CryptoChart = () => {
+const CryptoChart = () => {
     //Variations of different time frames for a crypto chart
     const timeframe: string[] = ["24h", "1w", "1m", "3m", "6m", "1y",]
     const {id} = useParams()
@@ -67,24 +68,24 @@ type ChartData = {
     }, [id, chartTimeFrame]);
 
     //GETTING THE VALUE X and Y to Display chart by the current price
-    const coinCharData = cryptoChartData.map((value : any ) : {x : string, y : string} => ({
+    const coinCharData = cryptoChartData.map((value: any): { x: string, y: string } => ({
         x: value[0], y: value[1].toFixed(2)
     }))
 
-      const options = {
-         responsive: true,
-         plugins: {
-             legend: {
-                 position: 'top' as const,
-             },
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
 
-         },
-     };
+        },
+    };
 
 
     //Creating the relevant data for a crypto chart with , selected coin , currency , date and etc.
-    const data : ChartData = {
-        labels: coinCharData.map((value : any) => moment(value.x * 1000).format('MMM D')),
+    const data: ChartData = {
+        labels: coinCharData.map((value: any) => moment(value.x * 1000).format('MMM D')),
         datasets: [
             {
                 fill: true,
@@ -96,37 +97,26 @@ type ChartData = {
         ]
     }
     return (
-        <Box mt={5} >
-
+        <Box mt={5}>
             {timeframe.length <= 0 ? (
-                <ListSkeleton columns={1}
-                              skeletonClass={styles.skeletonChartTimeFrame}
-                              variant={"rectangle"}
+                <ListSkeleton
+                    columns={1}
+                    skeletonClass={skeletonStyles.skeletonChartTimeFrame}
+                    variant={"rectangle"}
                 />
             ) : (
-                <Paper sx={{borderRadius: '20px', marginBottom: "10px", height: "100px",maxWidth : "100%" }}>
-                    <Typography sx={{textAlign: "center"}}>Chart time frame</Typography>
-                    <List sx={{display: "flex", justifyContent: "space-evenly" ,maxWidth : "100%"}}>
-                        {timeframe.map((item : string, index: number) => (
+                <Paper className={styles.paperTimeFrame}>
+                    <Typography className={styles.timeFrameTitle}>
+                        Chart time frame
+                    </Typography>
+                    <List className={styles.timeFrameListContent}>
+                        {timeframe.map((item: string, index: number) => (
                             <ListItem
                                 value={chartTimeFrame}
                                 onClick={() => dispatch(coinDescriptionActions.setChartTimeFrameAC(item))}
                                 key={index}
-                                sx={{
-                                    fontWeight: "bold",
-
-                                }}
                             >
-                                <ListItemButton
-                                    style={{
-                                        border: "1px solid #e0f64b",
-                                        borderRadius: '5px',
-                                        padding: "0",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        color: item === chartTimeFrame ? "#e0f64b" : "white"
-                                    }}
-                                >
+                                <ListItemButton className={styles.timeFrameBtn} style={{color: item === chartTimeFrame ? "#e0f64b" : "white"}}>
                                     {item}
                                 </ListItemButton>
                             </ListItem>
@@ -138,16 +128,14 @@ type ChartData = {
             }
 
 
-
-
             {data.labels.length <= 0 ? (
-                <ListSkeleton columns={1}
-                              skeletonClass={styles.skeletonChart}
-                              variant={"rectangle"}
+                <ListSkeleton
+                    columns={1}
+                    skeletonClass={skeletonStyles.skeletonChart}
+                    variant={"rectangle"}
                 />
             ) : (
-                // <Paper sx={{borderRadius: '20px', padding: "30px", height: "350px" , maxHeight : "100%",}}>
-                <Paper sx={{borderRadius: '20px', padding: "30px", height: {md : "350px" , xs : "auto"} , maxHeight : "100%",}}>
+                <Paper className={styles.paperChart}>
                     <Line options={options} data={data}/>
                 </Paper>
             )

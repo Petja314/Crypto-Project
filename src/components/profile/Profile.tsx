@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {actionsProfile, deleteUserAccountThunk, updateUserDetailsFirebaseThunk} from "../../redux/ProfileReducer";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import ProfileAvatarUpload from "./ProfileAvatarUpload";
+import styles from "../../css/profile/profile.module.css"
 
 
 /**
@@ -30,78 +31,79 @@ const Profile = () => {
         dispatch(deleteUserAccountThunk(checked))
     }
     return (
-            <Container sx={{marginTop : "100px", marginBottom : "70px"}}>
-                <Paper sx={{maxWidth: "600px", width: "100%", position: "relative", margin: "0 auto" }}>
+        <Container className={styles.profileContainer}>
+            <Paper className={styles.paperProfile}>
 
-                        {/*UPLOAD USER AVATAR*/}
-                        <ProfileAvatarUpload user={user}/>
-                        {/*//p={10}*/}
-                        <Box  sx={{
-                            padding : {xs : "10px" , xl : "50px"},
-                            display : "flex",
-                            justifyContent : "center"
-                        }} >
+                {/*UPLOAD USER AVATAR*/}
+                <ProfileAvatarUpload user={user}/>
+                <Box className={styles.profileBoxContent}>
 
-                            <Box sx={{display: "flex", gap: 2, flexDirection: "column" , marginTop : "80px"}}>
-                                <Typography mb={5} variant="h5" sx={{textAlign: "center"}}>User Profile</Typography>
+                    <Box className={styles.profileWrapper}>
+                        <Typography mb={5} variant="h5">
+                            User Profile
+                        </Typography>
 
-                                {
-                                    user.map((item, index: number) => (
-                                        <Box key={index} sx={{maxWidth: "400px", width: "100%", }}>
+                        {
+                            user.map((item, index: number) => (
+                                <Box key={index} className={styles.profileUserSection}>
+                                    <Box sx={{}}>
+                                        <Box>
+                                            <Typography>User Id:</Typography>
+                                            <TextField
+                                                fullWidth
+                                                disabled
+                                                value={item.uid}
+                                            />
+                                        </Box>
 
+                                        <Box>
+                                            <Typography>Display name :</Typography>
+                                            <TextField
+                                                fullWidth
+                                                onChange={(event) => dispatch(actionsProfile.setNewNameAC(event.target.value))}
+                                                placeholder={"Choose your own nickname"}
+                                                defaultValue={item.displayName}
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <Typography>Email:</Typography>
+                                            <TextField
+                                                fullWidth
+                                                onChange={(event) => dispatch(actionsProfile.setNewEmailAC(event.target.value))}
+                                                placeholder={"Change your email"}
+                                                defaultValue={item.email}
+                                            />
+                                        </Box>
+                                    </Box>
 
-                                            <Box sx={{}}>
-                                                <Box>
-                                                    <Typography>User Id:</Typography>
-                                                    <TextField
-                                                        fullWidth
-                                                        disabled
-                                                        value={item.uid}
-                                                    />
-                                                </Box>
-
-                                                <Box>
-                                                    <Typography>Display name :</Typography>
-                                                    <TextField
-                                                        fullWidth
-                                                        onChange={(event) => dispatch(actionsProfile.setNewNameAC(event.target.value))}
-                                                        placeholder={"Choose your own nickname"}
-                                                        defaultValue={item.displayName}
-                                                    />
-                                                </Box>
-                                                <Box>
-                                                    <Typography>Email:</Typography>
-                                                    <TextField
-                                                        fullWidth
-                                                        onChange={(event) => dispatch(actionsProfile.setNewEmailAC(event.target.value))}
-                                                        placeholder={"Change your email"}
-                                                        defaultValue={item.email}
-                                                    />
-                                                </Box>
-                                            </Box>
+                                    <Box>
+                                    </Box>
 
 
-                                            <Box>
-                                            </Box>
+                                    <Button onClick={() => dispatch(updateUserDetailsFirebaseThunk())}>
+                                        Save
+                                    </Button>
 
+                                    <Button onClick={deleteUserAccount}>
+                                        Delete Account
+                                    </Button>
+                                    <Box className={styles.notification}>
+                                        {notification}
+                                    </Box>
+                                    {deleteButtonClicked &&
+                                        <Checkbox
+                                            checked={checked}
+                                            onChange={handleAccountDeleteConformation}
+                                        />
+                                    }
+                                </Box>
+                            ))
+                        }
+                    </Box>
+                </Box>
 
-                                                <Button sx={{marginTop: "20px", width : "100%"}} onClick={() => dispatch(updateUserDetailsFirebaseThunk())}>Save</Button>
-                                                <Button sx={{marginTop: "20px", width : "100%"}} onClick={deleteUserAccount}>Delete Account</Button>
-                                                <Box mt={4} sx={{color: "green"}}> {notification} </Box>
-                                                {deleteButtonClicked &&
-                                                    <Checkbox
-                                                        checked={checked}
-                                                        onChange={handleAccountDeleteConformation}
-                                                    />
-                                                }
-                                            </Box>
-                                    ))
-                                }
-                            </Box>
-                        </Box>
-
-                </Paper>
-            </Container>
+            </Paper>
+        </Container>
     );
 };
 

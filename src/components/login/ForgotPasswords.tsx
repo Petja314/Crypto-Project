@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import {commonButtonStyles} from "./LoginContainer";
-import {auth, db} from "../../config/firebase"
+import {auth} from "../../config/firebase"
 import {sendPasswordResetEmail} from "firebase/auth"
+import styles from "../../css/login/forgot-password.module.css"
 
-
-
-// Quick Description: ForgotPasswords Component
-// This component facilitates the process of resetting passwords for registered users.
-// It sends a new password to the email address associated with the user's account.
-// Error handling is implemented to manage cases where the provided email does not match any record in the db.
-// Once the email is successfully sent, it enables the user to proceed with changing the password.
+/**
+ * Quick Description: ForgotPasswords Component
+ * This component facilitates the process of resetting passwords for registered users.
+ * It sends a new password to the email address associated with the user's account.
+ * Error handling is implemented to manage cases where the provided email does not match any record in the db.
+ * Once the email is successfully sent, it enables the user to proceed with changing the password.
+ */
 
 const ForgotPasswords = () => {
     //openResetPw - state which controls the dialogs open/close status
@@ -27,9 +27,9 @@ const ForgotPasswords = () => {
             await sendPasswordResetEmail(auth, resetEmailValue)
             setResetConformationText('Password reset successfully,check your email')
             // alert("check your email")
-        } catch (error : any) {
+        } catch (error: any) {
             const errorCode = error.code
-            if ( errorCode ) {
+            if (errorCode) {
                 //Handling the error if the - email is not found in db
                 setResetConformationText('Incorrect Email')
             }
@@ -38,44 +38,28 @@ const ForgotPasswords = () => {
 
     return (
         <Box>
-            <Button
-                onClick={() => setOpenResetPw(true)}
-                sx={{...commonButtonStyles, maxWidth: "300px", width: "100%", marginTop : "5px"}}
-            >
+            <Button className={styles.forgotPwBtn} onClick={() => setOpenResetPw(true)}>
                 Forgot password
             </Button>
 
-            <Dialog
-                sx={{textAlign: "center"}}
-                open={openResetPw}
-                onClose={() => setOpenResetPw(false)}
-            >
+            <Dialog className={styles.dialogContainer} open={openResetPw} onClose={() => setOpenResetPw(false)}>
                 <DialogTitle>Restore password</DialogTitle>
-                <IconButton
-                    aria-label="close"
-                    onClick={() => setOpenResetPw(false)}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}
-                >
+                <IconButton className={styles.closeIcon} aria-label="close" onClick={() => setOpenResetPw(false)}>
                     <CloseIcon/>
                 </IconButton>
 
                 <DialogContent>
-                    <TextField
-                        label='Email'
-                        type='text'
-                        onChange={(event) => {
-                            setResetEmailValue(event.target.value)
-                        }}
+                    <TextField label='Email' type='text'
+                               onChange={(event) => {
+                                   setResetEmailValue(event.target.value)
+                               }}
                     />
-                    <Typography sx={{ color : resetConformationText.length === 18 ?  "red" : "green" , marginTop : "10px"}}>{resetConformationText}</Typography>
+                    <Typography sx={{color: resetConformationText.length === 18 ? "red" : "green", marginTop: "10px"}}>
+                        {resetConformationText}
+                    </Typography>
                 </DialogContent>
 
-                <DialogActions sx={{display: "flex", justifyContent: "center"}}>
+                <DialogActions className={styles.dialogsActions}>
                     <Button autoFocus onClick={restorePasswordHandler}>Reset</Button>
                 </DialogActions>
 

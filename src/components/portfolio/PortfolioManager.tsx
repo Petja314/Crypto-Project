@@ -1,18 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Box, Button, Container, Grid, Typography} from "@mui/material";
 import PortfolioBalanceWidget from "../widgets/PortfolioBalanceWidget";
 import PerformanceAnalyticsWidget from "./analytics-widget-portfolio/PerformanceAnalyticsWidget";
 import PortfolioTable from "./portfolio-table/PortfolioTable";
 import AllocationPortfolioChart from "./allocation-chart-portfolio/AllocationPortfolioChart";
-import {
-    fetchPortfolioDataApiFirebase,
-    PortfolioActions,
-} from "../../redux/PortfolioReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {fetchPortfolioDataApiFirebase, PortfolioActions,} from "../../redux/PortfolioReducer";
+import {useDispatch} from "react-redux";
 import AddTransactionContainer from "./add-crypto-transaction/AddTransactionContainer";
-import {ThunkDispatch} from "redux-thunk";
-import {AppDispatch, RootState} from "../../redux/ReduxStore";
-import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
+import {AppDispatch} from "../../redux/ReduxStore";
+import styles from "../../css/portfolio/portfolio.module.css"
 
 
 /**
@@ -37,8 +33,8 @@ const PortfolioManager = () => {
     }, []);
     return (
         <Box>
-            <Container sx={{marginBottom: "100px", marginTop: "50px"}}>
-                <Grid container spacing={2} >
+            <Container className={styles.containerManager}  sx={{marginBottom: "100px", marginTop: "50px"}}>
+                <Grid container spacing={2}>
                     <Grid item xs={12} md={6} >
                         <Typography variant="h6" sx={{color: "#fff"}} mb={2}>🚀 Current Portfolio</Typography>
                         <Box mb={2}>

@@ -19,7 +19,7 @@ const Header = () => {
     return (
         <Box>
             { isMobile ?
-                <MobileHeader  />
+                <MobileHeader/>
                 :
                 <HeaderDesktop/>
             }
@@ -29,4 +29,3 @@ const Header = () => {
 };
 
 export default Header;
-

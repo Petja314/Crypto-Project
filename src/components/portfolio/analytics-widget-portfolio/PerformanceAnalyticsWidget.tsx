@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {
-    Box,
-} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-
+import {Box,} from "@mui/material";
+import {useSelector} from "react-redux";
 import {AllTimeProfitWidget} from "./AllTimeProfitWidget";
 import {PerformersWidgets} from "./PerformersWidgets";
 import {RootState} from "../../../redux/ReduxStore";
 import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
-import styles from "../../../css/portfolio/portfolio.module.css"
+import styles from "../../../css/widgets/performance-widget.module.css"
 
 
 /**
@@ -49,7 +46,7 @@ const PerformanceAnalyticsWidget = () => {
 
     return (
         <Box>
-            <Box className={styles.profitWidget} sx={{display: "flex", gap: 2, justifyContent : "space-between" }}>
+            <Box className={styles.profitWidget}>
 
                 <AllTimeProfitWidget
                     totalProfit={totalProfit}

@@ -2,9 +2,11 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../../redux/ReduxStore";
 import {createNewCoinInPortfolioThunk, deleteCoinFromPortfolioApiFirebase, PortfolioActions, portfolioFirebaseDataType, updatePortfolioThunk,} from "../../../redux/PortfolioReducer";
-import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Avatar, Box, Button, Paper, TextField, Typography} from "@mui/material";
 import {marketCapListArray} from "../../../redux/CryptoTableReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
+import styles from "../../../css/portfolio/add-transaction.module.css"
+
 
 type BuySellCoinsComponentPropsType = {
     tabValue : number
@@ -94,13 +96,13 @@ const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsType) => 
             {
                 selectedCoinArrayData.map((item : marketCapListArray, index: number) => (
                     <Box key={index}>
-                        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px"}}>
-                            <Avatar sx={{width: "30px", height: "30px", marginRight: "10px"}} src={item.icon}/>
-                            <Box sx={{fontWeight: "bold", marginRight: "5px"}}>{item.name}</Box>
-                            <Box sx={{color: "#c0c0ce", fontSize: "10px"}} component={"span"}> {item.symbol}</Box>
+                        <Box className={styles.selectedCoinContent}>
+                            <Avatar className={styles.selectedCoinIcon} src={item.icon}/>
+                            <Box className={styles.selectedCoinName}>{item.name}</Box>
+                            <Box className={styles.selectedCoinSymbol} component={"span"}>{item.symbol}</Box>
                         </Box>
 
-                        <Box sx={{marginTop: "10px", display: "flex", gap: 3}}>
+                        <Box className={styles.selectedCoinPurchaseContent}>
                             <Box>
                                 <Typography>Quantity</Typography>
                                 <TextField
@@ -123,15 +125,15 @@ const BuySellCoinsComponent = ({ tabValue }: BuySellCoinsComponentPropsType) => 
                 ))
             }
 
-            <Paper sx={{backgroundColor: "rgba(255, 255, 255, 0.16)", display: "flex-column", textAlign: "center", marginTop: "20px"}}>
-                <Box sx={{color: "#24de19", fontWeight: "bold", marginBottom: "10px"}}>{errorMessage}</Box>
+            <Paper className={styles.paperSelectedCoin}>
+                <Box className={styles.errorMessage}>{errorMessage}</Box>
                 <Typography>Total Spend</Typography>
-                <Box sx={{marginTop: "10px", fontWeight: "bold", fontSize: "20px"}}>
+                <Box className={styles.buyingAmount}>
                     {formatCurrency(totalBuyingAmount, "USD", "en")}
                 </Box>
             </Paper>
 
-            <Box sx={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
+            <Box className={styles.purchaseName}>
                 {/*Show the button base on dialogs popup tab value */}
                 {tabValue === 0 ? (
                     <Button autoFocus onClick={BuyCoinHandler}>Buy</Button>

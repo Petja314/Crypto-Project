@@ -1,15 +1,13 @@
-import {signInWithEmailAndPassword, signInWithPopup, signOut} from "firebase/auth";
-import {auth, googleProvider} from "../../config/firebase";
 import {Box, Button, TextField, Typography} from "@mui/material";
 import logo from "../../assets/images/logo/logo-dark.svg";
 import googleIcon from "../../assets/images/icons/google.svg";
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import ForgotPasswords from "./ForgotPasswords";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
+import styles from "../../css/login/login-section.module.css"
 
 
 /**
@@ -21,12 +19,12 @@ import {AppDispatch, RootState} from "../../redux/ReduxStore";
  */
 
 type LoginSectionPropsType = {
-    setIsRegistered : any
+    setIsRegistered: any
 }
- const LoginSection = ({ setIsRegistered }: LoginSectionPropsType) => {
+const LoginSection = ({setIsRegistered}: LoginSectionPropsType) => {
     // loginError - Displays an error message if there is one during the login process
-    const invalidLogin = useSelector((state : RootState) => state.auth.loginError)
-    const dispatch : AppDispatch = useDispatch()
+    const invalidLogin = useSelector((state: RootState) => state.auth.loginError)
+    const dispatch: AppDispatch = useDispatch()
 
 
     const logIn = async () => {
@@ -41,36 +39,25 @@ type LoginSectionPropsType = {
 
     return (
         <Box>
-            <Box sx={{maxWidth: "230px", textAlign: "center", margin: "0 auto"}}>
+            <Box className={styles.coinBox}>
                 <img src={logo} alt=""/>
-                <Typography variant='h5' sx={{color: "#fff", fontWeight: "bold", marginTop: "20px"}}>Start Your Crypto Journey Today</Typography>
+                <Typography variant='h5' className={styles.coinBoxTitle}>
+                    Start Your Crypto Journey Today
+                </Typography>
             </Box>
 
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: "30px",
-                gap: 2,
-                maxWidth: "300px",
-                width: "100%"
-            }}
-            >
-                <TextField
-                    label='Email'
-                    type='text'
-                    onChange={(event : React.ChangeEvent<HTMLInputElement>) => {
-                        dispatch(actionsAuth.setEmailAC(event.target.value))
-                    }}
+            <Box className={styles.formContainer}>
+                <TextField label='Email' type='text'
+                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                               dispatch(actionsAuth.setEmailAC(event.target.value))
+                           }}
                 />
-                <TextField
-                    label='Password'
-                    type='password'
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        dispatch(actionsAuth.setPasswordAC(event.target.value))
-
-                    }}
+                <TextField label='Password' type='password'
+                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                               dispatch(actionsAuth.setPasswordAC(event.target.value))
+                           }}
                 />
-                <Box sx={{color: "red", textAlign: "center"}}>{invalidLogin}</Box>
+                <Box className={styles.errorMessage}>{invalidLogin}</Box>
                 <Button onClick={logIn}>Login</Button>
                 <Button onClick={logOutHandler} sx={{...commonButtonStyles}}>Log out</Button>
                 <Button onClick={signInWithGoogle} startIcon={<img src={googleIcon} alt=""/>} sx={{...commonButtonStyles, marginBottom: "20px"}}>
@@ -79,13 +66,17 @@ type LoginSectionPropsType = {
 
 
                 <Box>
-                    <Typography sx={{color: "#848484", textAlign: "center", margin: "0 auto", fontSize: "14px"}}>Looking for an account?</Typography>
+                    <Typography className={styles.accountText}>Looking for an account?</Typography>
                     <Button
                         onClick={() => setIsRegistered(false)}
-                        sx={{...commonButtonStyles, maxWidth: "300px", width: "100%", marginTop: "5px", marginBottom: "5px"}}>
+                        className={styles.createAccountButton}
+                        sx={{...commonButtonStyles}}
+                    >
                         Create account
                     </Button>
-                    <Typography sx={{color: "#848484", textAlign: "center", margin: "0 auto", fontSize: "14px"}}>Forgot password?</Typography>
+                    <Typography className={styles.forgotPassword}>
+                        Forgot password?
+                    </Typography>
                     <ForgotPasswords/>
                 </Box>
 

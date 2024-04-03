@@ -3,11 +3,12 @@ import React, {memo} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/ReduxStore";
 import {ListSkeleton} from "../widgets/ListSkeleton";
-import styles from "../../css/coin-info/skeleton-coinInfo.module.css"
+import skeletonStyles from "../../css/coin-info/skeleton-coinInfo.module.css"
 import {formatCurrency} from "@coingecko/cryptoformat";
 import {formatPercent} from "../../commons/functions/percentFormatter";
 import {coinDataArray} from "../../redux/CoinDescriptionReducer";
-import css from "../../css/coin-info/coin-info.module.css"
+import styles from "../../css/coin-info/coin-table-info.module.css"
+
 
 type tableBodyInfoType = {
     label: string
@@ -15,7 +16,7 @@ type tableBodyInfoType = {
 }
 type CoinTableInfoPropsType = {
     currencyValue: any,
-    isLoading : boolean
+    isLoading: boolean
 }
 
 /**
@@ -24,68 +25,57 @@ type CoinTableInfoPropsType = {
  */
 
 
-const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) => {
+const CoinTableInfo = ({currencyValue, isLoading}: CoinTableInfoPropsType) => {
     // coinData - An array containing data of the selected coin including price, name, symbol, etc.
-    const {coinData } = useSelector((state: RootState) => state.coinDetails)
+    const {coinData} = useSelector((state: RootState) => state.coinDetails)
     const symbol = currencyValue.value
     return (
         <Box>
             {/*TABLE - Renders a skeleton based on the loading state.*/}
             {!isLoading ? (
                 <ListSkeleton columns={1}
-                              skeletonClass={styles.skeletonCoinTableDesc}
+                              skeletonClass={skeletonStyles.skeletonCoinTableDesc}
                               variant={"rectangle"}
                 />
             ) : (
-                    <TableContainer component={Paper}
-                                    sx={{width: {md : "450px" , xs : "100%"},
-                                        borderRadius: '20px',
-                                        height: "550px",
-                                        maxWidth : "100%" ,
-                                    }}  >
-                {coinData.map((item: any , index : any) => (
-                    <Table key={index}
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                    >
-                        <TableHead
+                <TableContainer component={Paper} className={styles.tableContainer}>
+                    {coinData.map((item: any, index: any) => (
+                        <Table key={index} className={styles.tableContentSection}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        <Box className={styles.tableCellCoinInfo}>
+                                            <Avatar className={styles.coinIcon} src={item.icon}/>
 
-                        >
-                            <TableRow >
-                                <TableCell>
-                                    <Box sx={{display: "flex", alignItems: "center", gap: 1.5}}>
-                                        <Avatar sx={{width: "60px", height: "60px"}} src={item.icon}/>
-                                        <Box sx={{fontWeight: "bold", fontSize: "20px"}} component={"span"}>{item.name}</Box>
-                                        <Box sx={{textTransform: "uppercase"}}>{item.symbol}</Box>
-                                    </Box>
-                                </TableCell>
+                                            <Box className={styles.coinName} component={"span"}>
+                                                {item.name}
+                                            </Box>
+                                            <Box className={styles.coinSymbol}>
+                                                {item.symbol}
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
 
-                                <TableCell>
-                                    <Box sx={{fontWeight: "bold", fontSize: "20px", marginBottom: "5px"}}>{formatCurrency(item.price, symbol ,"en")} </Box>
-                                    <Box sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}>
-                                        {formatPercent(item.priceChange1d)}
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody
-                            sx={{
-                                display : "flex",
-                                justifyContent : "center"
-                        }}
-                        >
-                            <TableBodyCoinInfo
-                                item={item}
-                            />
-                        </TableBody>
-                    </Table>
+                                    <TableCell>
+                                        <Box className={styles.coinPrice}>
+                                            {formatCurrency(item.price, symbol, "en")}
+                                        </Box>
+                                        <Box sx={{color: item.priceChange1d < 0 ? "#ea3943" : "#16c784"}}>
+                                            {formatPercent(item.priceChange1d)}
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody className={styles.tableBodyContentBox}>
+                                <TableBodyCoinInfo
+                                    item={item}
+                                />
+                            </TableBody>
+
+                        </Table>
                     ))}
-                    </TableContainer>
-
+                </TableContainer>
             )
             }
 
@@ -97,39 +87,38 @@ const CoinTableInfo = ({ currencyValue , isLoading }: CoinTableInfoPropsType) =>
 export default React.memo(CoinTableInfo);
 
 
-
 type TableBodyCoinPropsType = {
-    item : coinDataArray
+    item: coinDataArray
 }
-const TableBodyCoinInfo = memo(({item} : TableBodyCoinPropsType) => {
-    //tableBodyInfo was made to make JSX more clear
-    const tableBodyInfo: tableBodyInfoType[] = [
-        {label: 'Market cap Rank',      value: item.rank},
-        {label: 'Market Cap',           value: formatCurrency(item.marketCap, "USD", "en")},
-        {label: 'Volume',               value: formatCurrency(item.volume, "USD", "en")},
-        {label: 'Available Supply',     value: `${item.availableSupply} ${item.symbol}`},
-        {label: 'Total supply',         value: `${item.totalSupply} ${item.symbol}`},
-        {label: 'Price change 1d',      value: formatPercent(item.priceChange1d)},
-        {label: 'Price change 1w',      value: formatPercent(item.priceChange1w)},
-    ];
+const TableBodyCoinInfo = memo(({item}: TableBodyCoinPropsType) => {
+        //tableBodyInfo was made to make JSX more clear
+        const tableBodyInfo: tableBodyInfoType[] = [
+            {label: 'Market cap Rank', value: item.rank},
+            {label: 'Market Cap', value: formatCurrency(item.marketCap, "USD", "en")},
+            {label: 'Volume', value: formatCurrency(item.volume, "USD", "en")},
+            {label: 'Available Supply', value: `${item.availableSupply} ${item.symbol}`},
+            {label: 'Total supply', value: `${item.totalSupply} ${item.symbol}`},
+            {label: 'Price change 1d', value: formatPercent(item.priceChange1d)},
+            {label: 'Price change 1w', value: formatPercent(item.priceChange1w)},
+        ];
 
-    return (
-        <Box>
-            {tableBodyInfo.map((item, index: number) => (
-                <TableRow key={index}>
-                    <TableCell component="th" scope="row" sx={{fontWeight: 'bold'}}>
-                        {item.label}
-                    </TableCell>
-                    <TableCell>
-                        <Typography component="span" sx={{fontWeight: 'bold', textTransform: 'uppercase'}}>
-                            <Box sx={{color: item.label === 'Price change 1d' || item.label === 'Price change 1w' ? (item.value < 0 ? "#ea3943" : "#16c784") : "#fff"}}>
-                                {item.value}
-                            </Box>
-                        </Typography>
-                    </TableCell>
-                </TableRow>
-            ))}
-        </Box>
-    )
-}
+        return (
+            <Box>
+                {tableBodyInfo.map((item, index: number) => (
+                    <TableRow key={index}>
+                        <TableCell component="th" scope="row" className={styles.label}>
+                            {item.label}
+                        </TableCell>
+                        <TableCell>
+                            <Typography component="span" className={styles.selectedCoinValues}>
+                                <Box sx={{color: item.label === 'Price change 1d' || item.label === 'Price change 1w' ? (item.value < 0 ? "#ea3943" : "#16c784") : "#fff"}}>
+                                    {item.value}
+                                </Box>
+                            </Typography>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </Box>
+        )
+    }
 )

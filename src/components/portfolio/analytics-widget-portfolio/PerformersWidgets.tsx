@@ -2,33 +2,26 @@ import {Avatar, Box, Grid, Paper, Typography} from "@mui/material";
 import React from "react";
 import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import {formatCurrency} from "@coingecko/cryptoformat";
+import styles from "../../../css/widgets/performance-widget.module.css"
 
 type PerformersWidgetsPropsType = {
-    performers : portfolioFirebaseDataType[]
+    performers: portfolioFirebaseDataType[]
 }
 
 export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
 
 // Filtering performers to avoid duplicates: if all coins have profit/loss = 0, then show only 1 coin
-    const filteredUniquePerformers = performers.filter((value, index : number) => {
-        return index === performers.findIndex((compareObject) : boolean => value.id === compareObject.id)
+    const filteredUniquePerformers = performers.filter((value, index: number) => {
+        return index === performers.findIndex((compareObject): boolean => value.id === compareObject.id)
     })
-    // console.log('filteredUniquePerformers :', filteredUniquePerformers)
     return (
         <>
             {
                 filteredUniquePerformers.map((item, index: number) => (
-                    <Paper
-                        key={index}
-                        sx={{borderRadius: "20px",
-                            width: {lg : "200px" , xs : "100%"},
-                            height: "150px" ,
-                            maxWidth : "100%"
-                    }}
-                    >
-                        <Box  sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <Paper className={styles.paperPerformers} key={index}>
+                        <Box className={styles.performersBoxContent}>
                             <Box>
-                                <Box component="span" sx={{color: "#B8B8B8", fontSize: "15px", fontWeight: "bold",}}>
+                                <Box component="span" className={styles.profitLossDialog}>
                                     {item.profitLoss <= 0 ? (
                                         <Box>Worst Performer</Box>
                                     ) : (
@@ -36,34 +29,21 @@ export const PerformersWidgets = ({performers}: PerformersWidgetsPropsType) => {
                                     )}
                                 </Box>
 
-                                <Box sx={{display: "flex", alignItems: "center", gap: 1, marginBottom: "10px", marginTop: "5px",}}>
-                                    <Avatar sx={{width : "30px", height : "30px"}} src={item.icon}/>
+                                <Box className={styles.performersAvatarSection}>
+                                    <Avatar src={item.icon}/>
                                     <Box>
                                         <Typography variant="h6"> {item.symbol} </Typography>
                                     </Box>
                                 </Box>
 
-                                <Box
-                                    component="span"
-                                    sx={{
-                                        color: "#fff",
-                                        fontSize: "14px",
-                                        padding: "5px",
-                                        textAlign: "center",
-                                        borderRadius: "5px",
-                                        backgroundColor:
-                                            item.profitLoss > 0 ? "#1ABC7B" : "#F13005",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        fontWeight: "bold",
-                                    }}
-                                >
+                                <Box className={styles.profitLossAmount} component="span" sx={{backgroundColor: item.profitLoss > 0 ? "#1ABC7B" : "#F13005"}}>
                                     {formatCurrency(item.profitLoss, "USD", "en")}
                                 </Box>
                             </Box>
                         </Box>
                     </Paper>
-                ))}
+                ))
+            }
         </>
     )
 }

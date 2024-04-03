@@ -1,32 +1,237 @@
+.container {
+    margin-top: 50px;
+    margin-bottom: 100px;
+    position: relative;
+}
+
+.walletBtn {
+    margin-bottom: 20px;
+}
+
+.titleMainBox {
+    padding: 20px;
+    background-image: url("../../assets/images/image/titleBackground.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+    margin: 0 auto;: undefined;
+}
+
+.titleMainBox h3 {
+    color: #e0f64b;
+    font-weight: bold;
+    text-align: center;
+}
+
+.swapStatus {
+    display: flex;
+    justify-content: center;
+    align-item: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    height: 50px;
+    max-height: 100%;
+}
+
+.paperSwap {
+    border-radius: 24px;
+    width: 600px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    max-width: 100%;
+}
+
+.paperSwap h5 {
+    padding: 20px;
+}
+
+.mainExchangeBox {
+    position: relative;
+}
+
+.paymentBox {
+    border-radius: 24px;
+    padding: 20px;
+    background-color: rgb(42, 40, 40);
+}
+
+.paymentBox span {
+    color: #9d9191;
+}
+
+.clientPaymentSection {
+    display: flex;
+}
+
+.clientPaymentSection input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 30px;
+    color: #fff;
+}
+
+.clientPaymentContent {
+    background-color: rgb(81, 82, 89);
+    height: 50px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px 4px 4px
+}
+
+.paymentSelectedToken {
+    font-weight: bold;
+    margin-left: 5px
+}
+
+.swapIconBtn {
+    color: #e0f64b      !important;
+    position: absolute  !important;
+    left: 45%;
+    top: 30%
+}
+
+
+.paymentReceiveBox {
+    border-radius: 24px;
+    padding: 20px;
+    background-color: rgb(42, 40, 40);
+    margin-top: 10px;
+}
+
+.paymentReceiveBox span {
+    color: #9d9191;
+}
+
+.receivePaymentSection {
+    display: flex;
+}
+
+.receivePaymentSection input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 30px;
+    color: #fff;
+}
+
+.receiveContentSection {
+    background-color: rgb(81, 82, 89);
+    height: 50px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px 4px 4px
+}
+
+.receiveSelectedToken {
+    font-weight: bold;
+    margin-left: 5px;
+}
+.swapBtn{
+    width: 100%;
+    margin-top: 10px        !important;
+    font-weight: bold       !important;
+    padding-top: 10px       !important;
+    padding-bottom: 10px    !important;
+    font-size: 22px         !important;
+}
+
+
+.swapDialogBox{
+    height: 700px;
+    margin-top: 100px
+}
+.dialogCloseBtn{
+    position: absolute !important;
+    right: 8px ;
+    top: 8px ;
+}
+
+.tokenList{
+    display: flex;
+    gap: 10px;
+    width: 400px;
+    margin-top: 10px
+}
+
+
 .dexImage {
     width: 450px;
 }
-.metamaskImage{
+
+.metamaskImage {
     width: 200px;
     max-width: 100%;
 }
-.walletImage{
+
+.walletImage {
     width: 200px;
     max-width: 100%;
     border-radius: 20px;
 }
 
-.swapImage{
+.swapImage {
     width: 250px;
     border-radius: 20px;
 }
+
+/*XS*/
+@media (min-width: 0px) {
+    .titleMainBox {
+        width: 80%;
+    }
+
+    .titleMainBox h3 {
+        font-size: 25px;
+    }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+    .titleMainBox {
+        width: 50%;
+    }
+}
+
+/*MD*/
+@media (min-width: 900px) {
+    .titleMainBox h3 {
+        font-size: 30px;
+    }
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+    .titleMainBox {
+        width: 30%;
+    }
+
+    .titleMainBox h3 {
+        font-size: 48px;
+    }
+}
+
 
 @media (max-width: 600px) {
     .dexImage {
         width: 250px;
     }
-    .metamaskImage{
+
+    .metamaskImage {
         width: 100px;
     }
-    .swapImage{
+
+    .swapImage {
         width: 200px;
     }
-    .walletImage{
+
+    .walletImage {
         width: 150px;
         max-width: 100%;
         border-radius: 20px;

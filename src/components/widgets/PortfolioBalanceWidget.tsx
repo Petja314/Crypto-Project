@@ -1,7 +1,6 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import {Box, Grid, IconButton, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
-import walleticon from "../../assets/images/image/wallet.webp"
-import BackgroundBlock from "../../assets/images/image/block_bg.svg"
+import React, {useEffect} from 'react';
+import {Box, Grid, MenuItem, Paper, Select, SelectChangeEvent, Typography} from "@mui/material";
+import walletIcon from "../../assets/images/image/wallet.webp"
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCurrentBtcPriceThunk, fetchExchangeApiThunk, portfolioBalanceWidgetActions} from "../../redux/PortfolioBalanceWidgetReducer";
 import {fetchPortfolioDataApiFirebase, portfolioFirebaseDataType} from "../../redux/PortfolioReducer";
@@ -52,41 +51,32 @@ const PortfolioBalanceWidget = () => {
 
     return (
         <Box>
-            {/*sx={{width : "500px"}}*/}
-            <Paper sx={{
-                borderRadius: '20px',
-                marginBottom: "10px",
-                backgroundImage: `url(${BackgroundBlock})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: "rgba(255, 255, 255, 0.09)"
-                , maxWidth : "100%"
-            }}>
-                <Grid container sx={{position: "relative"}}>
+            <Paper
+                className={styles.paperBalanceWrapper}>
+                <Grid container className={styles.balanceWidgetGrid}>
                     <Grid item>
-                        <Box component='span' sx={{color: "#B8B8B8", fontSize: "15px"}}>Portfolio Balance</Box>
+                        <Box component='span' className={styles.balanceWidgetGridItem}>Portfolio Balance</Box>
                         <Typography variant='h5'>
                             {formatCurrency(portfolioBalanceCurrency, "", "en")}
                             <Select
-                                sx={{marginLeft: "10px", color: "#B8B8B8", fontSize: "12px"}}
+                                className={styles.balanceWidgetSelect}
                                 onChange={currencyHandleChange}
                                 label='currency'
                                 value={currencyValueBalance[0]}
                             >
                                 {currency.map((item, index: number) => (
-                                    <MenuItem key={index} sx={{color: "#B8B8B8", fontSize: "12px"}} value={item}>{item}</MenuItem>
+                                    <MenuItem key={index} className={styles.balanceWidgetMenu} value={item}>
+                                        {item}
+                                    </MenuItem>
                                 ))}
-
                             </Select>
                         </Typography>
-                        <Box component='span' sx={{color: "#B8B8B8", fontSize: "12px"}}>{Number(btcFormattedPrice)} BTC</Box>
+                        <Box component='span' className={styles.btcPrice}>{Number(btcFormattedPrice)} BTC</Box>
                     </Grid>
 
-
-                    <Box className={styles.walletImage} component='span' sx={{position: "absolute", bottom: -20, right: 0, maxWidth: "140px", width: "100%", height: "auto",}}>
-                        <img src={walleticon} alt="WebP Image" style={{width: "100%", height: "auto"}}/>
+                    <Box className={styles.walletImage} component='span'>
+                        <img src={walletIcon} alt="wallet image"/>
                     </Box>
-
                 </Grid>
             </Paper>
         </Box>

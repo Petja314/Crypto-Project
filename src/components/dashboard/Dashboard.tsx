@@ -39,20 +39,3 @@ const Dashboard = () => {
 
 export default React.memo(Dashboard);
 
-
-// <Container sx={{marginBottom: "50px", marginTop: "50px"}}>
-//     <Typography variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
-//
-//     <Grid container mb={2}>
-//         <Grid item xs={6}>
-//             <LeaderBoard/>
-//         </Grid>
-//         <Grid item xs={6}>
-//             <FearGreedIndex/>
-//             <CarouselMui/>
-//             <PortfolioBalanceWidget/>
-//         </Grid>
-//     </Grid>
-//
-//     <CryptoTable/>
-// </Container>

@@ -1,13 +1,10 @@
-import {createUserWithEmailAndPassword,updateProfile} from "firebase/auth";
-import {auth, db} from "../../config/firebase";
 import {Box, Button, TextField, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, signInThunkCreator} from "../../redux/AuthReducer";
 import {commonButtonStyles} from "./LoginContainer";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
-
+import styles from "../../css/login/sign-up.module.css"
 
 
 /**
@@ -46,54 +43,36 @@ const SignUpSection = ({ setIsRegistered}: SignUpSectionPropsType) => {
     }
 
     return (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            maxWidth: "350px"
-        }}>
+        <Box className={styles.signUpWrapper}>
 
+            <Typography variant='h5' className={styles.createAccTitle}>
+                Create Personal Account
+            </Typography>
 
-            <Typography variant='h5' sx={{color: "#fff", fontWeight: "bold", textAlign: "center", maxWidth: "250px", margin: "0 auto"}}>Create Personal Account</Typography>
-            <Box sx={{
-                marginTop: "30px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                maxWidth: "350px",
-                width: "100%"
-            }}>
-                <TextField
-                    onChange={(event) => {
-                        setUserName(event.target.value)
-                    }}
-                    label='User name'
-                    type='text'
+            <Box className={styles.signUpBoxContent}>
+                <TextField label='User name' type='text'
+                    onChange={(event) => {setUserName(event.target.value)}}
                 />
-                <TextField
-                    onChange={(event) => {
-                        dispatch(actionsAuth.setEmailAC(event.target.value))
-                    }}
-                    label='Email'
-                    type='text'
+                <TextField label='Email'  type='text'
+                    onChange={(event) => {dispatch(actionsAuth.setEmailAC(event.target.value))}}
                 />
-                <TextField
-                    onChange={(event) => {
-                        dispatch(actionsAuth.setPasswordAC(event.target.value))
-                    }}
-                    label='Password'
-                    type='password'
+                <TextField  label='Password'  type='password'
+                    onChange={(event) => {dispatch(actionsAuth.setPasswordAC(event.target.value))}}
                 />
-                <TextField
-                    onChange={(event) => {
-                        setConfirmPassword(event.target.value)
-                    }}
-                    label='Confirm Password'
-                    type='password'
+                <TextField label='Confirm Password'  type='password'
+                    onChange={(event) => {setConfirmPassword(event.target.value)}}
                 />
-                <Box sx={{color: "red", textAlign: "center"}}>{signInError}</Box>
-                <Button sx={{marginBottom: "70px"}} onClick={signIn}>Create Personal Account</Button>
+                <Box className={styles.error}>
+                    {signInError}
+                </Box>
 
-                <Typography sx={{color: "#848484", textAlign: "center", maxWidth: "250px", margin: "0 auto", fontSize: "14px"}}>Not looking for an account?</Typography>
+                <Button className={styles.createPersonalAcc} onClick={signIn}>
+                    Create Personal Account
+                </Button>
+
+                <Typography className={styles.exitDialogTitle}>
+                    Not looking for an account?
+                </Typography>
 
                 <Button
                     onClick={() => setIsRegistered(true)}

@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from "../../../css/widgets/allocation-chart.module.css"
 import {Box, CircularProgress, Paper, Typography} from "@mui/material";
 import {Doughnut} from "react-chartjs-2";
 import {Chart, ArcElement} from 'chart.js'
@@ -7,11 +8,12 @@ import {TypingEffects} from "../../../utils/TypingEffects";
 import {RootState} from "../../../redux/ReduxStore";
 import {portfolioFirebaseDataType} from "../../../redux/PortfolioReducer";
 import {formatPercent} from "../../../commons/functions/percentFormatter";
+
 Chart.register(ArcElement);
 
 type AllocationType = {
-            "coin": string,
-            "allocation": number
+    "coin": string,
+    "allocation": number
 }
 /**
  * AllocationPortfolioChart Component:
@@ -28,7 +30,7 @@ const AllocationPortfolioChart = () => {
     //Calculation total sum of current portfolio
     const totalPortfolioValue = myCurrentPortfolioDataFB.reduce((accum: number, value: portfolioFirebaseDataType) => accum + value.totalHoldingCoinAmountCash, 0)
     // Calculating the allocation percentage for each coin
-    const allocations = myCurrentPortfolioDataFB.map((coin : portfolioFirebaseDataType) => ({
+    const allocations = myCurrentPortfolioDataFB.map((coin: portfolioFirebaseDataType) => ({
         coin: coin.name,
         allocation: (coin.totalHoldingCoinAmountCash / totalPortfolioValue) * 100
     }))
@@ -72,31 +74,25 @@ const AllocationPortfolioChart = () => {
 
     return (
         <Box>
-            <Paper
-                sx={{width: {lg : "550px", xs : "100%"}, height: "400px", borderRadius: "20px", position: "relative"}}
-            >
-                <Typography
-                    sx={{position: "absolute", top: "40px", left: "20px"}}
-                    variant={'h5'}>
-                    Portfolio
-                    Allocation
+            <Paper className={styles.paperAllocationChart}>
+                <Typography variant={'h5'}>
+                    Portfolio Allocation
                 </Typography>
 
-                <Box sx={{margin: "0 auto", width: "370px", height: "370px" ,maxWidth : "100%"}}>
+                <Box className={styles.allocationChartContent}>
                     {allocations.length > 0 ? (
                         <Doughnut
                             data={data}
                             options={options}
                         />
                     ) : (
-                        <Box sx={{ marginTop : "30%", display : "flex", justifyContent : "center",}}>
-                            <CircularProgress sx={{width: "130px !important", height: "130px !important",}} />
+                        <Box className={styles.chartLoaderBox}>
+                            <CircularProgress className={styles.chartPreloader}/>
                         </Box>
                     )}
                 </Box>
 
-
-                <Typography sx={{bottom: "0", position: "absolute", fontSize: "14px", padding: "15px", color: "#a29393", width: "300px"}}>
+                <Typography className={styles.chartDescription}>
                     <TypingEffects
                         speed={20}
                         text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals."}
