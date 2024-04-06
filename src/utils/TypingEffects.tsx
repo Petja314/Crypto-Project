@@ -1,4 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Typography} from "@mui/material";
+import styles from "../css/widgets/allocation-chart.module.css";
+
 type  EffectProps = {
     text: string
     speed: number
@@ -19,9 +22,9 @@ export const TypingEffects = ({text, speed}: EffectProps) => {
         return () => clearInterval(intervalId);
     }, [text, speed]);
     return (
-        <div>
+        <Typography className={styles.chartDescription}>
             {displayText}
-        </div>
+        </Typography>
     )
 };
 

@@ -5,9 +5,9 @@ import React from "react";
 import ForgotPasswords from "./ForgotPasswords";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, loginThunkCreator, logOuThunkCreator, signInWithGoogleThunkCreator} from "../../redux/AuthReducer";
-import {commonButtonStyles} from "./LoginContainer";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import styles from "../../css/login/login-section.module.css"
+import {commonButtonStyles} from "../../mui/MuiTheme";
 
 
 /**
@@ -19,14 +19,12 @@ import styles from "../../css/login/login-section.module.css"
  */
 
 type LoginSectionPropsType = {
-    setIsRegistered: any
+    setIsRegistered: (isRegistered : boolean) => void
 }
 const LoginSection = ({setIsRegistered}: LoginSectionPropsType) => {
     // loginError - Displays an error message if there is one during the login process
     const invalidLogin = useSelector((state: RootState) => state.auth.loginError)
     const dispatch: AppDispatch = useDispatch()
-
-
     const logIn = async () => {
         dispatch(loginThunkCreator())
     }

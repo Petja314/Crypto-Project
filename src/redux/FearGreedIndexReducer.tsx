@@ -56,10 +56,8 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsFearGreed
 export const fearAndGreedFetchingThunk = () : ThunkType => async (dispatch) => {
     try {
         const response = await alternativeApi.fetchFearGreedIndex()
-        console.log('response fear :'  , response)
         const greedIndex = response.data.data[0].value
         const fearAndGreedData = response.data.data
-        // console.log('greedIndex' , Number(greedIndex))
         dispatch(fearGreedActions.setGreedIndexAC(Number(greedIndex)))
         dispatch(fearGreedActions.setFearAndGreedDataAC(fearAndGreedData))
     } catch (error) {

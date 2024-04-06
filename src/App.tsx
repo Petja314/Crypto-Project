@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import {Route, Routes, useLocation} from "react-router-dom";
-import {Box, Card, createTheme, styled} from "@mui/material";
-import {lime} from "@mui/material/colors";
+import {Box} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import Preloader from "./commons/preloader/Preloader";
 import Header from "./components/header/Header";
@@ -14,79 +13,6 @@ import {appInitializationThunkCreator} from "./redux/AppInitialization";
 import ScrollToTop from "./Routes/ScrollToTop";
 import {AppDispatch, RootState} from "./redux/ReduxStore";
 
-// @ts-ignore
-export const theme = createTheme({
-    palette: {
-        mode: "dark",
-        primary: lime,
-    },
-
-    components: {
-        MuiCssBaseline: {
-            styleOverrides: {
-                body: {
-                    color: '#B8B8B8',
-                    letterSpacing: "-0.5px",
-                },
-            },
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    fontSize: 15,
-                    transition: ".3s ease-in-out",
-                    padding: "10px 40px 10px 40px",
-                    borderRadius: "12px",
-                    backgroundColor: '#e0f64b',
-                    color: "#171717",
-                    '&:hover': {
-                        backgroundColor: '#171717',
-                        color: "#fff",
-                    },
-                },
-            },
-        },
-        MuiPaper: {
-            styleOverrides: {
-                root: {
-                    borderRadius : "20px",
-                    padding: "16px",
-                },
-            },
-        },
-        MuiTableRow: { // Add styles for MuiTableRow
-            styleOverrides: {
-                root: {
-
-                    whiteSpace: "nowrap"
-                },
-            },
-        },
-    },
-    typography: {
-        fontFamily: 'Manrope, sans-serif',
-        h2: {
-            fontSize: "2rem"
-        }
-    },
-
-});
-export const StyledCard = styled(Card)(({theme: any}) => ({
-    transition: "transform 0.15s ease-in-out",
-    "&:hover": {transform: "scale3d(1.09, 1.09, 1)"},
-}))
-
-
-// export const commonButtonStyles = {
-//     border: "1px solid #333",
-//     background: "#171717",
-//     color: "#fff",
-//     '&:hover': {
-//         border: "1px solid #e0f64b",
-//     },
-// };
-
-
 /**
  * Description: App Component
  * This component serves as the entry point of the application.
@@ -95,16 +21,16 @@ export const StyledCard = styled(Card)(({theme: any}) => ({
  * Components are rendered based on whether the user is logged in or not.
  */
 
-function App  () {
+function App() {
     const dispatch: AppDispatch = useDispatch()
     const location = useLocation();
-    const {authUser , isFetching} = useSelector((state : RootState) => state.appInitialization)
+    const {authUser, isFetching} = useSelector((state: RootState) => state.appInitialization)
 
 
     //Initializing the app
-    useEffect( () => {
-         dispatch(appInitializationThunkCreator())
-    },[dispatch])
+    useEffect(() => {
+        dispatch(appInitializationThunkCreator())
+    }, [dispatch])
 
 
     if (!isFetching) {
@@ -114,7 +40,7 @@ function App  () {
     return (
         <Box>
             <ScrollToTop/>
-            { authUser &&
+            {authUser &&
                 <Header/>
             }
             <TransitionGroup>
@@ -123,32 +49,35 @@ function App  () {
                     key={location.pathname}
                     timeout={1000}
                     classNames={{
-                        enter:        TransitionCss.page_enter,
-                        enterActive:  TransitionCss.page_enter_active,
-                        exit:         TransitionCss.page_exit,
-                        exitActive:   TransitionCss.page_exit_activeT,
+                        enter: TransitionCss.page_enter,
+                        enterActive: TransitionCss.page_enter_active,
+                        exit: TransitionCss.page_exit,
+                        exitActive: TransitionCss.page_exit_activeT,
                     }}
                     unmountOnExit
                 >
                     {/*Wrapping the components in Private Routes based on requirement*/}
                     <Routes location={location.pathname}>
-                            {
-                                routesNavigation.map((routes : RoutesNavigationType) => (
+
+                        {
+                            routesNavigation.map((routes: RoutesNavigationType, index: number) => (
                                     routes.isPrivate ? (
-                                        <Route element={<PrivateRoutes authUser={authUser}/>}>
+                                        <Route key={index} element={<PrivateRoutes authUser={authUser}/>}>
                                             <Route path={routes.path} element={routes.element}/>
                                         </Route>
                                     ) : (
-                                        <Route path={routes.path} element={routes.element}/>
+                                        <Route key={routes.name} path={routes.path} element={routes.element}/>
                                     )
-                                ))
-                            }
+                                )
+                            )
+                        }
                     </Routes>
                 </CSSTransition>
             </TransitionGroup>
         </Box>
     )
 }
+
 export default React.memo(App);
 
 

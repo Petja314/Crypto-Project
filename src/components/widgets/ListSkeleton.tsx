@@ -24,12 +24,10 @@ export const ListSkeletonNews = ({columns , skeletonClass , variant }: any) => {
     return (
         <>
             <Grid container spacing={2}>
-
-
                 {Array(columns)
                     .fill(1)
                     .map((card,index) => (
-                        <Grid item xs={12} md={6}> {/* Assuming you want this item to span the full width */}
+                        <Grid key={index} item xs={12} md={6}> {/* Assuming you want this item to span the full width */}
                             <Skeleton
                                 animation="wave"
                                 variant={variant}

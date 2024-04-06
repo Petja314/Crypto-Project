@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import {AppBar, Avatar, BottomNavigation, BottomNavigationAction, Box, Container, InputAdornment, TextField, Toolbar, Typography} from "@mui/material";
-import logo from "../../assets/images/logo/logo-dark.svg";
-import SearchIcon from "@mui/icons-material/Search";
-import {Link, NavLink} from "react-router-dom";
+import {AppBar, BottomNavigation, BottomNavigationAction, Box, Container} from "@mui/material";
+import {Link} from "react-router-dom";
 import LoginSettings from "./LoginSettings";
 import {routesNavigation, RoutesNavigationType} from "../../Routes/navigation";
 import MobileCoinSearch from "./MobileCoinSearch";

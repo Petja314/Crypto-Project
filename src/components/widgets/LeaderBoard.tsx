@@ -48,8 +48,8 @@ const LeaderBoard = () => {
                 />
             ) : (
                 leadersOfWeek.map((item, index: number) => (
-                    <Box>
-                        <Paper key={index} className={styles.paperLeaderBoard} sx={{backgroundColor: index === 0 ? "#1230c9" : "transparent"}}>
+                    <Box  key={index}>
+                        <Paper className={styles.paperLeaderBoard} sx={{backgroundColor: index === 0 ? "#1230c9" : "transparent"}}>
                             <Box className={styles.leaderBoardBoxContent} onClick={() => navigateToCoinDescription(item.id)}>
                                 <Box className={styles.leaderBoardCryptoInfo}>
                                     <Skeleton component='span' animation='wave' variant="circular" width={30} height={30} className={skeletonStyles.skeletonBoardIcon}>

@@ -15,11 +15,11 @@ import styles from "../../css/login/forgot-password.module.css"
 
 const ForgotPasswords = () => {
     //openResetPw - state which controls the dialogs open/close status
-    const [openResetPw, setOpenResetPw] = useState(false)
+    const [openResetPw, setOpenResetPw] = useState<boolean>(false)
     // resetEmailValue - Stores the email to retrieve new credentials for resetting the password.
-    const [resetEmailValue, setResetEmailValue] = useState('')
+    const [resetEmailValue, setResetEmailValue] = useState<string>('')
     //Handling the error during the password restore process
-    const [resetConformationText, setResetConformationText] = useState('')
+    const [resetConformationText, setResetConformationText] = useState<string>('')
 
     //Sending the new password to the existing email
     const restorePasswordHandler = async () => {

@@ -64,7 +64,6 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsProfileBa
 export const fetchExchangeApiThunk = (currencyValueBalance: string[]) : ThunkType => async (dispatch )  => {
     try {
         let response: AxiosResponse  = await exchangeCurrencyApi.fetchCurrencyRate(currencyValueBalance)
-        console.log('response :' , response)
         const currentExchangeValue = Object.values(response.data.data) as number[]
         dispatch(portfolioBalanceWidgetActions.setExchangingRate(currentExchangeValue))
     }

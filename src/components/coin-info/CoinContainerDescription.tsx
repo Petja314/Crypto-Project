@@ -67,8 +67,6 @@ const CoinContainerDescription = () => {
                         isLoading={isLoading}
                     />
                 </Box>
-
-
             </Box>
 
 

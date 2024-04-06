@@ -92,12 +92,12 @@ const AllocationPortfolioChart = () => {
                     )}
                 </Box>
 
-                <Typography className={styles.chartDescription}>
+
+
                     <TypingEffects
                         speed={20}
                         text={"Crypto portfolio allocation: Spreading investments across different cryptocurrencies to achieve financial goals."}
                     />
-                </Typography>
 
             </Paper>
         </Box>

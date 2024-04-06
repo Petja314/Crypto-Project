@@ -5,7 +5,6 @@ import bull from "../../assets/images/news/bullish.jpg"
 import trend from "../../assets/images/news/trending.jpg"
 import latest from "../../assets/images/news/latest.png"
 import imgComingSoon from "../../assets/images/news/comingsoon.png"
-import {StyledCard} from "../../App";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import {clearNewsDataAC, fetchCryptoNewsThunk, newsDataType, setCurrentPageAC, setIsLoadingAC, setTypeAC} from "../../redux/NewsReducer";
@@ -13,6 +12,7 @@ import {ListSkeletonNews} from "../widgets/ListSkeleton";
 import stylesSkeleton from "../../css/news/skeleton-news.module.css"
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
 import styles from "../../css/news/news.module.css"
+import {StyledCard} from "../../mui/MuiTheme";
 
 type NewsType = {
     type: string,
@@ -79,8 +79,10 @@ const News = () => {
             <Container className={styles.container}>
                 <Typography variant='h3' className={styles.newsMainTitle}>News</Typography>
                 <Box className={styles.newsTypeBox}>
-                    {newsType.map((item) => (
-                        <Box onClick={() => {
+                    {newsType.map((item, index : number) => (
+                        <Box
+                            key={index}
+                            onClick={() => {
                             newsTypeHandler(item.value)
                         }}
                              sx={{cursor: "pointer", border: item.value === type ? "2px solid #e0f64b" : "" , borderRadius : "20px"}}
@@ -100,8 +102,8 @@ const News = () => {
                         <Grid container spacing={2}>
                             {
                                 newsData.map((item: newsDataType, index: number) => (
-                                    <Grid item xs={12} md={6}>
-                                        <Paper className={styles.paperNewsSection} key={index}>
+                                    <Grid item xs={12} md={6} key={index}>
+                                        <Paper className={styles.paperNewsSection} >
                                             <Box className={styles.newsContentSection}>
                                                 <a href={item.shareURL}>
                                                     <Typography variant='h5' className={styles.newsContentTitle}>

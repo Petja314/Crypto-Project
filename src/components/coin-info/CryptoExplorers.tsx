@@ -36,8 +36,8 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
                     </Typography>
 
                     {
-                        cryptoExplorersInfo.map(explorersInfo => (
-                            <Box mt={3}>
+                        cryptoExplorersInfo.map((explorersInfo : CryptoExplorersType , index : number) => (
+                            <Box mt={3} key={index} >
                                 <Typography variant={'h6'}>{explorersInfo.title}</Typography>
                                 <Box>{explorersInfo.description}</Box>
                             </Box>
@@ -69,8 +69,14 @@ const CryptoExplorers = ({coinData, isLoading}: CryptoExplorersPropsType) => {
 export default React.memo(CryptoExplorers);
 
 
+type CryptoExplorersType = {
+    title : string,
+    description : string
+}
+
+
 //EXPLANATION WHAT CRYPTO EXPLORERS ARE
-const cryptoExplorersInfo = [
+const cryptoExplorersInfo : CryptoExplorersType[] = [
     {
         title: "",
         description: "Crypto Explorers are enthusiasts, researchers, and professionals dedicated to unraveling the mysteries of the cryptocurrency universe. Their endeavors span a wide range of  activities, including:"

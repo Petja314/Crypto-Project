@@ -2,9 +2,9 @@ import {Box, Button, TextField, Typography} from "@mui/material";
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {actionsAuth, signInThunkCreator} from "../../redux/AuthReducer";
-import {commonButtonStyles} from "./LoginContainer";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
 import styles from "../../css/login/sign-up.module.css"
+import {commonButtonStyles} from "../../mui/MuiTheme";
 
 
 /**
@@ -15,15 +15,15 @@ import styles from "../../css/login/sign-up.module.css"
  */
 
 type SignUpSectionPropsType = {
-    setIsRegistered : any
+    setIsRegistered: (isRegistered : boolean) => void
 }
 
 const SignUpSection = ({ setIsRegistered}: SignUpSectionPropsType) => {
     const dispatch : AppDispatch = useDispatch()
     //Conformation password handler
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState<string>("")
     //Setting the new username
-    const [userName, setUserName] = useState('')
+    const [userName, setUserName] = useState<string>('')
     const {signInError, password} = useSelector((state : RootState) => state.auth)
 
     const signIn = async () => {

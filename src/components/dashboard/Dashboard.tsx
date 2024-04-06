@@ -20,7 +20,6 @@ const Dashboard = () => {
     return (
         <Container sx={{marginBottom: "100px", marginTop: "50px"}}>
             <Typography variant='h4' sx={{color: "#fff", marginBottom: "50px"}}>🔥Dashboard</Typography>
-
             <Grid container mb={2} spacing={2} >
                 <Grid item md={6} xs={12} >
                     <LeaderBoard/>

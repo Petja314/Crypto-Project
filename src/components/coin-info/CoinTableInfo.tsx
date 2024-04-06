@@ -39,7 +39,7 @@ const CoinTableInfo = ({currencyValue, isLoading}: CoinTableInfoPropsType) => {
                 />
             ) : (
                 <TableContainer component={Paper} className={styles.tableContainer}>
-                    {coinData.map((item: any, index: any) => (
+                    {coinData.map((item: coinDataArray, index: number) => (
                         <Table key={index} className={styles.tableContentSection}>
                             <TableHead>
                                 <TableRow>
@@ -103,8 +103,8 @@ const TableBodyCoinInfo = memo(({item}: TableBodyCoinPropsType) => {
         ];
 
         return (
-            <Box>
-                {tableBodyInfo.map((item, index: number) => (
+            <>
+                {tableBodyInfo.map((item : tableBodyInfoType, index: number) => (
                     <TableRow key={index}>
                         <TableCell component="th" scope="row" className={styles.label}>
                             {item.label}
@@ -118,7 +118,7 @@ const TableBodyCoinInfo = memo(({item}: TableBodyCoinPropsType) => {
                         </TableCell>
                     </TableRow>
                 ))}
-            </Box>
+            </>
         )
     }
 )

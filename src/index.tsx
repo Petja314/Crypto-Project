@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App, {theme} from './App';
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {CssBaseline, ThemeProvider} from "@mui/material";
@@ -11,6 +9,8 @@ import {defaultWagmiConfig} from '@web3modal/wagmi/react/config'
 import {WagmiProvider} from 'wagmi'
 import {mainnet, sepolia} from 'wagmi/chains'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {theme} from "./mui/MuiTheme";
+import App from "./App";
 
 
 // WAGMI
@@ -27,7 +27,7 @@ const metadata = {
     icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 
-const chains = [mainnet,sepolia] as const // Can add more chains if needed
+const chains = [mainnet, sepolia] as const // Can add more chains if needed
 const config = defaultWagmiConfig({
     chains,
     projectId,
@@ -51,12 +51,12 @@ root.render(
         <Provider store={store}>
             <BrowserRouter>
                 <QueryClientProvider client={queryClient}>
-                <WagmiProvider config={config}>
-                    <App/>
-                </WagmiProvider>
+                    <WagmiProvider config={config}>
+                        <App/>
+                    </WagmiProvider>
                 </QueryClientProvider>
             </BrowserRouter>
         </Provider>
-    </ThemeProvider>
+   </ThemeProvider>
 );
 

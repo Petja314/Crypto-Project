@@ -48,14 +48,5 @@ const LoginContainer = () => {
 };
 
 
-export const commonButtonStyles = {
-    border: "1px solid #333",
-    background: "#171717",
-    color: "#fff",
-    '&:hover': {
-        border: "1px solid #e0f64b",
-    },
-};
-
 
 export default React.memo(LoginContainer);
