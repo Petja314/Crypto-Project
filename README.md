@@ -119,41 +119,51 @@ To use these APIs, you'll need to obtain **your own API keys**. Refer to the pro
 
 
 ![Static Badge](https://img.shields.io/badge/MaterialUi-blue?style=for-the-badge&logo=mui&labelColor=black&link=https%3A%2F%2Fmui.com%2Fmaterial-ui%2F)
+
 Is an open-source React component library that implements Google's Material. 
 
 
 ![Static Badge](https://img.shields.io/badge/Firebase-yellow?style=for-the-badge&logo=firebase&labelColor=black&link=https%3A%2F%2Fmui.com%2Fmaterial-ui%2F)
+
 Backed by Google which helps to store your data safe.
 
 
 ![Static Badge](https://img.shields.io/badge/WAGMI-GREEN?style=for-the-badge&logo=wasmcloud&labelColor=black&link=https%3A%2F%2F1.x.wagmi.sh%2F)
+
  Collection of React Hooks containing everything you need to work with Ethereum.
 
 ![Static Badge](https://img.shields.io/badge/MORALIS-%2300BFFF?style=for-the-badge&logo=mozilla&labelColor=black&link=https%3A%2F%2Fmoralis.io%2F)
+
 Instant access to cross-chain blockchain data with API request.
 
 
 ![Static Badge](https://img.shields.io/badge/WEB_3_MODAL-%23FFA07A?style=for-the-badge&logo=webtrees&logoColor=%23FFA07A&labelColor=black&link=https%3A%2F%2Fdocs.walletconnect.com%2F)
+
 Web3Modal SDK allows you to easily connect your Web3 app with wallets. 
 
 
 ![Static Badge](https://img.shields.io/badge/CHART_JS-%23F08080?style=for-the-badge&logo=chartdotjs&logoColor=%23F08080&labelColor=black&link=https%3A%2F%2Fdocs.walletconnect.com%2F)
+
 Library to convert data into the charts.
 
 
 
 ![Static Badge](https://img.shields.io/badge/AXIOS-%235A29E4?style=for-the-badge&logo=axios&logoColor=%235A29E4&labelColor=black&link=https%3A%2F%2Faxios-http.com%2F)
+
 Promise-based HTTP Client for node.js and the browser.
 
 
 ![Static Badge](https://img.shields.io/badge/NODE_JS-%23339933?style=for-the-badge&logo=nodedotjs&logoColor=%23339933&labelColor=black&link=https%3A%2F%2Fnodejs.org%2Fen)
+
 Create servers, web apps, command line tools and scripts.
 
 ![Static Badge](https://img.shields.io/badge/REDUX-%23764ABC?style=for-the-badge&logo=redux&logoColor=%23764ABC&labelColor=black&link=https%3A%2F%2Fredux.js.org%2F)
+
  A JS library for predictable and maintainable global state management.
 
 
 ![Static Badge](https://img.shields.io/badge/Browser_Router-%23CA4245?style=for-the-badge&logo=reactrouter&logoColor=%23CA4245&labelColor=black&link=https%3A%2F%2Freactrouter.com%2Fen%2F)
+
  Stores the current location in the browser's address bar using clean URLs.
 
 
