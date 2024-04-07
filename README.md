@@ -117,15 +117,18 @@ To use these APIs, you'll need to obtain **your own API keys**. Refer to the pro
 - Access to this data is restricted to project administrators only, ensuring the confidentiality and security of user information.
 ## Dependencies
 **Design**  :
+
 ![Static Badge](https://img.shields.io/badge/MaterialUi-blue?style=for-the-badge&logo=mui&labelColor=black&link=https%3A%2F%2Fmui.com%2Fmaterial-ui%2F)
 Is an open-source React component library that implements Google's Material. 
 
 **Database**  :
+
 ![Static Badge](https://img.shields.io/badge/Firebase-yellow?style=for-the-badge&logo=firebase&labelColor=black&link=https%3A%2F%2Fmui.com%2Fmaterial-ui%2F)
 
 Backed by Google which helps to store your data safe.
 
 **Web 3.0 DEX** :
+
 ![Static Badge](https://img.shields.io/badge/WAGMI-GREEN?style=for-the-badge&logo=wasmcloud&labelColor=black&link=https%3A%2F%2F1.x.wagmi.sh%2F)
 
  Collection of React Hooks containing everything you need to work with Ethereum.
@@ -140,6 +143,7 @@ Instant access to cross-chain blockchain data with API request.
 Web3Modal SDK allows you to easily connect your Web3 app with wallets. 
 
 **Crypto Chart**: 
+
 ![Static Badge](https://img.shields.io/badge/CHART_JS-%23F08080?style=for-the-badge&logo=chartdotjs&logoColor=%23F08080&labelColor=black&link=https%3A%2F%2Fdocs.walletconnect.com%2F)
 
 Library to convert data into the charts.
@@ -156,6 +160,7 @@ Promise-based HTTP Client for node.js and the browser.
 Create servers, web apps, command line tools and scripts.
 
 **REACT/REDUX**: 
+
 ![Static Badge](https://img.shields.io/badge/REDUX-%23764ABC?style=for-the-badge&logo=redux&logoColor=%23764ABC&labelColor=black&link=https%3A%2F%2Fredux.js.org%2F)
 
  A JS library for predictable and maintainable global state management.
