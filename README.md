@@ -155,6 +155,7 @@ Library to convert data into the charts.
 Promise-based HTTP Client for node.js and the browser.
 
 **Server**:
+
 ![Static Badge](https://img.shields.io/badge/NODE_JS-%23339933?style=for-the-badge&logo=nodedotjs&logoColor=%23339933&labelColor=black&link=https%3A%2F%2Fnodejs.org%2Fen)
 
 Create servers, web apps, command line tools and scripts.
