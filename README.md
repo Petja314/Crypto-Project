@@ -119,6 +119,7 @@ To use these APIs, you'll need to obtain **your own API keys**. Refer to the pro
 **Design**  :
 
 ![Static Badge](https://img.shields.io/badge/MaterialUi-blue?style=for-the-badge&logo=mui&labelColor=black&link=https%3A%2F%2Fmui.com%2Fmaterial-ui%2F)
+
 Is an open-source React component library that implements Google's Material. 
 
 **Database**  :
