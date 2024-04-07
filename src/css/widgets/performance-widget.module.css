@@ -1,0 +1,130 @@
+/*ALL TIME PROFIT*/
+.profitWidget {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.paperAllTimeProfit {
+    height: 150px;
+    background-image: url("../../assets/images/image/bgTransparent.svg") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(143, 130, 130, 0.09) !important;
+    position: relative;
+}
+
+.paperAllTimeProfit h6 {
+    font-weight: bold;
+}
+
+.totalProfit {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.profitImage {
+    position: absolute;
+    width: 70px;
+    bottom: 10px;
+    right: 20px;
+}
+
+/*PERFORMERS WIDGET*/
+.paperPerformers {
+    height: 150px;
+    max-width: 100%
+}
+.performersBoxContent{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profitLossDialog{
+    color: #B8B8B8;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.performersAvatarSection{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.performersAvatarSection img {
+    width: 30px;
+    height: 30px;
+}
+
+.profitLossAmount{
+    color: #fff;
+    font-size: 14px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+
+
+/*XS*/
+@media (min-width: 0px) {
+    .paperAllTimeProfit {
+        width: 100%;
+    }
+
+    .paperPerformers {
+        width: 100%;
+    }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+
+}
+
+/*MD*/
+@media (min-width: 900px) {
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+    .paperAllTimeProfit {
+        width: 270px;
+    }
+
+    .paperPerformers {
+        width: 200px;
+    }
+}
+
+/*XL*/
+@media (min-width: 1536px) {
+}
+
+
+@media (max-width: 400px ) {
+    .profitWidget {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px ) {
+    .profitImage {
+        display: none
+    }
+}
+
+@media (max-width: 400px ) {
+    .profitImage {
+        display: flex
+    }
+}
+

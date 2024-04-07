@@ -1,0 +1,36 @@
+.explorersBoxContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.paperExplorers {
+    border-radius: 20px;
+    padding: 30px;
+    height: 1200px;
+    background-image: url("../../assets/images/image/block_bg.svg") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.09) !important;
+    max-height: 100%;
+    max-width: 100%
+}
+
+.exploreIcon {
+    color: #E0F64B;
+}
+
+.topExplorersSection {
+    padding: 0 0;
+    list-style: none
+}
+
+.explorersLinks {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis
+}

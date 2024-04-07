@@ -1,0 +1,31 @@
+/*DASHBOARD*/
+.skeletonLists {
+    max-width: 100%;
+    height: 60px !important;
+    max-height: 100%;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.skeletonFearGreed {
+    border-radius: 20px !important;
+    height: 250px !important;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+
+.skeletonBoardIcon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #e0f64b !important;
+    color: black;
+}
+
+
+
+
+
+
