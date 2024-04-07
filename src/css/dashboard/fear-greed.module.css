@@ -49,9 +49,13 @@
 }
 .fearGreedBoxValue{
     text-align: center;
-    position: absolute;
-    top: 30%;
-    left: 35%
+    /*position: absolute;*/
+    /*top: 30%;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*left: 50%*/
 }
 
 .fearGreedValue{
@@ -61,7 +65,8 @@
 
 .lastUpdate{
     color: #c2baba;
-    font-size: 13px
+    font-size: 13px;
+    margin-top: 10px;
 }
 
 /*HISTORICAL VALUES*/

@@ -67,7 +67,7 @@ const FearGreedIndex = () => {
                                                 {item.value_classification}
                                             </Box>
 
-                                            <Box mt={9} className={styles.lastUpdate}>
+                                            <Box className={styles.lastUpdate}>
                                                 Last updated :{moment(item.timestamp * 1000).format('MMM DD YYYY h:mm A')}
                                             </Box>
                                         </Box>
