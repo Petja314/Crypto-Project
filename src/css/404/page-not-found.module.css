@@ -1,0 +1,73 @@
+.notFoundWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    flex-direction: column;
+}
+
+.notFoundTitle{
+    font-weight: bold !important;
+    color: #e0f64b;
+    font-size: 200px !important;
+    text-shadow: 3px 3px 4px #0cef26;
+}
+
+.pageNotExistTitle{
+    font-weight: bold !important;
+    color: #e0f64b;
+    font-size: 130px !important;
+    text-shadow: 2px 2px 1px #0cef26;
+}
+
+.notFoundDescription{
+    /*margin-top: 20px;*/
+    margin-bottom: 30px;
+    font-size: 20px ;
+    width: 500px;
+    max-width: 100%;
+    text-align: center;
+}
+
+.notFoundBtn{
+    font-weight: bold !important;
+}
+
+
+@media (min-width: 0px) {
+    .notFoundTitle{
+        font-size: 120px !important;
+    }
+    .pageNotExistTitle {
+        font-size: 90px !important;
+    }
+    .notFoundWrapper {
+        margin-top: 120px;
+    }
+}
+
+/*SM*/
+@media (min-width: 600px) {
+    .notFoundTitle{
+        font-size: 230px !important;
+    }
+    .pageNotExistTitle {
+        font-size: 130px !important;
+    }
+    .notFoundWrapper {
+        margin-top: 50px;
+    }
+}
+
+/*MD*/
+@media (min-width: 900px) {
+
+}
+
+/*LG*/
+@media (min-width: 1200px) {
+}
+
+/*XL*/
+@media (min-width: 1536px) {
+}

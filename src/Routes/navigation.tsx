@@ -11,10 +11,12 @@ import News from "../components/news/News";
 import Profile from "../components/profile/Profile";
 import LoginContainer from "../components/login/LoginContainer";
 import CoinContainerDescription from "../components/coin-info/CoinContainerDescription";
-import {ReactElement} from "react";
+import React, {ReactElement} from "react";
+import PageNotFound from "../components/404/PageNotFound";
 
 /** Route navigation map */
 export const routesNavigation : RoutesNavigationType[] = [
+    {path: '/',               element: <Dashboard/>,                  name: "Dashboard",         icon: DashboardIcon ,   isMenu : true ,     isPrivate : true},
     {path: '/dashboard',      element: <Dashboard/>,                  name: "Dashboard",         icon: DashboardIcon ,   isMenu : true ,     isPrivate : true},
     {path: '/portfolio',      element: <PortfolioManager/>,           name: "Portfolio",         icon: PortfolioIcon ,   isMenu : true ,     isPrivate : true},
     {path: '/dex-exchange',   element: <DexExchange/>,                name: "Exchange",          icon: PurchaseIcon ,    isMenu : true ,     isPrivate : true},
@@ -22,6 +24,7 @@ export const routesNavigation : RoutesNavigationType[] = [
     {path: '/profile',        element: <Profile/>,                    name: "Profile",           icon: "" ,              isMenu : false ,    isPrivate : true},
     {path: '/coin_info/:id?', element: <CoinContainerDescription/>,   name: "Coin Info",         icon: "" ,              isMenu : false ,    isPrivate : true},
     {path: '/login',          element: <LoginContainer/>,             name: "Login",             icon: "" ,              isMenu : false ,    isPrivate : false},
+    {path: '/*',              element: <PageNotFound/>,               name: "404",               icon: "" ,              isMenu : false ,    isPrivate : false},
 ];
 
 /**

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Avatar, Box, Button, Container, Dialog, DialogTitle, IconButton, MenuItem, Paper, Typography} from "@mui/material";
 import tokenList from "./tokenList.json"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -6,7 +6,6 @@ import SwapVerticalCircleIcon from '@mui/icons-material/SwapVerticalCircle';
 import CloseIcon from "@mui/icons-material/Close";
 import {useAccount, useSendTransaction} from "wagmi";
 import ParticleBackgroundAnimation from "../hooks/particle-background/ParticleBackgroundAnimation";
-import titleBG from "../../assets/images/image/titleBackground.svg"
 import {DexUsageInstruction} from "./DexUsageInstruction";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../redux/ReduxStore";
@@ -22,6 +21,8 @@ import {
 } from "../../redux/DexExchangeReducer";
 import {DexWarnings} from "./DexWarnings";
 import styles from "../../css/dex/dex.module.css"
+import '../../App.css';
+
 
 
 /**
@@ -103,8 +104,13 @@ const DexExchange = () => {
         dispatch(setSelectedTokenTwoAC(selectedTokenOne))
         dispatch(setTokenTwoPriceAC(tokenOnePrice))
         dispatch(fetchMoralisData({addressOne: selectedTokenOne.address, addressTwo: selectedTokenTwo.address}))
-
     }
+
+
+
+
+
+    // @ts-ignore
     return (
         <Container className={styles.container}>
             <ParticleBackgroundAnimation/>
@@ -112,6 +118,7 @@ const DexExchange = () => {
             <Box className={styles.walletBtn}>
                 <w3m-button/>
             </Box>
+
 
             <Box className={styles.titleMainBox}>
                 <Typography variant='h3'>Swap anytime anywhere</Typography>

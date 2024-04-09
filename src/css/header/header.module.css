@@ -29,13 +29,12 @@
 }
 
 .bottomNavContainer {
-    padding-top: 10px;
     display: flex;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 9;
 }
 
 .bottomNavigation {

@@ -11,6 +11,7 @@ import {mainnet, sepolia} from 'wagmi/chains'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {theme} from "./mui/MuiTheme";
 import App from "./App";
+import styles from "../src/css/dex/dex.module.css"
 
 
 // WAGMI
@@ -24,7 +25,8 @@ const metadata = {
     name: 'Web3Modal',
     description: 'Web3Modal Example',
     url: 'https://web3modal.com', // origin must match your domain & subdomain
-    icons: ['https://avatars.githubusercontent.com/u/37784886']
+    icons: ['https://avatars.githubusercontent.com/u/37784886'],
+
 }
 
 const chains = [mainnet, sepolia] as const // Can add more chains if needed
@@ -39,8 +41,13 @@ createWeb3Modal({
     wagmiConfig: config,
     projectId,
     enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    enableOnramp: true // Optional - false as default
+    enableOnramp: true // Optional - false as default,
+    ,
+    themeVariables: {
+        "--w3m-z-index": 10
+    }
 })
+
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
@@ -57,6 +64,6 @@ root.render(
                 </QueryClientProvider>
             </BrowserRouter>
         </Provider>
-   </ThemeProvider>
+    </ThemeProvider>
 );
 
